@@ -66,7 +66,7 @@ jobs:
         id: check_template_branch
         run: |
           echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
-          if git rev-parse --verify "$TEMPLATE_BRANCH_NAME"; then
+          if git rev-parse --verify "origin/$TEMPLATE_BRANCH_NAME"; then
             echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
             echo ::set-output name=exists::true;
           else
