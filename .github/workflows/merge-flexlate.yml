@@ -21,7 +21,7 @@ jobs:
         python-version: [ 3.8 ]
     steps:
       - name: Print inputs
-        run: echo "${{ $toJson(github.event.inputs) }}"
+        run: echo "${{ $toJSON(github.event.inputs) }}"
 
   merge_flexlate_branches:
     runs-on: ubuntu-latest
