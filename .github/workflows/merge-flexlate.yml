@@ -91,4 +91,9 @@ jobs:
           from_branch: flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
           target_branch: flexlate-output
           github_token: ${{ github.token }}
-
+      - name: Delete merged Flexlate branches
+        if: steps.check_template_branch.outputs.exists == 'true'
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ github.token }}
+          branches: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }},flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
