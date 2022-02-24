@@ -10,6 +10,7 @@ on:
         description: "The name of the base branch that the Flexlate branches were created on"
         required: false
         type: string
+        default: template-patches
 
 
 jobs:
