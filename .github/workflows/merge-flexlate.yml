@@ -33,7 +33,7 @@ jobs:
         python-version: [ 3.8 ]
 
 
-    if: github.event.pull_request.merged == true
+    if: (github.event.pull_request.merged == true || github.event.inputs.branch )
     steps:
       - uses: actions/checkout@v3
         with:
