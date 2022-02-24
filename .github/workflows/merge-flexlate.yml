@@ -72,6 +72,7 @@ jobs:
           else
             echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
             echo ::set-output name=exists::false;
+          fi;
         env:
           TEMPLATE_BRANCH_NAME: ${{ steps.get_branch_name.outputs.use_branch }}
       - name: Merge Flexlate template branch
