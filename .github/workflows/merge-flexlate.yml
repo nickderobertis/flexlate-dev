@@ -13,6 +13,16 @@ on:
 
 
 jobs:
+  temp_print:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [ 3.8 ]
+    steps:
+      - name: Print inputs
+        run: echo "${{ $toJson(github.event.inputs) }}"
+
   merge_flexlate_branches:
     runs-on: ubuntu-latest
     strategy:
