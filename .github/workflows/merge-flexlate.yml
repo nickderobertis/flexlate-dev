@@ -58,9 +58,14 @@ jobs:
         env:
           MERGED_BRANCH_NAME: ${{ steps.get_merged_branch.outputs.merged_branch }}
           PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
       - name: Check whether template branch exists
         id: check_template_branch
         run: |
+          echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
           if git rev-parse --verify "$TEMPLATE_BRANCH_NAME"; then
             echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
             echo ::set-output name=exists::true;
