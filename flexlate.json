@@ -14,7 +14,19 @@
   "applied_templates": [
     {
       "name": "copier-pypi-sphinx-flexlate",
-      "data": {},
+      "data": {
+        "package_name": "flexlate-dev",
+        "package_directory": "flexlate_dev",
+        "full_name": "Flexlate Development Tools",
+        "repo_name": "flexlate-dev",
+        "repo_username": "nickderobertis",
+        "short_description": "Development tools for template authors using Flexlate",
+        "package_author": "Nick DeRobertis",
+        "author_email": "derobertis.nick@gmail.com",
+        "google_analytics_id": "",
+        "logo_url": "",
+        "install_packages": ""
+      },
       "version": "6af7b5fb8e72b7e36a544593135e0e671a1d5ddb",
       "add_mode": "local",
       "root": "."
