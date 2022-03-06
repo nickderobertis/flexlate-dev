@@ -1,3 +1,4 @@
+import contextlib
 import os
 import tempfile
 import time
@@ -10,6 +11,20 @@ from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
 
 def serve_template(
+    template_path: Path = Path("."),
+    out_path: Optional[Path] = None,
+    no_input: bool = False,
+):
+    with run_server(template_path=template_path, out_path=out_path, no_input=no_input):
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            return
+
+
+@contextlib.contextmanager
+def run_server(
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
@@ -27,11 +42,10 @@ def serve_template(
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
+
+    yield
+
+    observer.stop()
     observer.join()
     if temp_file is not None:
         temp_file.cleanup()
