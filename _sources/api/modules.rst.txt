@@ -1,0 +1,7 @@
+flexlate_dev
+============
+
+.. toctree::
+   :maxdepth: 4
+
+   flexlate_dev

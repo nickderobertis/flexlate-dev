@@ -1,0 +1,4 @@
+flexlate
+typer
+watchdog
+flexlate-dev

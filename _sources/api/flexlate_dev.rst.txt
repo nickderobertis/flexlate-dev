@@ -1,0 +1,27 @@
+flexlate\_dev package
+=====================
+
+.. automodule:: flexlate_dev
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+flexlate\_dev.cli module
+------------------------
+
+.. automodule:: flexlate_dev.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.server module
+---------------------------
+
+.. automodule:: flexlate_dev.server
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
