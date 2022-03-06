@@ -1,3 +1,4 @@
+import contextlib
 import os
 import tempfile
 import time
@@ -9,7 +10,25 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
 
-def serve_template(template_path: Path = Path("."), out_path: Optional[Path] = None):
+def serve_template(
+    template_path: Path = Path("."),
+    out_path: Optional[Path] = None,
+    no_input: bool = False,
+):
+    with run_server(template_path=template_path, out_path=out_path, no_input=no_input):
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            return
+
+
+@contextlib.contextmanager
+def run_server(
+    template_path: Path = Path("."),
+    out_path: Optional[Path] = None,
+    no_input: bool = False,
+):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
         temp_file = tempfile.TemporaryDirectory()
@@ -19,15 +38,14 @@ def serve_template(template_path: Path = Path("."), out_path: Optional[Path] = N
         f"Starting server, watching for changes in {template_path}. Generating output at {out_path}"
     )
     observer = Observer()
-    event_handler = ServerEventHandler(template_path, out_path)
+    event_handler = ServerEventHandler(template_path, out_path, no_input=no_input)
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
+
+    yield
+
+    observer.stop()
     observer.join()
     if temp_file is not None:
         temp_file.cleanup()
@@ -37,12 +55,12 @@ old = 0.0
 
 
 class ServerEventHandler(FileSystemEventHandler):
-    def __init__(self, template_path: Path, out_root: Path):
+    def __init__(self, template_path: Path, out_root: Path, no_input: bool = False):
         super().__init__()
         self.template_path = template_path
         self.out_root = out_root
+        self.no_input = no_input
         self.folder: Optional[str] = None
-        self.data = {}
         self.initialized = False
         self.fxt = Flexlate()
 
@@ -80,6 +98,6 @@ class ServerEventHandler(FileSystemEventHandler):
 
     def _initialize_project(self):
         self.folder = self.fxt.init_project_from(
-            str(self.template_path), path=self.out_root
+            str(self.template_path), path=self.out_root, no_input=self.no_input
         )
         self.initialized = True
