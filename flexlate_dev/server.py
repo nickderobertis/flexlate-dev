@@ -61,7 +61,6 @@ class ServerEventHandler(FileSystemEventHandler):
         self.out_root = out_root
         self.no_input = no_input
         self.folder: Optional[str] = None
-        self.data = {}
         self.initialized = False
         self.fxt = Flexlate()
 
