@@ -42,6 +42,7 @@ def run_server(
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
+    print(f"Running auto-reloader, updating {event_handler.folder} with changes to {template_path}")
 
     yield
 
