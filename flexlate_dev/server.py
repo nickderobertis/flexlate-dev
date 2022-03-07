@@ -46,7 +46,7 @@ def run_server(
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
     print_styled(
-        f"Running auto-reloader, updating {out_path / event_handler.folder} with changes to {template_path}",
+        f"Running auto-reloader, updating {event_handler.out_path} with changes to {template_path}",
         SUCCESS_STYLE
     )
 
