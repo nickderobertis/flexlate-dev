@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev.server &mdash; flexlate-dev 0.1.0 documentation</title>
+  <title>flexlate_dev.server &mdash; flexlate-dev 0.2.0 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -178,6 +178,8 @@
 <span class="kn">from</span> <span class="nn">watchdog.observers</span> <span class="kn">import</span> <span class="n">Observer</span>
 <span class="kn">from</span> <span class="nn">watchdog.events</span> <span class="kn">import</span> <span class="n">FileSystemEventHandler</span><span class="p">,</span> <span class="n">FileSystemEvent</span>
 
+<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="n">print_styled</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">,</span> <span class="n">SUCCESS_STYLE</span>
+
 
 <div class="viewcode-block" id="serve_template"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.server.serve_template">[docs]</a><span class="k">def</span> <span class="nf">serve_template</span><span class="p">(</span>
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
@@ -203,14 +205,19 @@
         <span class="n">temp_file</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
         <span class="n">out_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="c1"># setting up inotify and specifying path to watch</span>
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Starting server, watching for changes in </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">. Generating output at </span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">print_styled</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Starting server, watching for changes in </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">. Generating output at </span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">INFO_STYLE</span>
     <span class="p">)</span>
     <span class="n">observer</span> <span class="o">=</span> <span class="n">Observer</span><span class="p">()</span>
     <span class="n">event_handler</span> <span class="o">=</span> <span class="n">ServerEventHandler</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="n">no_input</span><span class="p">)</span>
     <span class="n">event_handler</span><span class="o">.</span><span class="n">sync_output</span><span class="p">()</span>  <span class="c1"># do a sync before starting watcher</span>
     <span class="n">observer</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">event_handler</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_path</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">observer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">print_styled</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Running auto-reloader, updating </span><span class="si">{</span><span class="n">event_handler</span><span class="o">.</span><span class="n">out_path</span><span class="si">}</span><span class="s2"> with changes to </span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">SUCCESS_STYLE</span>
+    <span class="p">)</span>
 
     <span class="k">yield</span>
 

@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev package &mdash; flexlate-dev 0.1.0 documentation</title>
+  <title>flexlate_dev package &mdash; flexlate-dev 0.2.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.2.0
               </div>
             
           
@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.cli">flexlate_dev.cli module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.server">flexlate_dev.server module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.styles">flexlate_dev.styles module</a></li>
 </ul>
 </li>
 </ul>
@@ -189,9 +190,16 @@
 <section id="module-flexlate_dev.cli">
 <span id="flexlate-dev-cli-module"></span><h2>flexlate_dev.cli module<a class="headerlink" href="#module-flexlate_dev.cli" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.cli.publish">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.cli.</span></span><span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flexlate_dev.cli.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sync rendered output of a template</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.cli.serve">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.cli.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flexlate_dev.cli.serve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.cli.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flexlate_dev.cli.serve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a development server with auto-reloading to see rendered output of a template</p>
+</dd></dl>
 
 </section>
 <section id="module-flexlate_dev.server">
@@ -239,6 +247,24 @@
 <dt class="sig sig-object py" id="flexlate_dev.server.serve_template">
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.server.</span></span><span class="sig-name descname"><span class="pre">serve_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#serve_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.serve_template" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</section>
+<section id="module-flexlate_dev.styles">
+<span id="flexlate-dev-styles-module"></span><h2>flexlate_dev.styles module<a class="headerlink" href="#module-flexlate_dev.styles" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.styles.print_styled">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.styles.</span></span><span class="sig-name descname"><span class="pre">print_styled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/styles.html#print_styled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.styles.print_styled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.styles.styled">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.styles.</span></span><span class="sig-name descname"><span class="pre">styled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/styles.html#styled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.styles.styled" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

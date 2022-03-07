@@ -25,3 +25,11 @@ flexlate\_dev.server module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.styles module
+---------------------------
+
+.. automodule:: flexlate_dev.styles
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
