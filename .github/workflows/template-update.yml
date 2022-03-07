@@ -29,6 +29,10 @@ jobs:
     - name: Install dependencies
       run: |
         pipenv sync
+    - name: Set Git Committer
+      run: |
+        git config --global user.email "flexlate@nickderobertis.com"
+        git config --global user.name "Flexlate"
     - name: Check if template is out of date
       id: template_check
       run: |
