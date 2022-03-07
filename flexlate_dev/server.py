@@ -9,6 +9,8 @@ from flexlate.main import Flexlate
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
+from flexlate_dev.styles import print_styled, INFO_STYLE, SUCCESS_STYLE
+
 
 def serve_template(
     template_path: Path = Path("."),
@@ -34,15 +36,19 @@ def run_server(
         temp_file = tempfile.TemporaryDirectory()
         out_path = Path(temp_file.name)
     # setting up inotify and specifying path to watch
-    print(
-        f"Starting server, watching for changes in {template_path}. Generating output at {out_path}"
+    print_styled(
+        f"Starting server, watching for changes in {template_path}. Generating output at {out_path}",
+        INFO_STYLE
     )
     observer = Observer()
     event_handler = ServerEventHandler(template_path, out_path, no_input=no_input)
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
-    print(f"Running auto-reloader, updating {event_handler.folder} with changes to {template_path}")
+    print_styled(
+        f"Running auto-reloader, updating {out_path / event_handler.folder} with changes to {template_path}",
+        SUCCESS_STYLE
+    )
 
     yield
 
