@@ -270,11 +270,11 @@
         },
         "flexlate": {
             "hashes": [
-                "sha256:52baf5451b9370e78cff203d85e91bdd6d39916961807c635c417e7b9c6786ab",
-                "sha256:8cad2c691b3c5633a846fdde155352a16557847fe8d613eb76f28cafc95e2a51"
+                "sha256:8638ebb79aadb2aa365c245e6b11dfb0d7d72a1b23b23d8b757d5f55d3fbea67",
+                "sha256:8b6d882437dfc7d4cc247572efc66f703597dc058331cc01b55b53ec7a3cb20d"
             ],
             "index": "pypi",
-            "version": "==0.9.2"
+            "version": "==0.9.3"
         },
         "gitdb": {
             "hashes": [
