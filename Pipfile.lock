@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ae4795c117960995976b5a8290dac36962dd1c64a36310c17619d7a71bd9d247"
+            "sha256": "25eea967b10984e814f6a81aaf6bd3c296ec59019c8b7a0bbca5657fcd68d87c"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -181,7 +181,7 @@
                 "sha256:4afec02c6fa3efcac73e89307a1fddce1b71bf43f2df2adc338b97b89949a59b",
                 "sha256:6eab4ee1fe898a6946e88f1fbc60d9f6a66fde96e13e17b8325ff8e9658787d6"
             ],
-            "markers": "python_version >= '3.6' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '3.6' and python_version < '4'",
             "version": "==5.1.0"
         },
         "coverage": {
@@ -269,12 +269,13 @@
             "version": "==0.17.1"
         },
         "flexlate": {
+            "editable": true,
+            "git": "https://github.com/nickderobertis/flexlate.git",
             "hashes": [
                 "sha256:8638ebb79aadb2aa365c245e6b11dfb0d7d72a1b23b23d8b757d5f55d3fbea67",
                 "sha256:8b6d882437dfc7d4cc247572efc66f703597dc058331cc01b55b53ec7a3cb20d"
             ],
-            "index": "pypi",
-            "version": "==0.9.3"
+            "ref": "d5aec4900e5531db0e8ae15fba6c4d99174e0660"
         },
         "gitdb": {
             "hashes": [
@@ -1028,7 +1029,7 @@
                 "sha256:000ca7f471a233c2251c6c7023ee85305721bfdf18621ebff4fd17a8653427ed",
                 "sha256:0e7c33d9a63e7ddfcb86780aac87befc2fbddf46c58dbb487e0855f7ceec283c"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_full_version < '4.0.0'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
             "version": "==1.26.8"
         },
         "watchdog": {
