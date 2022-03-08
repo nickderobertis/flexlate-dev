@@ -13,9 +13,9 @@ def wait_until_path_exists(path: Path, timeout: int = DEFAULT_TIMEOUT):
     )
 
 
-def wait_until_file_updates(path: Path, timeout: int = DEFAULT_TIMEOUT):
-    modified_time = path.lstat().st_mtime
-
+def wait_until_file_updates(
+    path: Path, modified_time: float, timeout: int = DEFAULT_TIMEOUT
+):
     def path_has_been_modified() -> bool:
         new_modified_time = path.lstat().st_mtime
         return new_modified_time > modified_time

@@ -15,12 +15,13 @@ def test_server_creates_and_updates_template_on_change(copier_one_template_path:
         wait_until_path_exists(expect_file)
         # Check initial load
         assert expect_file.read_text() == "1"
+        modified_time = expect_file.lstat().st_mtime
 
         # Cause a reload
         template_file.write_text("new content {{ q2 }}")
 
         # Check reload
-        wait_until_file_updates(expect_file)
+        wait_until_file_updates(expect_file, modified_time)
         assert expect_file.read_text() == "new content 1"
 
 
@@ -35,10 +36,11 @@ def test_server_from_current_directory_creates_and_updates_template_on_change(
             wait_until_path_exists(expect_file)
             # Check initial load
             assert expect_file.read_text() == "1"
+            modified_time = expect_file.lstat().st_mtime
 
             # Cause a reload
             template_file.write_text("new content {{ q2 }}")
 
             # Check reload
-            wait_until_file_updates(expect_file)
+            wait_until_file_updates(expect_file, modified_time)
             assert expect_file.read_text() == "new content 1"
