@@ -38,7 +38,7 @@ def run_server(
     # setting up inotify and specifying path to watch
     print_styled(
         f"Starting server, watching for changes in {template_path}. Generating output at {out_path}",
-        INFO_STYLE
+        INFO_STYLE,
     )
     observer = Observer()
     event_handler = ServerEventHandler(template_path, out_path, no_input=no_input)
@@ -47,7 +47,7 @@ def run_server(
     observer.start()
     print_styled(
         f"Running auto-reloader, updating {event_handler.out_path} with changes to {template_path}",
-        SUCCESS_STYLE
+        SUCCESS_STYLE,
     )
 
     yield
