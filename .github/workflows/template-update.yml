@@ -48,51 +48,51 @@ jobs:
       if: steps.template_check.outputs.template_update == 'true'
       run: |
         if ! pipenv run fxt update --no-input --abort; then
-        echo "Encountered conflicts while trying to apply update. Will open an issue rather than a PR.";
-        echo ::set-output name=raise_update_issue::true;
+          echo "Encountered conflicts while trying to apply update. Will open an issue rather than a PR.";
+          echo ::set-output name=raise_update_issue::true;
         else
-        echo "Applied updates successfully.";
-        echo ::set-output name=raise_update_issue::false;
+          echo "Applied updates successfully.";
+          echo ::set-output name=raise_update_issue::false;
         fi;
-        - name: Determine if Github Actions Workflow Updated
-          id: workflow_update_check
-          if: steps.template_check.outputs.template_update == 'true'
-          run: bash scripts/workflows-updated.sh
-        - name: Check if Issue Exists
-          uses: nickderobertis/check-if-issue-exists-action@master
-          id: check_if_issue_exists
-          with:
-            repo: nickderobertis/none
-            token: ${{ secrets.gh_token }}
-            title: Manual Update to Files from Flexlate Needed
-            labels: automated issue, maintenance
-        - name: Set Git Committer
-          run: |
-            git config --global user.email "derobertis.nick@gmail.com"
-            git config --global user.name "Nick DeRobertis" 
-        - name: Create Issue to Manually Update Template
-          if: !steps.check_if_issue_exists.outputs.exists && steps.template_check.outputs.template_update == 'true' && (steps.workflow_update_check.outputs.workflow_updated || steps.template_update.outputs.raise_update_issue)
-          uses: JasonEtco/create-an-issue@5ee5d5edcd3777b7d5482d9342d3f08cd8daa3cd
-          with:
-            filename: temp-issue-template.md
-          env:
-            GITHUB_TOKEN: ${{ secrets.gh_token }}
-        - name: Create PR with template update
-          if: steps.template_check.outputs.template_update == 'true' && !steps.workflow_update_check.outputs.workflow_updated
-          uses: peter-evans/create-pull-request@v2
-          with:
-            token: ${{ secrets.gh_token }}
-            commit-message: Update project template using Flexlate
-            author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-            committer: GitHub <noreply@github.com>
-            title: 'Update project template using Flexlate'
-            body: |
-              Update template using Flexlate.
-              
-              Before merging, review the changes and adjust manually if necessary.
-              
-              - Updates coming from [copier-pypi-sphinx-flexlate][1]
-              
-              [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
-            labels: no auto merge, automated pr
-            branch: template-patches
+    - name: Determine if Github Actions Workflow Updated
+      id: workflow_update_check
+      if: steps.template_check.outputs.template_update == 'true'
+      run: bash scripts/workflows-updated.sh
+    - name: Check if Issue Exists
+      uses: nickderobertis/check-if-issue-exists-action@master
+      id: check_if_issue_exists
+      with:
+        repo: nickderobertis/none
+        token: ${{ secrets.gh_token }}
+        title: Manual Update to Files from Flexlate Needed
+        labels: automated issue, maintenance
+    - name: Set Git Committer
+      run: |
+        git config --global user.email "derobertis.nick@gmail.com"
+        git config --global user.name "Nick DeRobertis"
+    - name: Create Issue to Manually Update Template
+      if: !steps.check_if_issue_exists.outputs.exists && steps.template_check.outputs.template_update == 'true' && (steps.workflow_update_check.outputs.workflow_updated || steps.template_update.outputs.raise_update_issue)
+      uses: JasonEtco/create-an-issue@5ee5d5edcd3777b7d5482d9342d3f08cd8daa3cd
+      with:
+        filename: temp-issue-template.md
+      env:
+        GITHUB_TOKEN: ${{ secrets.gh_token }}
+    - name: Create PR with template update
+      if: steps.template_check.outputs.template_update == 'true' && !steps.workflow_update_check.outputs.workflow_updated
+      uses: peter-evans/create-pull-request@v2
+      with:
+        token: ${{ secrets.gh_token }}
+        commit-message: Update project template using Flexlate
+        author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
+        title: 'Update project template using Flexlate'
+        body: |
+          Update template using Flexlate.
+          
+          Before merging, review the changes and adjust manually if necessary.
+          
+          - Updates coming from [copier-pypi-sphinx-flexlate][1]
+          
+          [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
+        labels: no auto merge, automated pr
+        branch: template-patches
