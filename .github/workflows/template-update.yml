@@ -47,7 +47,7 @@ jobs:
       id: template_update
       if: steps.template_check.outputs.template_update == 'true'
       run: |
-        if ! pipenv run fxt update --no-input --abort; then
+        if ! FLEXLATE_LOG_LEVEL=DEBUG pipenv run fxt update --no-input --abort; then
           echo "Encountered conflicts while trying to apply update. Will open an issue rather than a PR.";
           echo ::set-output name=raise_update_issue::true;
         else
