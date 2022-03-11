@@ -47,12 +47,12 @@ jobs:
       id: template_update
       if: steps.template_check.outputs.template_update == 'true'
       run: |
-        if ! FLEXLATE_LOG_LEVEL=DEBUG pipenv run fxt update --no-input --abort; then
-          echo "Encountered conflicts while trying to apply update. Will open an issue rather than a PR.";
-          echo ::set-output name=raise_update_issue::true;
-        else
+        if FLEXLATE_LOG_LEVEL=DEBUG pipenv run fxt update --no-input --abort; then
           echo "Applied updates successfully.";
           echo ::set-output name=raise_update_issue::false;
+        else
+          echo "Encountered conflicts while trying to apply update. Will open an issue rather than a PR.";
+          echo ::set-output name=raise_update_issue::true;
         fi;
     - name: Determine if Github Actions Workflow Updated
       id: workflow_update_check
