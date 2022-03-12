@@ -26,11 +26,6 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
-      - name: Get merged branch
-        id: get_merged_branch
-        run: |
-          MERGED_BRANCH=$(git show-branch | sed "s/].*//" | grep "\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -n1 | sed "s/^.*\[//");
-          echo ::set-output name=merged_branch::$MERGED_BRANCH;
       - name: Get branch name
         id: get_branch_name
         run: |
@@ -42,7 +37,7 @@ jobs:
           USE_BRANCH="$base_branch"
           echo ::set-output name=use_branch::$USE_BRANCH;
         env:
-          MERGED_BRANCH_NAME: ${{ steps.get_merged_branch.outputs.merged_branch }}
+          MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
           PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
       - name: Dump steps context
         env:

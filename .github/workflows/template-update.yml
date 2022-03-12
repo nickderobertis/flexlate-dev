@@ -58,6 +58,7 @@ jobs:
         run: bash scripts/create-flexlate-issue-template.sh
       - name: Check if Issue Exists
         uses: nickderobertis/check-if-issue-exists-action@master
+        if: steps.template_check.outputs.template_update == 'true'
         id: check_if_issue_exists
         with:
           repo: ${{ github.repository }}
@@ -72,19 +73,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
       - name: Remove temporary issue template so it does not get committed
+        if: steps.template_check.outputs.template_update == 'true'
         run: rm temp-issue-template.md
       - name: Push changes to Flexlate template branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.gh_token }}
-          branch: flexlate-templates-template-patches
+        run: git push origin flexlate-templates-template-patches
       - name: Push changes to Flexlate output branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.gh_token }}
-          branch: flexlate-output-template-patches
+        run: git push origin flexlate-output-template-patches
       - name: Set back to main branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
         run: |
