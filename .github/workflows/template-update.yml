@@ -65,7 +65,7 @@ jobs:
       uses: nickderobertis/check-if-issue-exists-action@master
       id: check_if_issue_exists
       with:
-        repo: nickderobertis/none
+        repo: nickderobertis/flexlate-dev
         token: ${{ secrets.gh_token }}
         title: Manual Update to Files from Flexlate Needed
         labels: automated issue, maintenance
