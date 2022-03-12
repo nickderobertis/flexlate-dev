@@ -25,13 +25,8 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Pipenv
-      uses: dschep/install-pipenv-action@v1
-    - name: Install dependencies
-      run: |
-        pipenv sync
     - name: "TEMP: Upgrade Flexlate"
-      run: pipenv run pip install -e git+https://github.com/nickderobertis/flexlate.git@fix-client-ci#egg=flexlate
+      run: pip install -e git+https://github.com/nickderobertis/flexlate.git@fix-client-ci#egg=flexlate
     - name: Set Git Committer
       run: |
         git config --global user.email "flexlate@nickderobertis.com"
@@ -43,7 +38,7 @@ jobs:
     - name: Check if template is out of date
       id: template_check
       run: |
-        if ! pipenv run fxt check; then
+        if ! fxt check; then
           echo "Need to update template. Will do so and open PR.";
           echo ::set-output name=template_update::true;
         else
@@ -57,7 +52,7 @@ jobs:
       id: template_update
       if: steps.template_check.outputs.template_update == 'true'
       run: |
-        if FLEXLATE_LOG_LEVEL=DEBUG pipenv run fxt update --no-input --abort; then
+        if FLEXLATE_LOG_LEVEL=DEBUG fxt update --no-input --abort; then
           echo "Applied updates successfully.";
           echo ::set-output name=raise_update_issue::false;
         else
