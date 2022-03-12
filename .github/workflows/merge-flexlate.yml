@@ -12,7 +12,6 @@ on:
         type: string
         default: template-patches
 
-
 jobs:
   merge_flexlate_branches:
     runs-on: ubuntu-latest
