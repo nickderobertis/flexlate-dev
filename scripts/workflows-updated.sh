@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$(git diff --stat HEAD -- .github/workflows/)" ]; then
+if [ "$(git diff --stat HEAD~1 -- .github/workflows/)" ]; then
   echo "Updates to workflows detected.";
   echo ::set-output name=workflow_updated::true;
   issue_reason="the current updates include changes to the Github Actions workflow files, and Github Actions does not allow those to be updated by another workflow."
