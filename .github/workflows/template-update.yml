@@ -52,7 +52,7 @@ jobs:
       with: 
         repo: nickderobertis/flexlate-dev 
         token: ${{ secrets.gh_token }}
-        title: Manual Update to Files from Copier Needed
+        title: Manual Update to Files from Flexlate Needed
         labels: automated issue, maintenance
     - name: Create Issue to Manually Update Template
       if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated && !steps.check_if_issue_exists.outputs.exists
