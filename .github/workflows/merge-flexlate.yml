@@ -1,3 +1,4 @@
+name: Merge Flexlate Branches
 on:
   pull_request:
     branches:
