@@ -30,13 +30,13 @@ jobs:
         with:
           type: now
           from_branch: flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
-          target_branch: main
+          target_branch: flexlate-templates
           github_token: ${{ github.token }}
       - name: Merge Flexlate output branch
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
           from_branch: flexlate-output-${{ steps.get_merged_branch.outputs.merged_branch }}
-          target_branch: main
+          target_branch: flexlate-output
           github_token: ${{ github.token }}
 
