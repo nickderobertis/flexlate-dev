@@ -14,18 +14,6 @@ on:
 
 
 jobs:
-  temp_print:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [ 3.8 ]
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
   merge_flexlate_branches:
     runs-on: ubuntu-latest
     strategy:
