@@ -36,6 +36,8 @@ jobs:
       run: |
         git config --global user.email "flexlate@nickderobertis.com"
         git config --global user.name "Flexlate"
+    - name: "TEMP: Show git log"
+      run: git log --graph --pretty=oneline --abbrev-commit
     - name: Check if template is out of date
       id: template_check
       run: |
