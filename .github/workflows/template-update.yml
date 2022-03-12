@@ -84,14 +84,14 @@ jobs:
         STEP_CONTEXT: ${{ toJson(steps) }}
       run: echo "$STEP_CONTEXT"
     - name: Create Issue to Manually Update Template
-      if: (!steps.check_if_issue_exists.outputs.exists && steps.template_check.outputs.template_update == 'true' && (steps.workflow_update_check.outputs.workflow_updated || steps.template_update.outputs.raise_update_issue))
+      if: (steps.check_if_issue_exists.outputs.exists == 'false' && steps.template_check.outputs.template_update == 'true' && (steps.workflow_update_check.outputs.workflow_updated == 'true' || steps.template_update.outputs.raise_update_issue == 'true'))
       uses: JasonEtco/create-an-issue@5ee5d5edcd3777b7d5482d9342d3f08cd8daa3cd
       with:
         filename: temp-issue-template.md
       env:
         GITHUB_TOKEN: ${{ secrets.gh_token }}
     - name: Create PR with template update
-      if: steps.template_check.outputs.template_update == 'true' && !steps.workflow_update_check.outputs.workflow_updated
+      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: peter-evans/create-pull-request@v2
       with:
         token: ${{ secrets.gh_token }}
