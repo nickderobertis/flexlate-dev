@@ -29,6 +29,8 @@ jobs:
     - name: Install dependencies
       run: |
         pipenv sync
+    - name: "TEMP: Upgrade Flexlate"
+      run: pipenv run pip install -e git+https://github.com/nickderobertis/flexlate.git@fix-client-ci#egg=flexlate
     - name: Set Git Committer
       run: |
         git config --global user.email "flexlate@nickderobertis.com"
