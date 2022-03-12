@@ -77,10 +77,10 @@ jobs:
         run: rm temp-issue-template.md
       - name: Push changes to Flexlate template branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-        run: git push flexlate-templates-template-patches
+        run: git push origin flexlate-templates-template-patches
       - name: Push changes to Flexlate output branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-        run: git push flexlate-output-template-patches
+        run: git push origin flexlate-output-template-patches
       - name: Set back to main branch
         if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
         run: |
