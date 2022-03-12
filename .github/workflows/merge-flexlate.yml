@@ -26,6 +26,7 @@ jobs:
           MERGED_BRANCH=$(git show-branch | sed "s/].*//" | grep "\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -n1 | sed "s/^.*\[//");
           echo ::set-output name=merged_branch::$MERGED_BRANCH;
       - name: Merge Flexlate template branch
+        if: git rev-parse --verify flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
@@ -33,6 +34,7 @@ jobs:
           target_branch: flexlate-templates
           github_token: ${{ github.token }}
       - name: Merge Flexlate output branch
+        if: git rev-parse --verify flexlate-output-${{ steps.get_merged_branch.outputs.merged_branch }}
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
