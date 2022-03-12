@@ -58,6 +58,7 @@ jobs:
         run: bash scripts/create-flexlate-issue-template.sh
       - name: Check if Issue Exists
         uses: nickderobertis/check-if-issue-exists-action@master
+        if: steps.template_check.outputs.template_update == 'true'
         id: check_if_issue_exists
         with:
           repo: ${{ github.repository }}
