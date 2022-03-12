@@ -38,6 +38,8 @@ jobs:
         git config --global user.name "Flexlate"
     - name: "TEMP: Show git log"
       run: git log --graph --pretty=oneline --abbrev-commit
+    - name: "TEMP: Count objects"
+      run: git count-objects
     - name: Check if template is out of date
       id: template_check
       run: |
@@ -75,6 +77,8 @@ jobs:
       run: |
         git config --global user.email "derobertis.nick@gmail.com"
         git config --global user.name "Nick DeRobertis"
+    - name: Dump context
+      uses: crazy-max/ghaction-dump-context@v1
     - name: Create Issue to Manually Update Template
       if: (!steps.check_if_issue_exists.outputs.exists && steps.template_check.outputs.template_update == 'true' && (steps.workflow_update_check.outputs.workflow_updated || steps.template_update.outputs.raise_update_issue))
       uses: JasonEtco/create-an-issue@5ee5d5edcd3777b7d5482d9342d3f08cd8daa3cd
