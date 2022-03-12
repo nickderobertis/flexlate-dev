@@ -25,8 +25,19 @@ jobs:
         run: |
           MERGED_BRANCH=$(git show-branch | sed "s/].*//" | grep "\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -n1 | sed "s/^.*\[//");
           echo ::set-output name=merged_branch::$MERGED_BRANCH;
+      - name: Check whether template branch exists
+        id: check_template_branch
+        run: |
+          if git rev-parse --verify $TEMPLATE_BRANCH_NAME; then
+            echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
+            echo ::set-output name=exists::true;
+          else
+            echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
+            echo ::set-output name=exists::false;
+        env:
+          TEMPLATE_BRANCH_NAME: flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
       - name: Merge Flexlate template branch
-        if: git rev-parse --verify flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
+        if: steps.check_template_branch.outputs.exists == 'true'
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
@@ -34,7 +45,7 @@ jobs:
           target_branch: flexlate-templates
           github_token: ${{ github.token }}
       - name: Merge Flexlate output branch
-        if: git rev-parse --verify flexlate-output-${{ steps.get_merged_branch.outputs.merged_branch }}
+        if: steps.check_template_branch.outputs.exists == 'true'
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
