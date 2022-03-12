@@ -88,6 +88,8 @@ jobs:
         filename: temp-issue-template.md
       env:
         GITHUB_TOKEN: ${{ secrets.gh_token }}
+    - name: Remove temporary issue template so it does not get committed
+      run: rm temp-issue-template.md
     - name: Push changes to Flexlate template branch
       if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: ad-m/github-push-action@master
