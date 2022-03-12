@@ -50,6 +50,8 @@ jobs:
           echo "No updates to template needed, will exit workflow.";
           echo ::set-output name=template_update::false;
         fi;
+    - name: Set template update branch
+      run: git checkout -b template-patches
     - name: Template Update
       id: template_update
       if: steps.template_check.outputs.template_update == 'true'
