@@ -20,7 +20,5 @@ pytest = "*"
 pytest-cov = "*"
 mypy = "*"
 pypandoc = "*"
-flexlate = {editable = true, ref = "fix-client-ci", git = "https://github.com/nickderobertis/flexlate.git"}
-watchdog = "*"
-typer = "*"
-rich = "*"
+flexlate = "*"
+

@@ -4,6 +4,13 @@ on:
     branches:
       - deploy
     types: [closed]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The name of the base branch that the Flexlate branches were created on"
+        required: false
+        type: string
+        default: template-patches
 
 jobs:
   merge_flexlate_branches:
@@ -11,10 +18,9 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [ 3.8 ]
+        python-version: [3.8]
 
-
-    if: github.event.pull_request.merged == true
+    if: (github.event.pull_request.merged == true || github.event.inputs.branch )
     steps:
       - uses: actions/checkout@v3
         with:
@@ -25,23 +31,42 @@ jobs:
         run: |
           MERGED_BRANCH=$(git show-branch | sed "s/].*//" | grep "\*" | grep -v "$(git rev-parse --abbrev-ref HEAD)" | head -n1 | sed "s/^.*\[//");
           echo ::set-output name=merged_branch::$MERGED_BRANCH;
+      - name: Get branch name
+        id: get_branch_name
+        run: |
+          if [ -z "$PASSED_BRANCH_NAME" ]; then
+            base_branch="$MERGED_BRANCH_NAME"
+          else
+            base_branch="$PASSED_BRANCH_NAME"
+          fi;
+          USE_BRANCH="$base_branch"
+          echo ::set-output name=use_branch::$USE_BRANCH;
+        env:
+          MERGED_BRANCH_NAME: ${{ steps.get_merged_branch.outputs.merged_branch }}
+          PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
       - name: Check whether template branch exists
         id: check_template_branch
         run: |
-          if git rev-parse --verify $TEMPLATE_BRANCH_NAME; then
+          echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
+          if git rev-parse --verify "origin/$TEMPLATE_BRANCH_NAME"; then
             echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
             echo ::set-output name=exists::true;
           else
             echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
             echo ::set-output name=exists::false;
+          fi;
         env:
-          TEMPLATE_BRANCH_NAME: flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
+          TEMPLATE_BRANCH_NAME: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }}
       - name: Merge Flexlate template branch
         if: steps.check_template_branch.outputs.exists == 'true'
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
-          from_branch: flexlate-templates-${{ steps.get_merged_branch.outputs.merged_branch }}
+          from_branch: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }}
           target_branch: flexlate-templates
           github_token: ${{ github.token }}
       - name: Merge Flexlate output branch
@@ -49,7 +74,12 @@ jobs:
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
-          from_branch: flexlate-output-${{ steps.get_merged_branch.outputs.merged_branch }}
+          from_branch: flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
           target_branch: flexlate-output
           github_token: ${{ github.token }}
-
+      - name: Delete merged Flexlate branches
+        if: steps.check_template_branch.outputs.exists == 'true'
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ github.token }}
+          branches: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }},flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
