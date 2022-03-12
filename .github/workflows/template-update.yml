@@ -51,6 +51,7 @@ jobs:
           echo ::set-output name=template_update::false;
         fi;
     - name: Set template update branch
+      if: steps.template_check.outputs.template_update == 'true'
       run: git checkout -b template-patches
     - name: Template Update
       id: template_update
