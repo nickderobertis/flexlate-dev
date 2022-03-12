@@ -91,13 +91,13 @@ jobs:
     - name: Remove temporary issue template so it does not get committed
       run: rm temp-issue-template.md
     - name: Push changes to Flexlate template branch
-      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
+      if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.gh_token }}
         branch: flexlate-templates-template-patches
     - name: Push changes to Flexlate output branch
-      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
+      if: steps.template_check.outputs.template_update == 'true' && steps.template_update.outputs.raise_update_issue == 'false' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.gh_token }}
