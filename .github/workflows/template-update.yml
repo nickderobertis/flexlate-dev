@@ -93,6 +93,21 @@ jobs:
         filename: temp-issue-template.md
       env:
         GITHUB_TOKEN: ${{ secrets.gh_token }}
+    - name: Push changes to Flexlate template branch
+      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.gh_token }}
+        branch: flexlate-templates-${{ github.ref_name }}
+    - name: Push changes to Flexlate output branch
+      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.gh_token }}
+        branch: flexlate-output-${{ github.ref_name }}
+    - name: Set back to main branch
+      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
+      run: git checkout master
     - name: Create PR with template update
       if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: peter-evans/create-pull-request@v3
@@ -112,15 +127,3 @@ jobs:
           [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
         labels: no auto merge, automated pr
         branch: template-patches
-    - name: Push changes to Flexlate template branch
-      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.gh_token }}
-        branch: flexlate-templates-${{ github.ref_name }}
-    - name: Push changes to Flexlate output branch
-      if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.gh_token }}
-        branch: flexlate-output-${{ github.ref_name }}
