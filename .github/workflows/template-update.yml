@@ -98,13 +98,13 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.gh_token }}
-        branch: flexlate-templates-${{ github.ref_name }}
+        branch: flexlate-templates-template-patches
     - name: Push changes to Flexlate output branch
       if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.gh_token }}
-        branch: flexlate-output-${{ github.ref_name }}
+        branch: flexlate-output-template-patches
     - name: Set back to main branch
       if: steps.template_check.outputs.template_update == 'true' && steps.workflow_update_check.outputs.workflow_updated == 'false'
       run: git checkout master
