@@ -23,3 +23,5 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - uses: nickderobertis/flexlate-update-action@main
+        with:
+          gh_token: ${{ secrets.gh_token }}
