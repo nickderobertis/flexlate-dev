@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev.server &mdash; flexlate-dev 0.2.1 documentation</title>
+  <title>flexlate_dev.server &mdash; flexlate-dev 0.2.2 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.2.1
+                0.2.2
               </div>
             
           
@@ -175,6 +175,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">flexlate.main</span> <span class="kn">import</span> <span class="n">Flexlate</span>
+<span class="kn">import</span> <span class="nn">flexlate.exc</span> <span class="k">as</span> <span class="nn">flexlate_exc</span>
 <span class="kn">from</span> <span class="nn">watchdog.observers</span> <span class="kn">import</span> <span class="n">Observer</span>
 <span class="kn">from</span> <span class="nn">watchdog.events</span> <span class="kn">import</span> <span class="n">FileSystemEventHandler</span><span class="p">,</span> <span class="n">FileSystemEvent</span>
 
@@ -270,7 +271,10 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_project</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">project_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">project_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">flexlate_exc</span><span class="o">.</span><span class="n">TriedToCommitButNoChangesException</span><span class="p">:</span>
+            <span class="n">print_styled</span><span class="p">(</span><span class="s2">&quot;Update did not have any changes&quot;</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_initialize_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span><span class="o">.</span><span class="n">init_project_from</span><span class="p">(</span>
