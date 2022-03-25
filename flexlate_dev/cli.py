@@ -13,6 +13,7 @@ NO_AUTO_COMMIT_DOC = (
     "Whether to skip automatically committing manual changes in the generated project"
 )
 CONFIG_PATH_DOC = "The location of the flexlate-dev configuration file to use"
+SAVE_DOC = "Whether to save the config file with any changes from the run such as answering project questions"
 
 TEMPLATE_PATH_OPTION = typer.Option(
     Path("."),
@@ -25,6 +26,7 @@ NO_AUTO_COMMIT_OPTION = typer.Option(
     False, "--no-auto-commit", "-a", show_default=False
 )
 CONFIG_PATH_OPTION = typer.Option(None, "--config", "-c", show_default=False)
+SAVE_OPTION = typer.Option(False, "--save", "-s", show_default=False)
 
 
 @cli.command(name="serve")
@@ -37,6 +39,7 @@ def serve(
     no_input: bool = NO_INPUT_OPTION,
     no_auto_commit: bool = NO_AUTO_COMMIT_OPTION,
     config_path: Optional[Path] = CONFIG_PATH_OPTION,
+    save: bool = SAVE_OPTION,
 ):
     """
     Run a development server with auto-reloading to see rendered output of a template
@@ -47,6 +50,7 @@ def serve(
         no_input=no_input,
         auto_commit=not no_auto_commit,
         config_path=config_path,
+        save=save,
     )
 
 
@@ -58,6 +62,7 @@ def publish(
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
     config_path: Optional[Path] = CONFIG_PATH_OPTION,
+    save: bool = SAVE_OPTION,
 ):
     """
     Sync rendered output of a template

@@ -84,11 +84,16 @@ def test_server_creates_and_updates_template_on_change_after_generated_project_c
 
 def test_server_creates_project_with_config_data(copier_one_template_path: Path):
     template_path = copier_one_template_path
-    expect_file = GENERATED_FILES_DIR / "project" / "a1.txt"
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
+    config_path = project_path / "flexlate-dev.yaml"
+    config = FlexlateDevConfig.load_or_create(config_path)
     serve_config = ServeConfig(data=dict(q2=50))
-    config = FlexlateDevConfig(serve=serve_config)
-    with run_server(config, template_path, GENERATED_FILES_DIR, no_input=True):
+    config.serve = serve_config
+    with run_server(
+        config, template_path, GENERATED_FILES_DIR, no_input=True, save=True
+    ):
         wait_until_path_exists(expect_file)
         # Check initial load
         assert expect_file.read_text() == "50"
@@ -100,3 +105,7 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
         # Check reload
         wait_until_file_updates(expect_file, modified_time)
         assert expect_file.read_text() == "new content 50"
+
+        # Check that config was saved
+        config = FlexlateDevConfig.load(config_path)
+        assert config.serve.data == dict(q1="a1", q2=50, q3=None)

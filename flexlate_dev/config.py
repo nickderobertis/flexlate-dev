@@ -21,12 +21,15 @@ class FlexlateDevConfig(BaseConfig):
 
 def load_config(config_path: Optional[Path]) -> FlexlateDevConfig:
     if config_path is None:
-        for possible_name in ["flexlate-dev.yml", "flexlate-dev.yaml"]:
+        for possible_name in ["flexlate-dev.yaml", "flexlate-dev.yml"]:
             path = Path(possible_name)
             if path.exists():
                 return FlexlateDevConfig.load(path)
-    else:
+    elif config_path.exists():
         return FlexlateDevConfig.load(config_path)
+    else:
+        # Passed config path, but does not exist, might be trying to save new config
+        return FlexlateDevConfig.load_or_create(config_path.resolve())
 
-    # Could not find any config, create a blank one
-    return FlexlateDevConfig()
+    # Could not find any config, create a blank one at the default location
+    return FlexlateDevConfig.load_or_create(Path("flexlate-dev.yaml").resolve())
