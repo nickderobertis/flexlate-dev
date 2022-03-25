@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev package &mdash; flexlate-dev 0.3.0 documentation</title>
+  <title>flexlate_dev package &mdash; flexlate-dev 0.4.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.3.0
+                0.4.0
               </div>
             
           
@@ -107,9 +107,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">flexlate_dev</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">flexlate_dev package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.cli">flexlate_dev.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-cli-module">flexlate_dev.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-config-module">flexlate_dev.config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.gituitls">flexlate_dev.gituitls module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.server">flexlate_dev.server module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-server-module">flexlate_dev.server module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.styles">flexlate_dev.styles module</a></li>
 </ul>
 </li>
@@ -188,20 +189,11 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
-<section id="module-flexlate_dev.cli">
-<span id="flexlate-dev-cli-module"></span><h2>flexlate_dev.cli module<a class="headerlink" href="#module-flexlate_dev.cli" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="flexlate_dev.cli.publish">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.cli.</span></span><span class="sig-name descname"><span class="pre">publish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flexlate_dev.cli.publish" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sync rendered output of a template</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="flexlate_dev.cli.serve">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.cli.</span></span><span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Argument</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typer.Option</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#flexlate_dev.cli.serve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run a development server with auto-reloading to see rendered output of a template</p>
-</dd></dl>
-
+<section id="flexlate-dev-cli-module">
+<h2>flexlate_dev.cli module<a class="headerlink" href="#flexlate-dev-cli-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="flexlate-dev-config-module">
+<h2>flexlate_dev.config module<a class="headerlink" href="#flexlate-dev-config-module" title="Permalink to this headline">¶</a></h2>
 </section>
 <section id="module-flexlate_dev.gituitls">
 <span id="flexlate-dev-gituitls-module"></span><h2>flexlate_dev.gituitls module<a class="headerlink" href="#module-flexlate_dev.gituitls" title="Permalink to this headline">¶</a></h2>
@@ -211,52 +203,8 @@
 <dd></dd></dl>
 
 </section>
-<section id="module-flexlate_dev.server">
-<span id="flexlate-dev-server-module"></span><h2>flexlate_dev.server module<a class="headerlink" href="#module-flexlate_dev.server" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="flexlate_dev.server.ServerEventHandler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.server.</span></span><span class="sig-name descname"><span class="pre">ServerEventHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#ServerEventHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.ServerEventHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">watchdog.events.FileSystemEventHandler</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="flexlate_dev.server.ServerEventHandler.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#ServerEventHandler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.ServerEventHandler.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="flexlate_dev.server.ServerEventHandler.on_modified">
-<span class="sig-name descname"><span class="pre">on_modified</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#ServerEventHandler.on_modified"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.ServerEventHandler.on_modified" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="flexlate_dev.server.ServerEventHandler.out_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">out_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a></em><a class="headerlink" href="#flexlate_dev.server.ServerEventHandler.out_path" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="flexlate_dev.server.ServerEventHandler.sync_output">
-<span class="sig-name descname"><span class="pre">sync_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#ServerEventHandler.sync_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.ServerEventHandler.sync_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run build using subprocess so that imports will be executed every time
-:param _sphinx_paramlinks_flexlate_dev.server.ServerEventHandler.sync_output.file_path:
-:return:</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="flexlate_dev.server.run_server">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.server.</span></span><span class="sig-name descname"><span class="pre">run_server</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#run_server"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.run_server" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="flexlate_dev.server.serve_template">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.server.</span></span><span class="sig-name descname"><span class="pre">serve_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">PosixPath('.')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/server.html#serve_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.server.serve_template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<section id="flexlate-dev-server-module">
+<h2>flexlate_dev.server module<a class="headerlink" href="#flexlate-dev-server-module" title="Permalink to this headline">¶</a></h2>
 </section>
 <section id="module-flexlate_dev.styles">
 <span id="flexlate-dev-styles-module"></span><h2>flexlate_dev.styles module<a class="headerlink" href="#module-flexlate_dev.styles" title="Permalink to this headline">¶</a></h2>
