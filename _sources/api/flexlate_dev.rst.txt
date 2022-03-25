@@ -17,6 +17,14 @@ flexlate\_dev.cli module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.gituitls module
+-----------------------------
+
+.. automodule:: flexlate_dev.gituitls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.server module
 ---------------------------
 

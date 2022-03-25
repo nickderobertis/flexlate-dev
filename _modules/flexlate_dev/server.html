@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev.server &mdash; flexlate-dev 0.2.2 documentation</title>
+  <title>flexlate_dev.server &mdash; flexlate-dev 0.3.0 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -176,18 +176,31 @@
 
 <span class="kn">from</span> <span class="nn">flexlate.main</span> <span class="kn">import</span> <span class="n">Flexlate</span>
 <span class="kn">import</span> <span class="nn">flexlate.exc</span> <span class="k">as</span> <span class="nn">flexlate_exc</span>
+<span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
 <span class="kn">from</span> <span class="nn">watchdog.observers</span> <span class="kn">import</span> <span class="n">Observer</span>
 <span class="kn">from</span> <span class="nn">watchdog.events</span> <span class="kn">import</span> <span class="n">FileSystemEventHandler</span><span class="p">,</span> <span class="n">FileSystemEvent</span>
 
-<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="n">print_styled</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">,</span> <span class="n">SUCCESS_STYLE</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.gituitls</span> <span class="kn">import</span> <span class="n">stage_and_commit_all</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">print_styled</span><span class="p">,</span>
+    <span class="n">INFO_STYLE</span><span class="p">,</span>
+    <span class="n">SUCCESS_STYLE</span><span class="p">,</span>
+    <span class="n">ACTION_REQUIRED_STYLE</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="serve_template"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.server.serve_template">[docs]</a><span class="k">def</span> <span class="nf">serve_template</span><span class="p">(</span>
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
     <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">no_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">auto_commit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="k">with</span> <span class="n">run_server</span><span class="p">(</span><span class="n">template_path</span><span class="o">=</span><span class="n">template_path</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="n">no_input</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">run_server</span><span class="p">(</span>
+        <span class="n">template_path</span><span class="o">=</span><span class="n">template_path</span><span class="p">,</span>
+        <span class="n">out_path</span><span class="o">=</span><span class="n">out_path</span><span class="p">,</span>
+        <span class="n">no_input</span><span class="o">=</span><span class="n">no_input</span><span class="p">,</span>
+        <span class="n">auto_commit</span><span class="o">=</span><span class="n">auto_commit</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -200,6 +213,7 @@
     <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span>
     <span class="n">out_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">no_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">auto_commit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">temp_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">out_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -211,7 +225,9 @@
         <span class="n">INFO_STYLE</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">observer</span> <span class="o">=</span> <span class="n">Observer</span><span class="p">()</span>
-    <span class="n">event_handler</span> <span class="o">=</span> <span class="n">ServerEventHandler</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="n">no_input</span><span class="p">)</span>
+    <span class="n">event_handler</span> <span class="o">=</span> <span class="n">ServerEventHandler</span><span class="p">(</span>
+        <span class="n">template_path</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="n">no_input</span><span class="p">,</span> <span class="n">auto_commit</span><span class="o">=</span><span class="n">auto_commit</span>
+    <span class="p">)</span>
     <span class="n">event_handler</span><span class="o">.</span><span class="n">sync_output</span><span class="p">()</span>  <span class="c1"># do a sync before starting watcher</span>
     <span class="n">observer</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="n">event_handler</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">template_path</span><span class="p">),</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">observer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
@@ -232,12 +248,20 @@
 
 
 <div class="viewcode-block" id="ServerEventHandler"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.server.ServerEventHandler">[docs]</a><span class="k">class</span> <span class="nc">ServerEventHandler</span><span class="p">(</span><span class="n">FileSystemEventHandler</span><span class="p">):</span>
-<div class="viewcode-block" id="ServerEventHandler.__init__"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.server.ServerEventHandler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">out_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">no_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ServerEventHandler.__init__"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.server.ServerEventHandler.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">template_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">out_root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+        <span class="n">no_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">auto_commit</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template_path</span> <span class="o">=</span> <span class="n">template_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_root</span> <span class="o">=</span> <span class="n">out_root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">no_input</span> <span class="o">=</span> <span class="n">no_input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_commit</span> <span class="o">=</span> <span class="n">auto_commit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">folder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Repo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span> <span class="o">=</span> <span class="n">Flexlate</span><span class="p">()</span></div>
 
@@ -270,16 +294,32 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_project</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;repo must not be None&quot;</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">project_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_path</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">flexlate_exc</span><span class="o">.</span><span class="n">TriedToCommitButNoChangesException</span><span class="p">:</span>
-            <span class="n">print_styled</span><span class="p">(</span><span class="s2">&quot;Update did not have any changes&quot;</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">)</span></div>
+            <span class="n">print_styled</span><span class="p">(</span><span class="s2">&quot;Update did not have any changes&quot;</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">flexlate_exc</span><span class="o">.</span><span class="n">GitRepoDirtyException</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">auto_commit</span><span class="p">:</span>
+                <span class="n">stage_and_commit_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">,</span> <span class="s2">&quot;Auto-commit manual changes&quot;</span><span class="p">)</span>
+                <span class="n">print_styled</span><span class="p">(</span>
+                    <span class="s2">&quot;Detected manual changes to generated files and auto_commit=True, committing&quot;</span><span class="p">,</span>
+                    <span class="n">INFO_STYLE</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sync_output</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">print_styled</span><span class="p">(</span>
+                    <span class="s2">&quot;Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating&quot;</span><span class="p">,</span>
+                    <span class="n">ACTION_REQUIRED_STYLE</span><span class="p">,</span>
+                <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_initialize_project</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">folder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fxt</span><span class="o">.</span><span class="n">init_project_from</span><span class="p">(</span>
             <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template_path</span><span class="p">),</span> <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_root</span><span class="p">,</span> <span class="n">no_input</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">no_input</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">True</span></div>
 </pre></div>
 

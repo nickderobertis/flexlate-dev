@@ -1,5 +1,5 @@
+watchdog
+flexlate
 rich
 flexlate-dev
-flexlate
 typer
-watchdog
