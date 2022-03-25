@@ -4,7 +4,11 @@ from flexlate_dev.server import run_server
 from tests.config import GENERATED_FILES_DIR
 from tests.fixtures.template_path import copier_one_template_path
 from tests.pathutils import change_directory_to
-from tests.waitutils import wait_until_path_exists, wait_until_file_updates
+from tests.waitutils import (
+    wait_until_path_exists,
+    wait_until_file_updates,
+    wait_until_file_has_content,
+)
 
 
 def test_server_creates_and_updates_template_on_change(copier_one_template_path: Path):
@@ -61,11 +65,14 @@ def test_server_creates_and_updates_template_on_change_after_generated_project_c
 
         # Modify files in the project
         generated_modify_path = generated_project_path / "README.md"
-        generated_modify_path.write_text("new content for README")
+        new_content = "new content for README"
+        generated_modify_path.write_text(new_content)
 
         # Cause a reload
         template_file.write_text("new content {{ q2 }}")
 
         # Check reload
-        wait_until_file_updates(expect_file, modified_time)
-        assert expect_file.read_text() == "new content 1"
+        wait_until_file_has_content(expect_file, modified_time, "new content 1")
+
+        # Check modified file
+        assert generated_modify_path.read_text() == new_content
