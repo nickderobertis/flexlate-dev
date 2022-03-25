@@ -7,18 +7,31 @@ from typing import Optional
 
 from flexlate.main import Flexlate
 import flexlate.exc as flexlate_exc
+from git import Repo
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
-from flexlate_dev.styles import print_styled, INFO_STYLE, SUCCESS_STYLE
+from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.styles import (
+    print_styled,
+    INFO_STYLE,
+    SUCCESS_STYLE,
+    ACTION_REQUIRED_STYLE,
+)
 
 
 def serve_template(
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
+    auto_commit: bool = True,
 ):
-    with run_server(template_path=template_path, out_path=out_path, no_input=no_input):
+    with run_server(
+        template_path=template_path,
+        out_path=out_path,
+        no_input=no_input,
+        auto_commit=auto_commit,
+    ):
         try:
             while True:
                 time.sleep(1)
@@ -31,6 +44,7 @@ def run_server(
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
+    auto_commit: bool = True,
 ):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
@@ -42,7 +56,9 @@ def run_server(
         INFO_STYLE,
     )
     observer = Observer()
-    event_handler = ServerEventHandler(template_path, out_path, no_input=no_input)
+    event_handler = ServerEventHandler(
+        template_path, out_path, no_input=no_input, auto_commit=auto_commit
+    )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
@@ -63,12 +79,20 @@ old = 0.0
 
 
 class ServerEventHandler(FileSystemEventHandler):
-    def __init__(self, template_path: Path, out_root: Path, no_input: bool = False):
+    def __init__(
+        self,
+        template_path: Path,
+        out_root: Path,
+        no_input: bool = False,
+        auto_commit: bool = True,
+    ):
         super().__init__()
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input
+        self.auto_commit = auto_commit
         self.folder: Optional[str] = None
+        self.repo: Optional[Repo] = None
         self.initialized = False
         self.fxt = Flexlate()
 
@@ -101,14 +125,30 @@ class ServerEventHandler(FileSystemEventHandler):
         """
         if not self.initialized:
             return self._initialize_project()
+        if self.repo is None:
+            raise ValueError("repo must not be None")
 
         try:
             self.fxt.update(project_path=self.out_path, no_input=True)
         except flexlate_exc.TriedToCommitButNoChangesException:
             print_styled("Update did not have any changes", INFO_STYLE)
+        except flexlate_exc.GitRepoDirtyException:
+            if self.auto_commit:
+                stage_and_commit_all(self.repo, "Auto-commit manual changes")
+                print_styled(
+                    "Detected manual changes to generated files and auto_commit=True, committing",
+                    INFO_STYLE,
+                )
+                self.sync_output()
+            else:
+                print_styled(
+                    "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
+                    ACTION_REQUIRED_STYLE,
+                )
 
     def _initialize_project(self):
         self.folder = self.fxt.init_project_from(
             str(self.template_path), path=self.out_root, no_input=self.no_input
         )
+        self.repo = Repo(self.out_path)
         self.initialized = True

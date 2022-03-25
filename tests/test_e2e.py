@@ -44,3 +44,28 @@ def test_server_from_current_directory_creates_and_updates_template_on_change(
             # Check reload
             wait_until_file_updates(expect_file, modified_time)
             assert expect_file.read_text() == "new content 1"
+
+
+def test_server_creates_and_updates_template_on_change_after_generated_project_changes(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    generated_project_path = GENERATED_FILES_DIR / "project"
+    expect_file = generated_project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    with run_server(template_path, GENERATED_FILES_DIR, no_input=True):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        modified_time = expect_file.lstat().st_mtime
+
+        # Modify files in the project
+        generated_modify_path = generated_project_path / "README.md"
+        generated_modify_path.write_text("new content for README")
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_updates(expect_file, modified_time)
+        assert expect_file.read_text() == "new content 1"
