@@ -39,42 +39,6 @@ jobs:
         env:
           MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
           PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-      - name: Check whether template branch exists
-        id: check_template_branch
-        run: |
-          echo "TEMPLATE_BRANCH_NAME $TEMPLATE_BRANCH_NAME"
-          if git rev-parse --verify "origin/$TEMPLATE_BRANCH_NAME"; then
-            echo "$TEMPLATE_BRANCH_NAME exists, will merge to master"
-            echo ::set-output name=exists::true;
-          else
-            echo "$TEMPLATE_BRANCH_NAME does not exist, must not be a Flexlate update, exiting"
-            echo ::set-output name=exists::false;
-          fi;
-        env:
-          TEMPLATE_BRANCH_NAME: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }}
-      - name: Merge Flexlate template branch
-        if: steps.check_template_branch.outputs.exists == 'true'
-        uses: devmasx/merge-branch@1.4.0
+      - uses: nickderobertis/flexlate-merge-action@main
         with:
-          type: now
-          from_branch: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }}
-          target_branch: flexlate-templates
-          github_token: ${{ github.token }}
-      - name: Merge Flexlate output branch
-        if: steps.check_template_branch.outputs.exists == 'true'
-        uses: devmasx/merge-branch@1.4.0
-        with:
-          type: now
-          from_branch: flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
-          target_branch: flexlate-output
-          github_token: ${{ github.token }}
-      - name: Delete merged Flexlate branches
-        if: steps.check_template_branch.outputs.exists == 'true'
-        uses: dawidd6/action-delete-branch@v3
-        with:
-          github_token: ${{ github.token }}
-          branches: flexlate-templates-${{ steps.get_branch_name.outputs.use_branch }},flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
+          branch-name: ${{ steps.get_branch_name.outputs.use_branch }}
