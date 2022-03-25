@@ -10,7 +10,10 @@ import flexlate.exc as flexlate_exc
 from git import Repo
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
+from flexlate.template_data import TemplateData
+from flexlate.config import FlexlateConfig
 
+from flexlate_dev.config import FlexlateDevConfig, load_config, ServeConfig
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.styles import (
     print_styled,
@@ -25,12 +28,18 @@ def serve_template(
     out_path: Optional[Path] = None,
     no_input: bool = False,
     auto_commit: bool = True,
+    config_path: Optional[Path] = None,
+    save: bool = False,
 ):
+    config = load_config(config_path)
+
     with run_server(
+        config,
         template_path=template_path,
         out_path=out_path,
         no_input=no_input,
         auto_commit=auto_commit,
+        save=save,
     ):
         try:
             while True:
@@ -41,10 +50,12 @@ def serve_template(
 
 @contextlib.contextmanager
 def run_server(
+    config: FlexlateDevConfig,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
     auto_commit: bool = True,
+    save: bool = False,
 ):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
@@ -57,7 +68,12 @@ def run_server(
     )
     observer = Observer()
     event_handler = ServerEventHandler(
-        template_path, out_path, no_input=no_input, auto_commit=auto_commit
+        config,
+        template_path,
+        out_path,
+        no_input=no_input,
+        auto_commit=auto_commit,
+        save=save,
     )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
@@ -81,16 +97,20 @@ old = 0.0
 class ServerEventHandler(FileSystemEventHandler):
     def __init__(
         self,
+        config: FlexlateDevConfig,
         template_path: Path,
         out_root: Path,
         no_input: bool = False,
         auto_commit: bool = True,
+        save: bool = False,
     ):
         super().__init__()
+        self.config = config
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input
         self.auto_commit = auto_commit
+        self.save = save
         self.folder: Optional[str] = None
         self.repo: Optional[Repo] = None
         self.initialized = False
@@ -145,10 +165,31 @@ class ServerEventHandler(FileSystemEventHandler):
                     "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
                     ACTION_REQUIRED_STYLE,
                 )
+        else:
+            self._save_data_from_flexlate_if_necessary()
 
     def _initialize_project(self):
         self.folder = self.fxt.init_project_from(
-            str(self.template_path), path=self.out_root, no_input=self.no_input
+            str(self.template_path),
+            path=self.out_root,
+            no_input=self.no_input,
+            data=self.config.serve.data,
         )
+        self._save_data_from_flexlate_if_necessary()
         self.repo = Repo(self.out_path)
         self.initialized = True
+
+    def _save_data_from_flexlate_if_necessary(self):
+        if not self.save:
+            return
+        data = _get_data_from_flexlate_config(self.out_path)
+        self.config.serve.data = data
+        self.config.save()
+
+
+def _get_data_from_flexlate_config(folder: Path) -> TemplateData:
+    config_path = folder / "flexlate.json"
+    config = FlexlateConfig.load(config_path)
+    assert len(config.applied_templates) == 1
+    at = config.applied_templates[0]
+    return at.data
