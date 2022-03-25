@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from flexlate.main import Flexlate
+import flexlate.exc as flexlate_exc
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
@@ -101,7 +102,10 @@ class ServerEventHandler(FileSystemEventHandler):
         if not self.initialized:
             return self._initialize_project()
 
-        self.fxt.update(project_path=self.out_path, no_input=True)
+        try:
+            self.fxt.update(project_path=self.out_path, no_input=True)
+        except flexlate_exc.TriedToCommitButNoChangesException:
+            print_styled("Update did not have any changes", INFO_STYLE)
 
     def _initialize_project(self):
         self.folder = self.fxt.init_project_from(
