@@ -24,3 +24,4 @@ flexlate = {editable = true, ref = "fix-client-ci", git = "https://github.com/ni
 watchdog = "*"
 typer = "*"
 rich = "*"
+py-app-conf = "*"

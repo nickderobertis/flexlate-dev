@@ -11,6 +11,7 @@ from git import Repo
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
+from flexlate_dev.config import FlexlateDevConfig, load_config, ServeConfig
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.styles import (
     print_styled,
@@ -25,8 +26,12 @@ def serve_template(
     out_path: Optional[Path] = None,
     no_input: bool = False,
     auto_commit: bool = True,
+    config_path: Optional[Path] = None,
 ):
+    config = load_config(config_path)
+
     with run_server(
+        config,
         template_path=template_path,
         out_path=out_path,
         no_input=no_input,
@@ -41,6 +46,7 @@ def serve_template(
 
 @contextlib.contextmanager
 def run_server(
+    config: FlexlateDevConfig,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
@@ -57,7 +63,11 @@ def run_server(
     )
     observer = Observer()
     event_handler = ServerEventHandler(
-        template_path, out_path, no_input=no_input, auto_commit=auto_commit
+        config.serve,
+        template_path,
+        out_path,
+        no_input=no_input,
+        auto_commit=auto_commit,
     )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
@@ -81,12 +91,14 @@ old = 0.0
 class ServerEventHandler(FileSystemEventHandler):
     def __init__(
         self,
+        config: ServeConfig,
         template_path: Path,
         out_root: Path,
         no_input: bool = False,
         auto_commit: bool = True,
     ):
         super().__init__()
+        self.config = config
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input
@@ -148,7 +160,10 @@ class ServerEventHandler(FileSystemEventHandler):
 
     def _initialize_project(self):
         self.folder = self.fxt.init_project_from(
-            str(self.template_path), path=self.out_root, no_input=self.no_input
+            str(self.template_path),
+            path=self.out_root,
+            no_input=self.no_input,
+            data=self.config.data,
         )
         self.repo = Repo(self.out_path)
         self.initialized = True

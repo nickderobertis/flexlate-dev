@@ -12,6 +12,7 @@ NO_INPUT_DOC = "Whether to proceed without any input from the user"
 NO_AUTO_COMMIT_DOC = (
     "Whether to skip automatically committing manual changes in the generated project"
 )
+CONFIG_PATH_DOC = "The location of the flexlate-dev configuration file to use"
 
 TEMPLATE_PATH_OPTION = typer.Option(
     Path("."),
@@ -23,6 +24,7 @@ NO_INPUT_OPTION = typer.Option(False, "--no-input", "-n", show_default=False)
 NO_AUTO_COMMIT_OPTION = typer.Option(
     False, "--no-auto-commit", "-a", show_default=False
 )
+CONFIG_PATH_OPTION = typer.Option(None, "--config", "-c", show_default=False)
 
 
 @cli.command(name="serve")
@@ -34,12 +36,17 @@ def serve(
     template_path: Path = TEMPLATE_PATH_OPTION,
     no_input: bool = NO_INPUT_OPTION,
     no_auto_commit: bool = NO_AUTO_COMMIT_OPTION,
+    config_path: Optional[Path] = CONFIG_PATH_OPTION,
 ):
     """
     Run a development server with auto-reloading to see rendered output of a template
     """
     serve_template(
-        template_path, out_path, no_input=no_input, auto_commit=not no_auto_commit
+        template_path,
+        out_path,
+        no_input=no_input,
+        auto_commit=not no_auto_commit,
+        config_path=config_path,
     )
 
 
@@ -50,6 +57,7 @@ def publish(
         help="Location to publish built template to",
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
+    config_path: Optional[Path] = CONFIG_PATH_OPTION,
 ):
     """
     Sync rendered output of a template
