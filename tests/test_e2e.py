@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from flexlate_dev.config import ServeConfig, FlexlateDevConfig
+from flexlate_dev.config import FlexlateDevConfig, DataConfiguration
 from flexlate_dev.server import run_server
 from tests.config import GENERATED_FILES_DIR
 from tests.pathutils import change_directory_to
@@ -17,7 +17,7 @@ def test_server_creates_and_updates_template_on_change(copier_one_template_path:
     expect_file = GENERATED_FILES_DIR / "project" / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config = FlexlateDevConfig()
-    with run_server(config, template_path, GENERATED_FILES_DIR, no_input=True):
+    with run_server(config, None, template_path, GENERATED_FILES_DIR, no_input=True):
         wait_until_path_exists(expect_file)
         # Check initial load
         assert expect_file.read_text() == "1"
@@ -61,7 +61,7 @@ def test_server_creates_and_updates_template_on_change_after_generated_project_c
     expect_file = generated_project_path / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config = FlexlateDevConfig()
-    with run_server(config, template_path, GENERATED_FILES_DIR, no_input=True):
+    with run_server(config, None, template_path, GENERATED_FILES_DIR, no_input=True):
         wait_until_path_exists(expect_file)
         # Check initial load
         assert expect_file.read_text() == "1"
@@ -89,10 +89,11 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config_path = project_path / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    serve_config = ServeConfig(data=dict(q2=50))
-    config.serve = serve_config
+    data_config = DataConfiguration(data=dict(q2=50))
+    config.data["default"] = data_config
+    config.run_configs["default_serve"].data_name = "default"
     with run_server(
-        config, template_path, GENERATED_FILES_DIR, no_input=True, save=True
+        config, None, template_path, GENERATED_FILES_DIR, no_input=True, save=True
     ):
         wait_until_path_exists(expect_file)
         # Check initial load
@@ -103,9 +104,8 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
         template_file.write_text("new content {{ q2 }}")
 
         # Check reload
-        wait_until_file_updates(expect_file, modified_time)
-        assert expect_file.read_text() == "new content 50"
+        wait_until_file_has_content(expect_file, modified_time, "new content 50")
 
         # Check that config was saved
         config = FlexlateDevConfig.load(config_path)
-        assert config.serve.data == dict(q1="a1", q2=50, q3=None)
+        assert config.data["default"].data == dict(q1="a1", q2=50, q3=None)

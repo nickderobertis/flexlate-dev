@@ -13,7 +13,8 @@ from watchdog.events import FileSystemEventHandler, FileSystemEvent
 from flexlate.template_data import TemplateData
 from flexlate.config import FlexlateConfig
 
-from flexlate_dev.config import FlexlateDevConfig, load_config, ServeConfig
+from flexlate_dev.command_type import CommandType
+from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.styles import (
     print_styled,
@@ -24,6 +25,7 @@ from flexlate_dev.styles import (
 
 
 def serve_template(
+    run_config_name: Optional[str] = None,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
@@ -35,6 +37,7 @@ def serve_template(
 
     with run_server(
         config,
+        run_config_name=run_config_name,
         template_path=template_path,
         out_path=out_path,
         no_input=no_input,
@@ -51,6 +54,7 @@ def serve_template(
 @contextlib.contextmanager
 def run_server(
     config: FlexlateDevConfig,
+    run_config_name: Optional[str] = None,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
@@ -71,6 +75,7 @@ def run_server(
         config,
         template_path,
         out_path,
+        run_config_name=run_config_name,
         no_input=no_input,
         auto_commit=auto_commit,
         save=save,
@@ -100,12 +105,14 @@ class ServerEventHandler(FileSystemEventHandler):
         config: FlexlateDevConfig,
         template_path: Path,
         out_root: Path,
+        run_config_name: Optional[str] = None,
         no_input: bool = False,
         auto_commit: bool = True,
         save: bool = False,
     ):
         super().__init__()
         self.config = config
+        self.run_config = config.get_run_config(CommandType.SERVE, run_config_name)
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input
@@ -173,7 +180,10 @@ class ServerEventHandler(FileSystemEventHandler):
             str(self.template_path),
             path=self.out_root,
             no_input=self.no_input,
-            data=self.config.serve.data,
+            data=self.run_config.data.data if self.run_config.data else None,
+            default_folder_name=self.run_config.data.folder_name
+            if self.run_config.data
+            else DEFAULT_PROJECT_NAME,
         )
         self._save_data_from_flexlate_if_necessary()
         self.repo = Repo(self.out_path)
@@ -183,8 +193,7 @@ class ServerEventHandler(FileSystemEventHandler):
         if not self.save:
             return
         data = _get_data_from_flexlate_config(self.out_path)
-        self.config.serve.data = data
-        self.config.save()
+        self.config.save_data_for_run_config(self.run_config, data)
 
 
 def _get_data_from_flexlate_config(folder: Path) -> TemplateData:

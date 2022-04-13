@@ -14,6 +14,7 @@ NO_AUTO_COMMIT_DOC = (
 )
 CONFIG_PATH_DOC = "The location of the flexlate-dev configuration file to use"
 SAVE_DOC = "Whether to save the config file with any changes from the run such as answering project questions"
+RUN_CONFIG_NAME_DOC = "The name of the run configuration to use"
 
 TEMPLATE_PATH_OPTION = typer.Option(
     Path("."),
@@ -27,12 +28,16 @@ NO_AUTO_COMMIT_OPTION = typer.Option(
 )
 CONFIG_PATH_OPTION = typer.Option(None, "--config", "-c", show_default=False)
 SAVE_OPTION = typer.Option(False, "--save", "-s", show_default=False)
+RUN_CONFIG_ARGUMENT = typer.Argument(None, help=RUN_CONFIG_NAME_DOC)
 
 
 @cli.command(name="serve")
 def serve(
-    out_path: Optional[Path] = typer.Argument(
+    run_config: Optional[str] = RUN_CONFIG_ARGUMENT,
+    out_path: Optional[Path] = typer.Option(
         None,
+        "--out",
+        "-o",
         help="Optional location to serve built template to, defaults to a temporary directory",
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
@@ -45,6 +50,7 @@ def serve(
     Run a development server with auto-reloading to see rendered output of a template
     """
     serve_template(
+        run_config,
         template_path,
         out_path,
         no_input=no_input,
@@ -56,8 +62,11 @@ def serve(
 
 @cli.command(name="publish")
 def publish(
-    out_path: Path = typer.Argument(
-        ...,
+    run_config: Optional[str] = RUN_CONFIG_ARGUMENT,
+    out_path: Optional[Path] = typer.Option(
+        None,
+        "--out",
+        "-o",
         help="Location to publish built template to",
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
