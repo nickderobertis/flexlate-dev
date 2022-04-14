@@ -20,6 +20,57 @@ from flexlate_dev.styles import print_styled, INFO_STYLE, ACTION_REQUIRED_STYLE
 fxt = Flexlate()
 
 
+def update_or_initialize_project_get_folder(
+    template_path: Path,
+    out_root: Path,
+    config: FlexlateDevConfig,
+    run_config: FullRunConfiguration,
+    no_input: bool = False,
+    data: Optional[TemplateData] = None,
+    save: bool = True,
+    abort_on_conflict: bool = False,
+    auto_commit: bool = True,
+    default_folder_name: str = DEFAULT_PROJECT_NAME,
+) -> str:
+    def init_project() -> str:
+        return initialize_project_get_folder(
+            template_path,
+            out_root,
+            config,
+            run_config,
+            no_input=no_input,
+            data=data,
+            save=save,
+            default_folder_name=default_folder_name,
+        )
+
+    folder = run_config.data.folder_name if run_config.data else None
+    if folder is None:
+        print_styled(
+            "No folder name in the config, defaulting to initializing the project",
+            INFO_STYLE,
+        )
+        return init_project()
+
+    out_path = out_root / folder
+    if out_path.exists():
+        print_styled(f"{out_path} exists, updating project", INFO_STYLE)
+        update_project(
+            out_path,
+            config,
+            run_config,
+            data=data,
+            no_input=no_input,
+            abort_on_conflict=abort_on_conflict,
+            auto_commit=auto_commit,
+            save=save,
+        )
+        return folder
+
+    print_styled(f"{out_path} does not exist, initializing project", INFO_STYLE)
+    return init_project()
+
+
 def initialize_project_get_folder(
     template_path: Path,
     out_root: Path,
