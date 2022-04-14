@@ -10,6 +10,9 @@ from flexlate_dev.config import (
     FullRunConfiguration,
     DEFAULT_PROJECT_NAME,
 )
+from flexlate_dev.dirutils import change_directory_to
+from flexlate_dev.ext_subprocess import run_commands_stream_output
+from flexlate_dev.styles import print_styled, INFO_STYLE
 
 fxt = Flexlate()
 
@@ -31,8 +34,12 @@ def initialize_project_get_folder(
         data=data,
         default_folder_name=default_folder_name,
     )
+    out_path = out_root / folder
+    if run_config.config.post_init:
+        print_styled("Running post-init commands", INFO_STYLE)
+        with change_directory_to(out_path):
+            run_commands_stream_output(run_config.config.post_init)
     if save:
-        out_path = out_root / folder
         save_config(out_path, config, run_config)
     return folder
 
