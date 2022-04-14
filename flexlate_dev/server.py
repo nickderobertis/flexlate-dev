@@ -167,23 +167,11 @@ class ServerEventHandler(FileSystemEventHandler):
                 self.run_config,
                 data=self.data,
                 no_input=self.no_input,
+                auto_commit=self.auto_commit,
                 save=self.save,
             )
         except flexlate_exc.TriedToCommitButNoChangesException:
             print_styled("Update did not have any changes", INFO_STYLE)
-        except flexlate_exc.GitRepoDirtyException:
-            if self.auto_commit:
-                stage_and_commit_all(self.repo, "Auto-commit manual changes")
-                print_styled(
-                    "Detected manual changes to generated files and auto_commit=True, committing",
-                    INFO_STYLE,
-                )
-                self.sync_output()
-            else:
-                print_styled(
-                    "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
-                    ACTION_REQUIRED_STYLE,
-                )
 
     def _initialize_project(self):
         self.folder = initialize_project_get_folder(

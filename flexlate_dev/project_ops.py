@@ -4,6 +4,8 @@ from typing import Optional
 from flexlate import Flexlate
 from flexlate.config import FlexlateConfig
 from flexlate.template_data import TemplateData
+from flexlate import exc as flexlate_exc
+from git import Repo
 
 from flexlate_dev.config import (
     FlexlateDevConfig,
@@ -12,7 +14,8 @@ from flexlate_dev.config import (
 )
 from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.ext_subprocess import run_commands_stream_output
-from flexlate_dev.styles import print_styled, INFO_STYLE
+from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.styles import print_styled, INFO_STYLE, ACTION_REQUIRED_STYLE
 
 fxt = Flexlate()
 
@@ -51,14 +54,45 @@ def update_project(
     data: Optional[TemplateData] = None,
     no_input: bool = False,
     abort_on_conflict: bool = False,
+    auto_commit: bool = True,
     save: bool = True,
 ):
-    fxt.update(
-        data=[data] if data else None,
-        no_input=no_input,
-        abort_on_conflict=abort_on_conflict,
-        project_path=out_path,
-    )
+    if run_config.config.pre_update:
+        print_styled("Running pre-update commands", INFO_STYLE)
+        with change_directory_to(out_path):
+            run_commands_stream_output(run_config.config.pre_update)
+    try:
+        fxt.update(
+            data=[data] if data else None,
+            no_input=no_input,
+            abort_on_conflict=abort_on_conflict,
+            project_path=out_path,
+        )
+    except flexlate_exc.GitRepoDirtyException:
+        if auto_commit:
+            repo = Repo(out_path)
+            stage_and_commit_all(repo, "Auto-commit manual changes")
+            print_styled(
+                "Detected manual changes to generated files and auto_commit=True, committing",
+                INFO_STYLE,
+            )
+            fxt.update(
+                data=[data] if data else None,
+                no_input=no_input,
+                abort_on_conflict=abort_on_conflict,
+                project_path=out_path,
+            )
+        else:
+            print_styled(
+                "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
+                ACTION_REQUIRED_STYLE,
+            )
+            return
+
+    if run_config.config.post_update:
+        print_styled("Running post-update commands", INFO_STYLE)
+        with change_directory_to(out_path):
+            run_commands_stream_output(run_config.config.post_update)
     if save:
         _save_config(out_path, config, run_config)
 
