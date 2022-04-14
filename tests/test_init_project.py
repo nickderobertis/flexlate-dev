@@ -35,3 +35,30 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
     # Check that config was saved
     loaded_config = FlexlateDevConfig.load(config_path)
     assert loaded_config.data["default"].data == dict(q1="a1", q2=50, q3=None)
+
+
+def test_init_project_creates_project_with_default_data(copier_one_template_path: Path):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
+    config = FlexlateDevConfig()
+    config.settings.custom_config_folder = GENERATED_FILES_DIR
+    config.settings.config_name = "flexlate-dev"
+    run_config = config.get_run_config(CommandType.SERVE, None)
+
+    initialize_project_get_folder(
+        template_path,
+        GENERATED_FILES_DIR,
+        config,
+        run_config=run_config,
+        no_input=True,
+        data=None,
+        save=True,
+    )
+
+    assert expect_file.read_text() == "1"
+
+    # Check that config was saved
+    loaded_config = FlexlateDevConfig.load(config_path)
+    assert loaded_config.data["default"].data == dict(q1="a1", q2=1, q3=None)
