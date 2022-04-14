@@ -16,7 +16,7 @@ from flexlate.config import FlexlateConfig
 from flexlate_dev.command_type import CommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.gituitls import stage_and_commit_all
-from flexlate_dev.project_ops import initialize_project_get_folder, save_config
+from flexlate_dev.project_ops import initialize_project_get_folder, update_project
 from flexlate_dev.styles import (
     print_styled,
     INFO_STYLE,
@@ -130,6 +130,10 @@ class ServerEventHandler(FileSystemEventHandler):
             raise ValueError("folder must be set")
         return self.out_root / self.folder
 
+    @property
+    def data(self) -> Optional[TemplateData]:
+        return self.run_config.data.data if self.run_config.data else None
+
     def on_modified(self, event: FileSystemEvent):
         global old
         super().on_modified(event)
@@ -157,7 +161,14 @@ class ServerEventHandler(FileSystemEventHandler):
             raise ValueError("repo must not be None")
 
         try:
-            self.fxt.update(project_path=self.out_path, no_input=True)
+            update_project(
+                self.out_path,
+                self.config,
+                self.run_config,
+                data=self.data,
+                no_input=self.no_input,
+                save=self.save,
+            )
         except flexlate_exc.TriedToCommitButNoChangesException:
             print_styled("Update did not have any changes", INFO_STYLE)
         except flexlate_exc.GitRepoDirtyException:
@@ -173,8 +184,6 @@ class ServerEventHandler(FileSystemEventHandler):
                     "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
                     ACTION_REQUIRED_STYLE,
                 )
-        else:
-            self._save_data_from_flexlate_if_necessary()
 
     def _initialize_project(self):
         self.folder = initialize_project_get_folder(
@@ -183,7 +192,7 @@ class ServerEventHandler(FileSystemEventHandler):
             self.config,
             self.run_config,
             no_input=self.no_input,
-            data=self.run_config.data.data if self.run_config.data else None,
+            data=self.data,
             save=self.save,
             default_folder_name=self.run_config.data.folder_name
             if self.run_config.data
@@ -191,7 +200,3 @@ class ServerEventHandler(FileSystemEventHandler):
         )
         self.repo = Repo(self.out_path)
         self.initialized = True
-
-    def _save_data_from_flexlate_if_necessary(self):
-        if self.save:
-            save_config(self.out_path, self.config, self.run_config)

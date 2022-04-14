@@ -40,11 +40,30 @@ def initialize_project_get_folder(
         with change_directory_to(out_path):
             run_commands_stream_output(run_config.config.post_init)
     if save:
-        save_config(out_path, config, run_config)
+        _save_config(out_path, config, run_config)
     return folder
 
 
-def save_config(
+def update_project(
+    out_path: Path,
+    config: FlexlateDevConfig,
+    run_config: FullRunConfiguration,
+    data: Optional[TemplateData] = None,
+    no_input: bool = False,
+    abort_on_conflict: bool = False,
+    save: bool = True,
+):
+    fxt.update(
+        data=[data] if data else None,
+        no_input=no_input,
+        abort_on_conflict=abort_on_conflict,
+        project_path=out_path,
+    )
+    if save:
+        _save_config(out_path, config, run_config)
+
+
+def _save_config(
     out_path: Path, config: FlexlateDevConfig, run_config: FullRunConfiguration
 ):
     data = _get_data_from_flexlate_config(out_path)
