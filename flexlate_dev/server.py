@@ -16,6 +16,7 @@ from flexlate.config import FlexlateConfig
 from flexlate_dev.command_type import CommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.project_ops import initialize_project_get_folder, save_config
 from flexlate_dev.styles import (
     print_styled,
     INFO_STYLE,
@@ -176,29 +177,21 @@ class ServerEventHandler(FileSystemEventHandler):
             self._save_data_from_flexlate_if_necessary()
 
     def _initialize_project(self):
-        self.folder = self.fxt.init_project_from(
-            str(self.template_path),
-            path=self.out_root,
+        self.folder = initialize_project_get_folder(
+            self.template_path,
+            self.out_root,
+            self.config,
+            self.run_config,
             no_input=self.no_input,
             data=self.run_config.data.data if self.run_config.data else None,
+            save=self.save,
             default_folder_name=self.run_config.data.folder_name
             if self.run_config.data
             else DEFAULT_PROJECT_NAME,
         )
-        self._save_data_from_flexlate_if_necessary()
         self.repo = Repo(self.out_path)
         self.initialized = True
 
     def _save_data_from_flexlate_if_necessary(self):
-        if not self.save:
-            return
-        data = _get_data_from_flexlate_config(self.out_path)
-        self.config.save_data_for_run_config(self.run_config, data)
-
-
-def _get_data_from_flexlate_config(folder: Path) -> TemplateData:
-    config_path = folder / "flexlate.json"
-    config = FlexlateConfig.load(config_path)
-    assert len(config.applied_templates) == 1
-    at = config.applied_templates[0]
-    return at.data
+        if self.save:
+            save_config(self.out_path, self.config, self.run_config)
