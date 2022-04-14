@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Dict, List, Final
+from typing import Optional, Dict, List, Final, Any
 
 from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
@@ -12,11 +12,11 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 
 
 class UserRunConfiguration(BaseModel):
-    post_init: List[str] = Field(default_factory=list)
-    pre_reinit: List[str] = Field(default_factory=list)
-    post_reinit: List[str] = Field(default_factory=list)
-    pre_update: List[str] = Field(default_factory=list)
-    post_update: List[str] = Field(default_factory=list)
+    post_init: Optional[List[str]] = None
+    pre_reinit: Optional[List[str]] = None
+    post_reinit: Optional[List[str]] = None
+    pre_update: Optional[List[str]] = None
+    post_update: Optional[List[str]] = None
     data_name: Optional[str] = None
     out_root: Optional[Path] = None
 
@@ -51,6 +51,10 @@ class FlexlateDevConfig(BaseConfig):
         default_format=ConfigFormats.YAML,
         config_name="flexlate-dev",
     )
+
+    def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):
+        all_kwargs = dict(exclude_none=True, **kwargs)
+        return super().save(serializer_kwargs=serializer_kwargs, **all_kwargs)
 
     def get_run_config(
         self, command: CommandType, name: Optional[str] = None
