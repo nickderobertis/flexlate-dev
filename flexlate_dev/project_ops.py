@@ -30,6 +30,7 @@ def update_or_initialize_project_get_folder(
     save: bool = True,
     abort_on_conflict: bool = False,
     auto_commit: bool = True,
+    known_folder_name: Optional[str] = None,
     default_folder_name: str = DEFAULT_PROJECT_NAME,
 ) -> str:
     def init_project() -> str:
@@ -44,7 +45,9 @@ def update_or_initialize_project_get_folder(
             default_folder_name=default_folder_name,
         )
 
-    folder = run_config.data.folder_name if run_config.data else None
+    folder = known_folder_name or (
+        run_config.data.folder_name if run_config.data else None
+    )
     if folder is None:
         print_styled(
             "No folder name in the config, defaulting to initializing the project",

@@ -11,17 +11,16 @@ from git import Repo
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 from flexlate.template_data import TemplateData
-from flexlate.config import FlexlateConfig
 
 from flexlate_dev.command_type import CommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
-from flexlate_dev.gituitls import stage_and_commit_all
-from flexlate_dev.project_ops import initialize_project_get_folder, update_project
+from flexlate_dev.project_ops import (
+    update_or_initialize_project_get_folder,
+)
 from flexlate_dev.styles import (
     print_styled,
     INFO_STYLE,
     SUCCESS_STYLE,
-    ACTION_REQUIRED_STYLE,
 )
 
 
@@ -113,6 +112,7 @@ class ServerEventHandler(FileSystemEventHandler):
     ):
         super().__init__()
         self.config = config
+        self.run_config_name = run_config_name
         self.run_config = config.get_run_config(CommandType.SERVE, run_config_name)
         self.template_path = template_path
         self.out_root = out_root
@@ -121,7 +121,6 @@ class ServerEventHandler(FileSystemEventHandler):
         self.save = save
         self.folder: Optional[str] = None
         self.repo: Optional[Repo] = None
-        self.initialized = False
         self.fxt = Flexlate()
 
     @property
@@ -150,38 +149,18 @@ class ServerEventHandler(FileSystemEventHandler):
         old = new
 
     def sync_output(self):
-        """
-        Run build using subprocess so that imports will be executed every time
-        :param file_path:
-        :return:
-        """
-        if not self.initialized:
-            return self._initialize_project()
-        if self.repo is None:
-            raise ValueError("repo must not be None")
-
-        update_project(
-            self.out_path,
+        self.folder = update_or_initialize_project_get_folder(
+            self.template_path,
+            self.out_root,
             self.config,
             self.run_config,
             data=self.data,
             no_input=self.no_input,
             auto_commit=self.auto_commit,
             save=self.save,
-        )
-
-    def _initialize_project(self):
-        self.folder = initialize_project_get_folder(
-            self.template_path,
-            self.out_root,
-            self.config,
-            self.run_config,
-            no_input=self.no_input,
-            data=self.data,
-            save=self.save,
+            known_folder_name=self.folder,
             default_folder_name=self.run_config.data.folder_name
             if self.run_config.data
             else DEFAULT_PROJECT_NAME,
         )
         self.repo = Repo(self.out_path)
-        self.initialized = True
