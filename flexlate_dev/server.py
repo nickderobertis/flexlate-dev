@@ -160,18 +160,15 @@ class ServerEventHandler(FileSystemEventHandler):
         if self.repo is None:
             raise ValueError("repo must not be None")
 
-        try:
-            update_project(
-                self.out_path,
-                self.config,
-                self.run_config,
-                data=self.data,
-                no_input=self.no_input,
-                auto_commit=self.auto_commit,
-                save=self.save,
-            )
-        except flexlate_exc.TriedToCommitButNoChangesException:
-            print_styled("Update did not have any changes", INFO_STYLE)
+        update_project(
+            self.out_path,
+            self.config,
+            self.run_config,
+            data=self.data,
+            no_input=self.no_input,
+            auto_commit=self.auto_commit,
+            save=self.save,
+        )
 
     def _initialize_project(self):
         self.folder = initialize_project_get_folder(

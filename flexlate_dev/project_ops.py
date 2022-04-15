@@ -139,6 +139,9 @@ def update_project(
                 ACTION_REQUIRED_STYLE,
             )
             return
+    except flexlate_exc.TriedToCommitButNoChangesException:
+        print_styled("Update did not have any changes", INFO_STYLE)
+        return
 
     if run_config.config.post_update:
         print_styled("Running post-update commands", INFO_STYLE)
