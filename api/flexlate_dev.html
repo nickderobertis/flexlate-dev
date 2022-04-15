@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev package &mdash; flexlate-dev 0.4.0 documentation</title>
+  <title>flexlate_dev package &mdash; flexlate-dev 0.5.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.5.0
               </div>
             
           
@@ -108,8 +108,14 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">flexlate_dev package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-cli-module">flexlate_dev.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.command_type">flexlate_dev.command_type module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-config-module">flexlate_dev.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.dirutils">flexlate_dev.dirutils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.exc">flexlate_dev.exc module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.ext_subprocess">flexlate_dev.ext_subprocess module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.gituitls">flexlate_dev.gituitls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-project-ops-module">flexlate_dev.project_ops module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-publish-module">flexlate_dev.publish module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#flexlate-dev-server-module">flexlate_dev.server module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.styles">flexlate_dev.styles module</a></li>
 </ul>
@@ -192,8 +198,76 @@
 <section id="flexlate-dev-cli-module">
 <h2>flexlate_dev.cli module<a class="headerlink" href="#flexlate-dev-cli-module" title="Permalink to this headline">¶</a></h2>
 </section>
+<section id="module-flexlate_dev.command_type">
+<span id="flexlate-dev-command-type-module"></span><h2>flexlate_dev.command_type module<a class="headerlink" href="#module-flexlate_dev.command_type" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.command_type.</span></span><span class="sig-name descname"><span class="pre">CommandType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/command_type.html#CommandType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.command_type.CommandType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType.PUBLISH">
+<span class="sig-name descname"><span class="pre">PUBLISH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'publish'</span></em><a class="headerlink" href="#flexlate_dev.command_type.CommandType.PUBLISH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType.SERVE">
+<span class="sig-name descname"><span class="pre">SERVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'serve'</span></em><a class="headerlink" href="#flexlate_dev.command_type.CommandType.SERVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="flexlate-dev-config-module">
 <h2>flexlate_dev.config module<a class="headerlink" href="#flexlate-dev-config-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-flexlate_dev.dirutils">
+<span id="flexlate-dev-dirutils-module"></span><h2>flexlate_dev.dirutils module<a class="headerlink" href="#module-flexlate_dev.dirutils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.dirutils.change_directory_to">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.dirutils.</span></span><span class="sig-name descname"><span class="pre">change_directory_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/dirutils.html#change_directory_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.dirutils.change_directory_to" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-flexlate_dev.exc">
+<span id="flexlate-dev-exc-module"></span><h2>flexlate_dev.exc module<a class="headerlink" href="#module-flexlate_dev.exc" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="flexlate_dev.exc.FlexlateDevException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">FlexlateDevException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#FlexlateDevException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.FlexlateDevException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="flexlate_dev.exc.NoSuchDataException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">NoSuchDataException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#NoSuchDataException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.NoSuchDataException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#flexlate_dev.exc.UserInputException" title="flexlate_dev.exc.UserInputException"><code class="xref py py-class docutils literal notranslate"><span class="pre">flexlate_dev.exc.UserInputException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="flexlate_dev.exc.NoSuchRunConfigurationException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">NoSuchRunConfigurationException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#NoSuchRunConfigurationException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.NoSuchRunConfigurationException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#flexlate_dev.exc.UserInputException" title="flexlate_dev.exc.UserInputException"><code class="xref py py-class docutils literal notranslate"><span class="pre">flexlate_dev.exc.UserInputException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="flexlate_dev.exc.UserInputException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">UserInputException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#UserInputException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.UserInputException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#flexlate_dev.exc.FlexlateDevException" title="flexlate_dev.exc.FlexlateDevException"><code class="xref py py-class docutils literal notranslate"><span class="pre">flexlate_dev.exc.FlexlateDevException</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-flexlate_dev.ext_subprocess">
+<span id="flexlate-dev-ext-subprocess-module"></span><h2>flexlate_dev.ext_subprocess module<a class="headerlink" href="#module-flexlate_dev.ext_subprocess" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.ext_subprocess.run_command_stream_output">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.ext_subprocess.</span></span><span class="sig-name descname"><span class="pre">run_command_stream_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/ext_subprocess.html#run_command_stream_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.ext_subprocess.run_command_stream_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.ext_subprocess.run_commands_stream_output">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.ext_subprocess.</span></span><span class="sig-name descname"><span class="pre">run_commands_stream_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/ext_subprocess.html#run_commands_stream_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.ext_subprocess.run_commands_stream_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-flexlate_dev.gituitls">
 <span id="flexlate-dev-gituitls-module"></span><h2>flexlate_dev.gituitls module<a class="headerlink" href="#module-flexlate_dev.gituitls" title="Permalink to this headline">¶</a></h2>
@@ -202,6 +276,12 @@
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.gituitls.</span></span><span class="sig-name descname"><span class="pre">stage_and_commit_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commit_message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/gituitls.html#stage_and_commit_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.gituitls.stage_and_commit_all" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</section>
+<section id="flexlate-dev-project-ops-module">
+<h2>flexlate_dev.project_ops module<a class="headerlink" href="#flexlate-dev-project-ops-module" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="flexlate-dev-publish-module">
+<h2>flexlate_dev.publish module<a class="headerlink" href="#flexlate-dev-publish-module" title="Permalink to this headline">¶</a></h2>
 </section>
 <section id="flexlate-dev-server-module">
 <h2>flexlate_dev.server module<a class="headerlink" href="#flexlate-dev-server-module" title="Permalink to this headline">¶</a></h2>

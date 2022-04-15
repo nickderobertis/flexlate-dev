@@ -17,6 +17,14 @@ flexlate\_dev.cli module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.command\_type module
+----------------------------------
+
+.. automodule:: flexlate_dev.command_type
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.config module
 ---------------------------
 
@@ -25,10 +33,50 @@ flexlate\_dev.config module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.dirutils module
+-----------------------------
+
+.. automodule:: flexlate_dev.dirutils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.exc module
+------------------------
+
+.. automodule:: flexlate_dev.exc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.ext\_subprocess module
+------------------------------------
+
+.. automodule:: flexlate_dev.ext_subprocess
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.gituitls module
 -----------------------------
 
 .. automodule:: flexlate_dev.gituitls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.project\_ops module
+---------------------------------
+
+.. automodule:: flexlate_dev.project_ops
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.publish module
+----------------------------
+
+.. automodule:: flexlate_dev.publish
    :members:
    :undoc-members:
    :show-inheritance:
