@@ -64,7 +64,7 @@ class FlexlateDevConfig(BaseConfig):
         if not user_run_config:
             raise NoSuchRunConfigurationException(name)
         if user_run_config.data_name is None:
-            data_config = None
+            data_config = self.data.get("default")
         else:
             data_config = self.data.get(user_run_config.data_name)
             if not data_config:
