@@ -3,6 +3,7 @@ from typing import Optional
 
 import typer
 
+from flexlate_dev.publish import publish_template
 from flexlate_dev.server import serve_template
 
 cli = typer.Typer()
@@ -71,12 +72,20 @@ def publish(
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
     config_path: Optional[Path] = CONFIG_PATH_OPTION,
+    no_input: bool = NO_INPUT_OPTION,
     save: bool = SAVE_OPTION,
 ):
     """
     Sync rendered output of a template
     """
-    raise NotImplementedError
+    publish_template(
+        template_path,
+        out_path,
+        run_config_name=run_config,
+        config_path=config_path,
+        save=save,
+        no_input=no_input,
+    )
 
 
 if __name__ == "__main__":

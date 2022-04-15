@@ -27,7 +27,7 @@ def update_or_initialize_project_get_folder(
     run_config: FullRunConfiguration,
     no_input: bool = False,
     data: Optional[TemplateData] = None,
-    save: bool = True,
+    save: bool = False,
     abort_on_conflict: bool = False,
     auto_commit: bool = True,
     known_folder_name: Optional[str] = None,
