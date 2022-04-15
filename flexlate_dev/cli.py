@@ -63,13 +63,11 @@ def serve(
 
 @cli.command(name="publish")
 def publish(
-    run_config: Optional[str] = RUN_CONFIG_ARGUMENT,
-    out_path: Optional[Path] = typer.Option(
-        None,
-        "--out",
-        "-o",
+    out_path: Path = typer.Argument(
+        ...,
         help="Location to publish built template to",
     ),
+    run_config: Optional[str] = RUN_CONFIG_ARGUMENT,
     template_path: Path = TEMPLATE_PATH_OPTION,
     config_path: Optional[Path] = CONFIG_PATH_OPTION,
     no_input: bool = NO_INPUT_OPTION,
