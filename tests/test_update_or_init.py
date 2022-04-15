@@ -34,3 +34,31 @@ def test_init_project_creates_project_when_no_folder_name_in_config(
     )
 
     assert expect_file.read_text() == "1"
+
+
+def test_init_project_creates_project_when_path_does_not_exist(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    config = FlexlateDevConfig()
+    config.settings.custom_config_folder = GENERATED_FILES_DIR
+    config.settings.config_name = "flexlate-dev"
+    data_config = DataConfiguration(folder_name="project")
+    config.data["default"] = data_config
+    run_config = config.get_run_config(CommandType.SERVE, None)
+
+    assert not expect_file.exists()
+
+    update_or_initialize_project_get_folder(
+        template_path,
+        GENERATED_FILES_DIR,
+        config,
+        run_config=run_config,
+        no_input=True,
+        data=None,
+        save=True,
+    )
+
+    assert expect_file.read_text() == "1"
