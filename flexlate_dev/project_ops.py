@@ -13,7 +13,7 @@ from flexlate_dev.config import (
     DEFAULT_PROJECT_NAME,
 )
 from flexlate_dev.dirutils import change_directory_to
-from flexlate_dev.ext_subprocess import run_commands_stream_output
+from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.styles import print_styled, INFO_STYLE, ACTION_REQUIRED_STYLE
 
@@ -95,7 +95,7 @@ def initialize_project_get_folder(
     if run_config.config.post_init:
         print_styled("Running post-init commands", INFO_STYLE)
         with change_directory_to(out_path):
-            run_commands_stream_output(run_config.config.post_init)
+            run_command_or_command_strs(run_config.config.post_init)
     if save:
         _save_config(out_path, config, run_config)
     return folder
@@ -114,7 +114,7 @@ def update_project(
     if run_config.config.pre_update:
         print_styled("Running pre-update commands", INFO_STYLE)
         with change_directory_to(out_path):
-            run_commands_stream_output(run_config.config.pre_update)
+            run_command_or_command_strs(run_config.config.pre_update)
     try:
         fxt.update(
             data=[data] if data else None,
@@ -149,7 +149,7 @@ def update_project(
     if run_config.config.post_update:
         print_styled("Running post-update commands", INFO_STYLE)
         with change_directory_to(out_path):
-            run_commands_stream_output(run_config.config.post_update)
+            run_command_or_command_strs(run_config.config.post_update)
     if save:
         _save_config(out_path, config, run_config)
 
