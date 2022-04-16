@@ -57,6 +57,14 @@ flexlate\_dev.ext\_subprocess module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.get\_version module
+---------------------------------
+
+.. automodule:: flexlate_dev.get_version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.gituitls module
 -----------------------------
 
