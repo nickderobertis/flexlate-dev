@@ -15,8 +15,6 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 
 class UserRunConfiguration(BaseModel):
     post_init: Optional[List[Runnable]] = None
-    pre_reinit: Optional[List[Runnable]] = None
-    post_reinit: Optional[List[Runnable]] = None
     pre_update: Optional[List[Runnable]] = None
     post_update: Optional[List[Runnable]] = None
     data_name: Optional[str] = None
