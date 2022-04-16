@@ -4,6 +4,7 @@ from flexlate_dev.ext_subprocess import (
     run_command_stream_output,
     run_command_in_background_stream_output,
 )
+from flexlate_dev.styles import print_styled, INFO_STYLE
 from flexlate_dev.user_command import UserCommand
 
 Runnable = Union[UserCommand, str]
@@ -19,6 +20,7 @@ def run_command_or_command_strs(cmds: Sequence[Runnable]):
 
 
 def run_command(cmd: UserCommand):
+    print_styled(f"Running command: {cmd.display_name}", INFO_STYLE)
     if cmd.background:
         run_command_in_background_stream_output(cmd.run)
     else:

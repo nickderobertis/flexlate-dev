@@ -11,3 +11,7 @@ class UserCommand(BaseModel):
     @classmethod
     def from_string(cls, command: str) -> "UserCommand":
         return cls(run=command)
+
+    @property
+    def display_name(self) -> str:
+        return self.name or self.run
