@@ -2,7 +2,7 @@ from pathlib import Path
 
 from flexlate_dev.config import FlexlateDevConfig, DataConfiguration
 from flexlate_dev.server import run_server
-from tests.config import GENERATED_FILES_DIR
+from tests.config import GENERATED_FILES_DIR, BLOCKING_COMMAND_CONFIG_PATH
 from tests.pathutils import change_directory_to
 from tests.waitutils import (
     wait_until_path_exists,
@@ -109,3 +109,24 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
         # Check that config was saved
         config = FlexlateDevConfig.load(config_path)
         assert config.data["default"].data == dict(q1="a1", q2=50, q3=None)
+
+
+def test_server_runs_a_background_command_and_keeps_reloading(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    expect_file = GENERATED_FILES_DIR / "project" / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig.load(BLOCKING_COMMAND_CONFIG_PATH)
+    with run_server(config, None, template_path, GENERATED_FILES_DIR, no_input=True):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        modified_time = expect_file.lstat().st_mtime
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_updates(expect_file, modified_time)
+        assert expect_file.read_text() == "new content 1"

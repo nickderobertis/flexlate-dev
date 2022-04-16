@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from flexlate_dev.command_type import CommandType
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, DEFAULT_PROJECT_NAME, load_config
 from flexlate_dev.project_ops import update_or_initialize_project_get_folder
 
@@ -16,7 +16,7 @@ def publish_template(
     abort_on_conflict: bool = False,
 ):
     config = load_config(config_path)
-    run_config = config.get_run_config(CommandType.PUBLISH, run_config_name)
+    run_config = config.get_run_config(ExternalCLICommandType.PUBLISH, run_config_name)
 
     update_or_initialize_project_get_folder(
         template_path,

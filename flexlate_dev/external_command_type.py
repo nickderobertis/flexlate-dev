@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class CommandType(str, Enum):
+class ExternalCLICommandType(str, Enum):
     SERVE = "serve"
     PUBLISH = "publish"

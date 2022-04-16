@@ -1,0 +1,13 @@
+commands: []
+data: {}
+run_configs:
+  default_publish:
+    post_init:
+    - gh repo create --source=.
+    post_update:
+    - git push --all origin
+  default_serve: {}
+  my-run-config:
+    post_init:
+    - background: true
+      run: sleep 10
