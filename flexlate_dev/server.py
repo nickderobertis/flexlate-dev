@@ -12,7 +12,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 from flexlate.template_data import TemplateData
 
-from flexlate_dev.command_type import CommandType
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.project_ops import (
     update_or_initialize_project_get_folder,
@@ -113,7 +113,9 @@ class ServerEventHandler(FileSystemEventHandler):
         super().__init__()
         self.config = config
         self.run_config_name = run_config_name
-        self.run_config = config.get_run_config(CommandType.SERVE, run_config_name)
+        self.run_config = config.get_run_config(
+            ExternalCLICommandType.SERVE, run_config_name
+        )
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input

@@ -1,4 +1,4 @@
-from flexlate_dev.command_type import CommandType
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder, update_project
 
@@ -13,7 +13,7 @@ def test_init_project_creates_project_with_default_data(copier_one_template_path
     config = FlexlateDevConfig()
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    run_config = config.get_run_config(CommandType.SERVE, None)
+    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(
         template_path,
@@ -50,7 +50,7 @@ def test_init_project_runs_pre_and_post_update(copier_one_template_path: Path):
         post_update=[f"echo $(date +%N) >> {extra_file}"],
     )
     config.run_configs["default_serve"] = user_run_config
-    run_config = config.get_run_config(CommandType.SERVE, None)
+    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(
         template_path,

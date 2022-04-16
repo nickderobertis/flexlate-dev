@@ -5,7 +5,7 @@ from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
 from pydantic import BaseModel, Field
 
-from flexlate_dev.command_type import CommandType
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.exc import NoSuchRunConfigurationException, NoSuchDataException
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
@@ -57,7 +57,7 @@ class FlexlateDevConfig(BaseConfig):
         return super().save(serializer_kwargs=serializer_kwargs, **all_kwargs)
 
     def get_run_config(
-        self, command: CommandType, name: Optional[str] = None
+        self, command: ExternalCLICommandType, name: Optional[str] = None
     ) -> FullRunConfiguration:
         name = name or f"default_{command.value.casefold()}"
         user_run_config = self.run_configs.get(name)
