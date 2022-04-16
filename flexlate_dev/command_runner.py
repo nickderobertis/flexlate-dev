@@ -1,6 +1,9 @@
 from typing import Sequence, Union
 
-from flexlate_dev.ext_subprocess import run_command_stream_output
+from flexlate_dev.ext_subprocess import (
+    run_command_stream_output,
+    run_command_in_background_stream_output,
+)
 from flexlate_dev.user_command import UserCommand
 
 Runnable = Union[UserCommand, str]
@@ -16,4 +19,7 @@ def run_command_or_command_strs(cmds: Sequence[Runnable]):
 
 
 def run_command(cmd: UserCommand):
-    run_command_stream_output(cmd.run)
+    if cmd.background:
+        run_command_in_background_stream_output(cmd.run)
+    else:
+        run_command_stream_output(cmd.run)
