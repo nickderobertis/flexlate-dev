@@ -3,8 +3,10 @@ from typing import Optional
 
 import typer
 
+from flexlate_dev import get_version
 from flexlate_dev.publish import publish_template
 from flexlate_dev.server import serve_template
+from flexlate_dev.styles import print_styled, INFO_STYLE
 
 cli = typer.Typer()
 
@@ -30,6 +32,30 @@ NO_AUTO_COMMIT_OPTION = typer.Option(
 CONFIG_PATH_OPTION = typer.Option(None, "--config", "-c", show_default=False)
 SAVE_OPTION = typer.Option(False, "--save", "-s", show_default=False)
 RUN_CONFIG_ARGUMENT = typer.Argument(None, help=RUN_CONFIG_NAME_DOC)
+
+
+@cli.callback(invoke_without_command=True)
+def pre_execute(
+    version: bool = typer.Option(
+        False,
+        "--version",
+        "-v",
+        show_default=False,
+        help="Show flexlate-dev and flexlate version, then exit",
+    )
+):
+    # Support printing version and then existing with dfxt --version
+    if version:
+        version_number = get_version.get_flexlate_dev_version()
+        flexlate_version = get_version.get_flexlate_version()
+        message = "\n".join(
+            [
+                f"flexlate-dev: {version_number}",
+                f"flexlate: {flexlate_version}",
+            ]
+        )
+        print_styled(message, INFO_STYLE)
+        exit(0)
 
 
 @cli.command(name="serve")
