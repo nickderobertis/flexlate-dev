@@ -8,8 +8,8 @@ from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import (
     FlexlateDevConfig,
     DataConfiguration,
-    UserRunConfiguration,
 )
+from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.project_ops import update_or_initialize_project_get_folder
 from tests.fixtures.template_path import *

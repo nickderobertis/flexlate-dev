@@ -5,8 +5,8 @@ from git import Repo
 from flexlate_dev.config import (
     FlexlateDevConfig,
     DataConfiguration,
-    UserRunConfiguration,
 )
+from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.publish import publish_template
 from flexlate_dev.server import run_server

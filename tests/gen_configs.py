@@ -1,8 +1,8 @@
 from flexlate_dev.config import (
     FlexlateDevConfig,
-    UserRunConfiguration,
     create_default_run_configs,
 )
+from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.user_command import UserCommand
 from tests.config import INPUT_CONFIGS_DIR
 

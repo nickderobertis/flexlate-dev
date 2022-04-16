@@ -5,20 +5,16 @@ from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
 from pydantic import BaseModel, Field
 
-from flexlate_dev.command_runner import Runnable
 from flexlate_dev.external_command_type import ExternalCLICommandType
-from flexlate_dev.exc import NoSuchRunConfigurationException, NoSuchDataException
+from flexlate_dev.exc import (
+    NoSuchRunConfigurationException,
+    NoSuchDataException,
+    NoSuchCommandException,
+)
 from flexlate_dev.user_command import UserCommand
+from flexlate_dev.user_runner import UserRunConfiguration
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
-
-
-class UserRunConfiguration(BaseModel):
-    post_init: Optional[List[Runnable]] = None
-    pre_update: Optional[List[Runnable]] = None
-    post_update: Optional[List[Runnable]] = None
-    data_name: Optional[str] = None
-    out_root: Optional[Path] = None
 
 
 class DataConfiguration(BaseModel):
@@ -81,6 +77,12 @@ class FlexlateDevConfig(BaseConfig):
         run_config.config.data_name = data_name  # set to default if was previously None
         self.data[data_name] = new_data_config
         self.save()
+
+    def get_global_command_by_id(self, id: str) -> UserCommand:
+        for command in self.commands:
+            if command.id == id:
+                return command
+        raise NoSuchCommandException(id)
 
 
 def load_config(config_path: Optional[Path]) -> FlexlateDevConfig:

@@ -22,3 +22,7 @@ class UserCommand(BaseModel):
     @property
     def display_name(self) -> str:
         return self.name or self.run
+
+    @property
+    def is_reference(self) -> bool:
+        return self.id is not None and self.run is None

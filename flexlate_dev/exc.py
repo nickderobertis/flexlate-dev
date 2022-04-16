@@ -12,3 +12,7 @@ class NoSuchRunConfigurationException(UserInputException):
 
 class NoSuchDataException(UserInputException):
     pass
+
+
+class NoSuchCommandException(UserInputException):
+    pass
