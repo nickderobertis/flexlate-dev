@@ -6,7 +6,7 @@ from pydantic import BaseModel
 class UserCommand(BaseModel):
     run: str
     name: Optional[str] = None
-    background: bool = False
+    background: Optional[bool] = None
 
     @classmethod
     def from_string(cls, command: str) -> "UserCommand":

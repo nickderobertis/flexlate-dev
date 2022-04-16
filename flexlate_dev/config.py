@@ -5,6 +5,7 @@ from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
 from pydantic import BaseModel, Field
 
+from flexlate_dev.command_runner import Runnable
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.exc import NoSuchRunConfigurationException, NoSuchDataException
 
@@ -12,11 +13,11 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 
 
 class UserRunConfiguration(BaseModel):
-    post_init: Optional[List[str]] = None
-    pre_reinit: Optional[List[str]] = None
-    post_reinit: Optional[List[str]] = None
-    pre_update: Optional[List[str]] = None
-    post_update: Optional[List[str]] = None
+    post_init: Optional[List[Runnable]] = None
+    pre_reinit: Optional[List[Runnable]] = None
+    post_reinit: Optional[List[Runnable]] = None
+    pre_update: Optional[List[Runnable]] = None
+    post_update: Optional[List[Runnable]] = None
     data_name: Optional[str] = None
     out_root: Optional[Path] = None
 
