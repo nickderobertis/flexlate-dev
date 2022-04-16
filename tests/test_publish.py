@@ -13,7 +13,7 @@ from flexlate_dev.server import run_server
 from tests.config import GENERATED_FILES_DIR
 from tests.pathutils import change_directory_to
 from tests.fixtures.template_path import *
-from tests.test_config import WITH_USER_COMMAND_PATH
+from tests.test_config import WITH_USER_COMMAND_CONFIG_PATH
 
 
 def test_publish_creates_output(copier_one_template_path: Path):
@@ -98,7 +98,7 @@ def test_publish_runs_user_commands_from_config_file(copier_one_template_path: P
         template_path,
         GENERATED_FILES_DIR,
         run_config_name="my-run-config",
-        config_path=WITH_USER_COMMAND_PATH,
+        config_path=WITH_USER_COMMAND_CONFIG_PATH,
         no_input=True,
     )
     assert expect_file.read_text() == "1"

@@ -1,13 +1,15 @@
 from flexlate_dev.config import FlexlateDevConfig
 from flexlate_dev.user_command import UserCommand
-from tests.config import INPUT_CONFIGS_DIR, GENERATED_FILES_DIR
+from tests.config import (
+    INPUT_CONFIGS_DIR,
+    GENERATED_FILES_DIR,
+    WITH_USER_COMMAND_CONFIG_PATH,
+)
 from tests.gen_configs import gen_config_with_user_commands
-
-WITH_USER_COMMAND_PATH = INPUT_CONFIGS_DIR / "with_user_command.yaml"
 
 
 def test_read_config_with_commands():
-    with_user_command_config = FlexlateDevConfig.load(WITH_USER_COMMAND_PATH)
+    with_user_command_config = FlexlateDevConfig.load(WITH_USER_COMMAND_CONFIG_PATH)
     run_config = with_user_command_config.run_configs["my-run-config"]
     assert run_config.post_update == ["touch string_command.txt"]
     assert len(run_config.post_init) == 2
@@ -25,6 +27,6 @@ def test_write_config_with_commands():
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.save()
     assert (
-        WITH_USER_COMMAND_PATH.read_text()
+        WITH_USER_COMMAND_CONFIG_PATH.read_text()
         == (GENERATED_FILES_DIR / "with_user_command.yaml").read_text()
     )

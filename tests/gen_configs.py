@@ -25,6 +25,21 @@ def gen_config_with_user_commands():
     return config
 
 
+def gen_config_with_blocking_command():
+    """
+    Generate a configuration file with a user command.
+    """
+    blocking_command = UserCommand(run="sleep 10", background=True)
+    run_config = UserRunConfiguration(
+        post_init=[blocking_command],
+    )
+    run_configs = {"my-run-config": run_config, **create_default_run_configs()}
+    config = FlexlateDevConfig(run_configs=run_configs)
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "blocking_command"
+    return config
+
+
 if __name__ == "__main__":
-    config = gen_config_with_user_commands()
-    config.save()
+    gen_config_with_user_commands().save()
+    gen_config_with_blocking_command().save()
