@@ -1,0 +1,283 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>flexlate_dev.user_runner &mdash; flexlate-dev 0.6.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx_paramlinks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> flexlate-dev
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.6.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Getting started with flexlate-dev</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">This is my gallery</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">flexlate_dev</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">flexlate-dev</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>flexlate_dev.user_runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for flexlate_dev.user_runner</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Handles resolving commands referenced by id so that the command_runner module</span>
+<span class="sd">can focus on only running a sequence of commands. Also has context of the</span>
+<span class="sd">different configuration hooks so that the command_runner module can be</span>
+<span class="sd">focused on just running commands.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">flexlate_dev.config</span> <span class="kn">import</span> <span class="n">FlexlateDevConfig</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span> <span class="nn">flexlate_dev.command_runner</span> <span class="kn">import</span> <span class="n">Runnable</span><span class="p">,</span> <span class="n">run_command_or_command_strs</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.dirutils</span> <span class="kn">import</span> <span class="n">change_directory_to</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="n">print_styled</span><span class="p">,</span> <span class="n">INFO_STYLE</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.user_command</span> <span class="kn">import</span> <span class="n">UserCommand</span>
+
+
+<div class="viewcode-block" id="RunnerHookType"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.user_runner.RunnerHookType">[docs]</a><span class="k">class</span> <span class="nc">RunnerHookType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">POST_INIT</span> <span class="o">=</span> <span class="s2">&quot;post_init&quot;</span>
+    <span class="n">PRE_UPDATE</span> <span class="o">=</span> <span class="s2">&quot;pre_update&quot;</span>
+    <span class="n">POST_UPDATE</span> <span class="o">=</span> <span class="s2">&quot;post_update&quot;</span></div>
+
+
+<div class="viewcode-block" id="UserRunConfiguration"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.user_runner.UserRunConfiguration">[docs]</a><span class="k">class</span> <span class="nc">UserRunConfiguration</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">post_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Runnable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">pre_update</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Runnable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">post_update</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Runnable</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">data_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">out_root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="run_user_hook"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.user_runner.run_user_hook">[docs]</a><span class="k">def</span> <span class="nf">run_user_hook</span><span class="p">(</span>
+    <span class="n">hook_type</span><span class="p">:</span> <span class="n">RunnerHookType</span><span class="p">,</span>
+    <span class="n">out_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">user_run_config</span><span class="p">:</span> <span class="n">UserRunConfiguration</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;FlexlateDevConfig&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs a hook of the given type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hook</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Runnable</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">user_run_config</span><span class="p">,</span> <span class="n">hook_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hook</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="n">_create_command_list_resolving_references</span><span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">print_styled</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running </span><span class="si">{</span><span class="n">hook_type</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> commands&quot;</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">change_directory_to</span><span class="p">(</span><span class="n">out_path</span><span class="p">):</span>
+            <span class="n">run_command_or_command_strs</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_create_command_list_resolving_references</span><span class="p">(</span>
+    <span class="n">command_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Runnable</span><span class="p">],</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;FlexlateDevConfig&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UserCommand</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolves references in the given command list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resolved_command_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UserCommand</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="n">command_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">add_command</span> <span class="o">=</span> <span class="n">UserCommand</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">is_reference</span><span class="p">:</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">command</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                <span class="n">add_command</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_global_command_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">add_command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="n">resolved_command_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">add_command</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resolved_command_list</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2022, Nick DeRobertis
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -17,10 +17,10 @@ flexlate\_dev.cli module
    :undoc-members:
    :show-inheritance:
 
-flexlate\_dev.command\_type module
-----------------------------------
+flexlate\_dev.command\_runner module
+------------------------------------
 
-.. automodule:: flexlate_dev.command_type
+.. automodule:: flexlate_dev.command_runner
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,6 +53,14 @@ flexlate\_dev.ext\_subprocess module
 ------------------------------------
 
 .. automodule:: flexlate_dev.ext_subprocess
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.external\_command\_type module
+--------------------------------------------
+
+.. automodule:: flexlate_dev.external_command_type
    :members:
    :undoc-members:
    :show-inheritance:
@@ -101,6 +109,22 @@ flexlate\_dev.styles module
 ---------------------------
 
 .. automodule:: flexlate_dev.styles
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.user\_command module
+----------------------------------
+
+.. automodule:: flexlate_dev.user_command
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.user\_runner module
+---------------------------------
+
+.. automodule:: flexlate_dev.user_runner
    :members:
    :undoc-members:
    :show-inheritance:

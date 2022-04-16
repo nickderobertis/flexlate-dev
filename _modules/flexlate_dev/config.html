@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev.config &mdash; flexlate-dev 0.5.1 documentation</title>
+  <title>flexlate_dev.config &mdash; flexlate-dev 0.6.0 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.6.0
               </div>
             
           
@@ -174,20 +174,16 @@
 <span class="kn">from</span> <span class="nn">pyappconf</span> <span class="kn">import</span> <span class="n">BaseConfig</span><span class="p">,</span> <span class="n">AppConfig</span><span class="p">,</span> <span class="n">ConfigFormats</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
-<span class="kn">from</span> <span class="nn">flexlate_dev.command_type</span> <span class="kn">import</span> <span class="n">CommandType</span>
-<span class="kn">from</span> <span class="nn">flexlate_dev.exc</span> <span class="kn">import</span> <span class="n">NoSuchRunConfigurationException</span><span class="p">,</span> <span class="n">NoSuchDataException</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.external_command_type</span> <span class="kn">import</span> <span class="n">ExternalCLICommandType</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.exc</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NoSuchRunConfigurationException</span><span class="p">,</span>
+    <span class="n">NoSuchDataException</span><span class="p">,</span>
+    <span class="n">NoSuchCommandException</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.user_command</span> <span class="kn">import</span> <span class="n">UserCommand</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.user_runner</span> <span class="kn">import</span> <span class="n">UserRunConfiguration</span>
 
 <span class="n">DEFAULT_PROJECT_NAME</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;project&quot;</span>
-
-
-<div class="viewcode-block" id="UserRunConfiguration"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.UserRunConfiguration">[docs]</a><span class="k">class</span> <span class="nc">UserRunConfiguration</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">post_init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">pre_reinit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">post_reinit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">pre_update</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">post_update</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">data_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">out_root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="DataConfiguration"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.DataConfiguration">[docs]</a><span class="k">class</span> <span class="nc">DataConfiguration</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -212,6 +208,7 @@
 
 <div class="viewcode-block" id="FlexlateDevConfig"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig">[docs]</a><span class="k">class</span> <span class="nc">FlexlateDevConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataConfiguration</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">commands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UserCommand</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">run_configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRunConfiguration</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="n">create_default_run_configs</span>
     <span class="p">)</span>
@@ -226,7 +223,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">serializer_kwargs</span><span class="o">=</span><span class="n">serializer_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">all_kwargs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FlexlateDevConfig.get_run_config"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.get_run_config">[docs]</a>    <span class="k">def</span> <span class="nf">get_run_config</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">CommandType</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">ExternalCLICommandType</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FullRunConfiguration</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">&quot;default_</span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">user_run_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -248,7 +245,13 @@
         <span class="n">new_data_config</span> <span class="o">=</span> <span class="n">data_config</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">))</span>
         <span class="n">run_config</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">data_name</span> <span class="o">=</span> <span class="n">data_name</span>  <span class="c1"># set to default if was previously None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">data_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_data_config</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="FlexlateDevConfig.get_global_command_by_id"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.get_global_command_by_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_global_command_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserCommand</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">command</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">command</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="nb">id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">command</span>
+        <span class="k">raise</span> <span class="n">NoSuchCommandException</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="load_config"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.load_config">[docs]</a><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">FlexlateDevConfig</span><span class="p">:</span>

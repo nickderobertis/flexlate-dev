@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev package &mdash; flexlate-dev 0.5.1 documentation</title>
+  <title>flexlate_dev package &mdash; flexlate-dev 0.6.0 documentation</title>
   
 
   
@@ -72,7 +72,7 @@
             
             
               <div class="version">
-                0.5.1
+                0.6.0
               </div>
             
           
@@ -108,17 +108,20 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">flexlate_dev package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.cli">flexlate_dev.cli module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.command_type">flexlate_dev.command_type module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.command_runner">flexlate_dev.command_runner module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.config">flexlate_dev.config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.dirutils">flexlate_dev.dirutils module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.exc">flexlate_dev.exc module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.ext_subprocess">flexlate_dev.ext_subprocess module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.external_command_type">flexlate_dev.external_command_type module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.get_version">flexlate_dev.get_version module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.gituitls">flexlate_dev.gituitls module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.project_ops">flexlate_dev.project_ops module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.publish">flexlate_dev.publish module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.server">flexlate_dev.server module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.styles">flexlate_dev.styles module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.user_command">flexlate_dev.user_command module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-flexlate_dev.user_runner">flexlate_dev.user_runner module</a></li>
 </ul>
 </li>
 </ul>
@@ -216,24 +219,17 @@
 </dd></dl>
 
 </section>
-<section id="module-flexlate_dev.command_type">
-<span id="flexlate-dev-command-type-module"></span><h2>flexlate_dev.command_type module<a class="headerlink" href="#module-flexlate_dev.command_type" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.command_type.</span></span><span class="sig-name descname"><span class="pre">CommandType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/command_type.html#CommandType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.command_type.CommandType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType.PUBLISH">
-<span class="sig-name descname"><span class="pre">PUBLISH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'publish'</span></em><a class="headerlink" href="#flexlate_dev.command_type.CommandType.PUBLISH" title="Permalink to this definition">¶</a></dt>
+<section id="module-flexlate_dev.command_runner">
+<span id="flexlate-dev-command-runner-module"></span><h2>flexlate_dev.command_runner module<a class="headerlink" href="#module-flexlate_dev.command_runner" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.command_runner.run_command">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.command_runner.</span></span><span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/command_runner.html#run_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.command_runner.run_command" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.command_type.CommandType.SERVE">
-<span class="sig-name descname"><span class="pre">SERVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'serve'</span></em><a class="headerlink" href="#flexlate_dev.command_type.CommandType.SERVE" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.command_runner.run_command_or_command_strs">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.command_runner.</span></span><span class="sig-name descname"><span class="pre">run_command_or_command_strs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/command_runner.html#run_command_or_command_strs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.command_runner.run_command_or_command_strs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-</dd></dl>
 
 </section>
 <section id="module-flexlate_dev.config">
@@ -259,9 +255,24 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.config.</span></span><span class="sig-name descname"><span class="pre">FlexlateDevConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&lt;object</span> <span class="pre">object&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/config.html#FlexlateDevConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyappconf.model.BaseConfig</span></code></p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.config.FlexlateDevConfig.commands">
+<span class="sig-name descname"><span class="pre">commands</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig.commands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.config.FlexlateDevConfig.data">
 <span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#flexlate_dev.config.DataConfiguration" title="flexlate_dev.config.DataConfiguration"><span class="pre">flexlate_dev.config.DataConfiguration</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flexlate_dev.config.FlexlateDevConfig.get_global_command_by_id">
+<span class="sig-name descname"><span class="pre">get_global_command_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/config.html#FlexlateDevConfig.get_global_command_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig.get_global_command_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserCommand</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="flexlate_dev.config.FlexlateDevConfig.get_run_config">
@@ -275,7 +286,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.config.FlexlateDevConfig.run_configs">
-<span class="sig-name descname"><span class="pre">run_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#flexlate_dev.config.UserRunConfiguration" title="flexlate_dev.config.UserRunConfiguration"><span class="pre">flexlate_dev.config.UserRunConfiguration</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig.run_configs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run_configs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#flexlate_dev.user_runner.UserRunConfiguration" title="flexlate_dev.user_runner.UserRunConfiguration"><span class="pre">flexlate_dev.user_runner.UserRunConfiguration</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.FlexlateDevConfig.run_configs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -296,7 +307,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.config.FullRunConfiguration.config">
-<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#flexlate_dev.config.UserRunConfiguration" title="flexlate_dev.config.UserRunConfiguration"><span class="pre">flexlate_dev.config.UserRunConfiguration</span></a></em><a class="headerlink" href="#flexlate_dev.config.FullRunConfiguration.config" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#flexlate_dev.user_runner.UserRunConfiguration" title="flexlate_dev.user_runner.UserRunConfiguration"><span class="pre">flexlate_dev.user_runner.UserRunConfiguration</span></a></em><a class="headerlink" href="#flexlate_dev.config.FullRunConfiguration.config" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -306,53 +317,12 @@
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.config.</span></span><span class="sig-name descname"><span class="pre">UserRunConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/config.html#UserRunConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.data_name">
-<span class="sig-name descname"><span class="pre">data_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.data_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.out_root">
-<span class="sig-name descname"><span class="pre">out_root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.out_root" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.post_init">
-<span class="sig-name descname"><span class="pre">post_init</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.post_init" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.post_reinit">
-<span class="sig-name descname"><span class="pre">post_reinit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.post_reinit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.post_update">
-<span class="sig-name descname"><span class="pre">post_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.post_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.pre_reinit">
-<span class="sig-name descname"><span class="pre">pre_reinit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.pre_reinit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="flexlate_dev.config.UserRunConfiguration.pre_update">
-<span class="sig-name descname"><span class="pre">pre_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.UserRunConfiguration.pre_update" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.config.create_default_run_configs">
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.config.</span></span><span class="sig-name descname"><span class="pre">create_default_run_configs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/config.html#create_default_run_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.config.create_default_run_configs" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="#flexlate_dev.config.UserRunConfiguration" title="flexlate_dev.config.UserRunConfiguration"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserRunConfiguration</span></code></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="#flexlate_dev.user_runner.UserRunConfiguration" title="flexlate_dev.user_runner.UserRunConfiguration"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserRunConfiguration</span></code></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -385,6 +355,12 @@
 </dd></dl>
 
 <dl class="py exception">
+<dt class="sig sig-object py" id="flexlate_dev.exc.NoSuchCommandException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">NoSuchCommandException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#NoSuchCommandException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.NoSuchCommandException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#flexlate_dev.exc.UserInputException" title="flexlate_dev.exc.UserInputException"><code class="xref py py-class docutils literal notranslate"><span class="pre">flexlate_dev.exc.UserInputException</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
 <dt class="sig sig-object py" id="flexlate_dev.exc.NoSuchDataException">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.exc.</span></span><span class="sig-name descname"><span class="pre">NoSuchDataException</span></span><a class="reference internal" href="../_modules/flexlate_dev/exc.html#NoSuchDataException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.exc.NoSuchDataException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#flexlate_dev.exc.UserInputException" title="flexlate_dev.exc.UserInputException"><code class="xref py py-class docutils literal notranslate"><span class="pre">flexlate_dev.exc.UserInputException</span></code></a></p>
@@ -406,14 +382,34 @@
 <section id="module-flexlate_dev.ext_subprocess">
 <span id="flexlate-dev-ext-subprocess-module"></span><h2>flexlate_dev.ext_subprocess module<a class="headerlink" href="#module-flexlate_dev.ext_subprocess" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.ext_subprocess.run_command_in_background_stream_output">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.ext_subprocess.</span></span><span class="sig-name descname"><span class="pre">run_command_in_background_stream_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/ext_subprocess.html#run_command_in_background_stream_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.ext_subprocess.run_command_in_background_stream_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.ext_subprocess.run_command_stream_output">
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.ext_subprocess.</span></span><span class="sig-name descname"><span class="pre">run_command_stream_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/ext_subprocess.html#run_command_stream_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.ext_subprocess.run_command_stream_output" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="flexlate_dev.ext_subprocess.run_commands_stream_output">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.ext_subprocess.</span></span><span class="sig-name descname"><span class="pre">run_commands_stream_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/ext_subprocess.html#run_commands_stream_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.ext_subprocess.run_commands_stream_output" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="module-flexlate_dev.external_command_type">
+<span id="flexlate-dev-external-command-type-module"></span><h2>flexlate_dev.external_command_type module<a class="headerlink" href="#module-flexlate_dev.external_command_type" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="flexlate_dev.external_command_type.ExternalCLICommandType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.external_command_type.</span></span><span class="sig-name descname"><span class="pre">ExternalCLICommandType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/external_command_type.html#ExternalCLICommandType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.external_command_type.ExternalCLICommandType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.external_command_type.ExternalCLICommandType.PUBLISH">
+<span class="sig-name descname"><span class="pre">PUBLISH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'publish'</span></em><a class="headerlink" href="#flexlate_dev.external_command_type.ExternalCLICommandType.PUBLISH" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.external_command_type.ExternalCLICommandType.SERVE">
+<span class="sig-name descname"><span class="pre">SERVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'serve'</span></em><a class="headerlink" href="#flexlate_dev.external_command_type.ExternalCLICommandType.SERVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </section>
 <section id="module-flexlate_dev.get_version">
@@ -542,6 +538,136 @@
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+</section>
+<section id="module-flexlate_dev.user_command">
+<span id="flexlate-dev-user-command-module"></span><h2>flexlate_dev.user_command module<a class="headerlink" href="#module-flexlate_dev.user_command" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_command.</span></span><span class="sig-name descname"><span class="pre">UserCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_command.html#UserCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_command.UserCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.background">
+<span class="sig-name descname"><span class="pre">background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.display_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">display_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.display_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.from_string">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_command.html#UserCommand.from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserCommand</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.is_reference">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_reference</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.is_reference" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.run">
+<span class="sig-name descname"><span class="pre">run</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="flexlate_dev.user_command.UserCommand.run_or_id_must_be_defined">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_or_id_must_be_defined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_command.html#UserCommand.run_or_id_must_be_defined"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_command.UserCommand.run_or_id_must_be_defined" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-flexlate_dev.user_runner">
+<span id="flexlate-dev-user-runner-module"></span><h2>flexlate_dev.user_runner module<a class="headerlink" href="#module-flexlate_dev.user_runner" title="Permalink to this headline">¶</a></h2>
+<p>Handles resolving commands referenced by id so that the command_runner module
+can focus on only running a sequence of commands. Also has context of the
+different configuration hooks so that the command_runner module can be
+focused on just running commands.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_runner.</span></span><span class="sig-name descname"><span class="pre">RunnerHookType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_runner.html#RunnerHookType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.POST_INIT">
+<span class="sig-name descname"><span class="pre">POST_INIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'post_init'</span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType.POST_INIT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.POST_UPDATE">
+<span class="sig-name descname"><span class="pre">POST_UPDATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'post_update'</span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType.POST_UPDATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.PRE_UPDATE">
+<span class="sig-name descname"><span class="pre">PRE_UPDATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pre_update'</span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType.PRE_UPDATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_runner.</span></span><span class="sig-name descname"><span class="pre">UserRunConfiguration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_runner.html#UserRunConfiguration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration.data_name">
+<span class="sig-name descname"><span class="pre">data_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration.data_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration.out_root">
+<span class="sig-name descname"><span class="pre">out_root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration.out_root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration.post_init">
+<span class="sig-name descname"><span class="pre">post_init</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration.post_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration.post_update">
+<span class="sig-name descname"><span class="pre">post_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration.post_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.UserRunConfiguration.pre_update">
+<span class="sig-name descname"><span class="pre">pre_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.UserRunConfiguration.pre_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.run_user_hook">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_runner.</span></span><span class="sig-name descname"><span class="pre">run_user_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_runner.html#run_user_hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_runner.run_user_hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs a hook of the given type.</p>
 </dd></dl>
 
 </section>

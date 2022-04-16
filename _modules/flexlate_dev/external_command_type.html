@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>flexlate_dev.get_version &mdash; flexlate-dev 0.6.0 documentation</title>
+  <title>flexlate_dev.external_command_type &mdash; flexlate-dev 0.6.0 documentation</title>
   
 
   
@@ -151,7 +151,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>flexlate_dev.get_version</li>
+      <li>flexlate_dev.external_command_type</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -166,14 +166,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for flexlate_dev.get_version</h1><div class="highlight"><pre>
-<span></span><span class="c1"># TODO: get version statically inside package by restructuring template</span>
-<span class="kn">import</span> <span class="nn">pkg_resources</span>
-<span class="kn">from</span> <span class="nn">flexlate.get_version</span> <span class="kn">import</span> <span class="n">get_flexlate_version</span>
+  <h1>Source code for flexlate_dev.external_command_type</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 
-<div class="viewcode-block" id="get_flexlate_dev_version"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.get_version.get_flexlate_dev_version">[docs]</a><span class="k">def</span> <span class="nf">get_flexlate_dev_version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="s2">&quot;flexlate-dev&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span></div>
+<div class="viewcode-block" id="ExternalCLICommandType"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.external_command_type.ExternalCLICommandType">[docs]</a><span class="k">class</span> <span class="nc">ExternalCLICommandType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">SERVE</span> <span class="o">=</span> <span class="s2">&quot;serve&quot;</span>
+    <span class="n">PUBLISH</span> <span class="o">=</span> <span class="s2">&quot;publish&quot;</span></div>
 </pre></div>
 
            </div>
