@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 from flexlate_dev.command_runner import Runnable
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.exc import NoSuchRunConfigurationException, NoSuchDataException
+from flexlate_dev.user_command import UserCommand
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
 
@@ -44,6 +45,7 @@ def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
 
 class FlexlateDevConfig(BaseConfig):
     data: Dict[str, DataConfiguration] = Field(default_factory=dict)
+    commands: List[UserCommand] = Field(default_factory=list)
     run_configs: Dict[str, UserRunConfiguration] = Field(
         default_factory=create_default_run_configs
     )

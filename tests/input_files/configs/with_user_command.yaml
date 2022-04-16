@@ -1,3 +1,6 @@
+commands:
+- id: separate_command
+  run: touch referenced.txt
 data: {}
 run_configs:
   default_publish:
@@ -9,5 +12,6 @@ run_configs:
   my-run-config:
     post_init:
     - run: touch user_command.txt
+    - id: separate_command
     post_update:
     - touch string_command.txt
