@@ -13,6 +13,7 @@ from flexlate_dev.server import run_server
 from tests.config import GENERATED_FILES_DIR
 from tests.pathutils import change_directory_to
 from tests.fixtures.template_path import *
+from tests.test_config import WITH_USER_COMMAND_PATH
 
 
 def test_publish_creates_output(copier_one_template_path: Path):
@@ -85,3 +86,24 @@ def test_publish_updates_existing_output(copier_one_template_path: Path):
 
     # Check that post update was run
     assert (project_path / "two.txt").exists()
+
+
+def test_publish_runs_user_commands_from_config_file(copier_one_template_path: Path):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+
+    assert not expect_file.exists()
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        run_config_name="my-run-config",
+        config_path=WITH_USER_COMMAND_PATH,
+        no_input=True,
+    )
+    assert expect_file.read_text() == "1"
+
+    # Check that post init (both inline and referenced) but not post update was run
+    assert (project_path / "user_command.txt").exists()
+    assert (project_path / "referenced.txt").exists()
+    assert not (project_path / "string_command.txt").exists()
