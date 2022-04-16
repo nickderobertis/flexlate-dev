@@ -21,7 +21,9 @@ class UserCommand(BaseModel):
 
     @property
     def display_name(self) -> str:
-        return self.name or self.run
+        if self.name is None and self.run is None:
+            raise ValueError("name or run must be defined")
+        return self.name or self.run  # type: ignore
 
     @property
     def is_reference(self) -> bool:

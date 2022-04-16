@@ -21,6 +21,8 @@ def run_command_or_command_strs(cmds: Sequence[Runnable]):
 
 def run_command(cmd: UserCommand):
     print_styled(f"Running command: {cmd.display_name}", INFO_STYLE)
+    if cmd.run is None:
+        raise ValueError(f"Cannot run command {cmd} as run=None")
     if cmd.background:
         run_command_in_background_stream_output(cmd.run)
     else:

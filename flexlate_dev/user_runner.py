@@ -6,7 +6,7 @@ focused on just running commands.
 """
 from enum import Enum
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING
+from typing import Optional, List, TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     from flexlate_dev.config import FlexlateDevConfig
@@ -56,13 +56,14 @@ def _create_command_list_resolving_references(
     """
     Resolves references in the given command list.
     """
-    resolved_command_list: List[Runnable] = []
+    resolved_command_list: List[UserCommand] = []
     for command in command_list:
         if isinstance(command, str):
             add_command = UserCommand.from_string(command)
         else:
             if command.is_reference:
-                add_command = config.get_global_command_by_id(command.id)
+                id = cast(str, command.id)
+                add_command = config.get_global_command_by_id(id)
             else:
                 add_command = command
         resolved_command_list.append(add_command)
