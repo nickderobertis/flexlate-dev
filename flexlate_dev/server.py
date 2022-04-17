@@ -147,6 +147,7 @@ class ServerEventHandler(FileSystemEventHandler):
         new = stat_buf.st_mtime
         if (new - old) > 0.5:
             # This is a valid event, now the main logic
+            print_styled(f"Detected change in {event.src_path}", INFO_STYLE)
             self.sync_output()
         old = new
 

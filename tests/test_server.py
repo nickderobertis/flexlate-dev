@@ -27,8 +27,7 @@ def test_server_creates_and_updates_template_on_change(copier_one_template_path:
         template_file.write_text("new content {{ q2 }}")
 
         # Check reload
-        wait_until_file_updates(expect_file, modified_time)
-        assert expect_file.read_text() == "new content 1"
+        wait_until_file_has_content(expect_file, modified_time, "new content 1")
 
 
 def test_server_from_current_directory_creates_and_updates_template_on_change(
@@ -49,8 +48,7 @@ def test_server_from_current_directory_creates_and_updates_template_on_change(
             template_file.write_text("new content {{ q2 }}")
 
             # Check reload
-            wait_until_file_updates(expect_file, modified_time)
-            assert expect_file.read_text() == "new content 1"
+            wait_until_file_has_content(expect_file, modified_time, "new content 1")
 
 
 def test_server_creates_and_updates_template_on_change_after_generated_project_changes(
@@ -128,5 +126,4 @@ def test_server_runs_a_background_command_and_keeps_reloading(
         template_file.write_text("new content {{ q2 }}")
 
         # Check reload
-        wait_until_file_updates(expect_file, modified_time)
-        assert expect_file.read_text() == "new content 1"
+        wait_until_file_has_content(expect_file, modified_time, "new content 1")
