@@ -48,7 +48,7 @@ jobs:
           MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
           PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
       - name: Merge Flexlate Output Branch into Feature Branch
-        if: steps.get_branch_name.is_flexlate_branch
+        if: steps.get_branch_name.outputs.is_flexlate_branch
         uses: devmasx/merge-branch@1.4.0
         with:
           type: now
@@ -56,7 +56,7 @@ jobs:
           target_branch: ${{ steps.get_branch_name.outputs.use_branch }}
           github_token: ${{ github.token }}
       - name: Create PR with template update from feature branch
-        if: steps.get_branch_name.is_flexlate_branch
+        if: steps.get_branch_name.outputs.is_flexlate_branch
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.gh_token }}
@@ -75,7 +75,7 @@ jobs:
           labels: no auto merge, automated pr
           branch: ${{ steps.get_branch_name.outputs.use_branch }}
       - name: Revert Merge Commit on Templates Branch
-        if: steps.get_branch_name.is_flexlate_branch
+        if: steps.get_branch_name.outputs.is_flexlate_branch
         run: |
           templates_branch="flexlate-templates-$BASE_BRANCH_NAME"
           git checkout "$templates_branch"
