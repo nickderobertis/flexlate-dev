@@ -72,12 +72,12 @@ jobs:
             [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
           labels: no auto merge, automated pr
           branch: ${{ steps.get_branch_name.outputs.use_branch }}
-        - name: Revert Merge Commit on Templates Branch
-          if: steps.get_branch_name.is_flexlate_branch
-          run: |
-            templates_branch="flexlate-templates-$BASE_BRANCH_NAME"
-            git checkout "$templates_branch"
-            git reset --hard HEAD~1
-            git push origin "$templates_branch"
-          env:
-            BASE_BRANCH_NAME: ${{ steps.get_branch_name.outputs.use_branch }}
+      - name: Revert Merge Commit on Templates Branch
+        if: steps.get_branch_name.is_flexlate_branch
+        run: |
+          templates_branch="flexlate-templates-$BASE_BRANCH_NAME"
+          git checkout "$templates_branch"
+          git reset --hard HEAD~1
+          git push origin "$templates_branch"
+        env:
+          BASE_BRANCH_NAME: ${{ steps.get_branch_name.outputs.use_branch }}
