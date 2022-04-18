@@ -1,0 +1,74 @@
+name: Merge Flexlate Branches from Conflict Resolution
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "The name of the base branch that the Flexlate branches were created on"
+        required: false
+        type: string
+        default: template-patches
+
+jobs:
+  merge_flexlate_branches:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.8]
+
+    if: (github.event.pull_request.merged == true || github.event.inputs.branch )
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: master
+          fetch-depth: 0
+      - name: Get branch name
+        id: get_branch_name
+        run: |
+          if [ -z "$PASSED_BRANCH_NAME" ]; then
+            if [[ "$MERGED_BRANCH_NAME" = flexlate-templates-* ]]; then
+              branch_suffix="${MERGED_BRANCH_NAME#flexlate-templates-}"
+              echo ::set-output name=use_branch::$branch_suffix;
+              echo ::set-output name=is_flexlate_branch::true;
+            else
+              echo ::set-output name=is_flexlate_branch::false;
+            fi
+            base_branch="$MERGED_BRANCH_NAME"
+          else
+            echo ::set-output name=is_flexlate_branch::true;
+            echo ::set-output name=use_branch::$PASSED_BRANCH_NAME;
+          fi;
+        env:
+          MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+          PASSED_BRANCH_NAME: ${{ github.event.inputs.branch }}
+      - name: Merge Flexlate Output Branch into Feature Branch
+        if: steps.get_branch_name.is_flexlate_branch
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          from_branch: flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
+          target_branch: ${{ steps.get_branch_name.outputs.use_branch }}
+          github_token: ${{ github.token }}
+      - name: Create PR with template update from feature branch
+        if: steps.get_branch_name.is_flexlate_branch
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.gh_token }}
+          commit-message: Update project template using Flexlate
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: GitHub <noreply@github.com>
+          title: "Update project template using Flexlate"
+          body: |
+            Update template using Flexlate.
+            
+            Before merging, review the changes and adjust manually if necessary.
+            
+            - Updates coming from [copier-pypi-sphinx-flexlate][1]
+            
+            [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
+          labels: no auto merge, automated pr
+          branch: ${{ steps.get_branch_name.outputs.use_branch }}
