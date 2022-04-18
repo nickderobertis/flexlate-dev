@@ -34,13 +34,15 @@ jobs:
               branch_suffix="${MERGED_BRANCH_NAME#flexlate-templates-}"
               echo ::set-output name=use_branch::$branch_suffix;
               echo ::set-output name=is_flexlate_branch::true;
+              echo "Using base branch: $branch_suffix"
             else
+              echo "$MERGED_BRANCH_NAME is not a flexlate-templates branch"
               echo ::set-output name=is_flexlate_branch::false;
             fi
-            base_branch="$MERGED_BRANCH_NAME"
           else
             echo ::set-output name=is_flexlate_branch::true;
             echo ::set-output name=use_branch::$PASSED_BRANCH_NAME;
+            echo "Using passed branch name: $PASSED_BRANCH_NAME"
           fi;
         env:
           MERGED_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
