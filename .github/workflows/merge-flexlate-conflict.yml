@@ -31,10 +31,13 @@ jobs:
         run: |
           if [ -z "$PASSED_BRANCH_NAME" ]; then
             if [[ "$MERGED_BRANCH_NAME" = flexlate-templates-* ]]; then
+              # Remove flexlate-templates- prefix
               branch_suffix="${MERGED_BRANCH_NAME#flexlate-templates-}"
-              echo ::set-output name=use_branch::$branch_suffix;
+              # Remove -for-conflicts suffix
+              base_branch="${branch_suffix%-for-conflicts}"
+              echo ::set-output name=use_branch::$base_branch;
               echo ::set-output name=is_flexlate_branch::true;
-              echo "Using base branch: $branch_suffix"
+              echo "Using base branch: $base_branch"
             else
               echo "$MERGED_BRANCH_NAME is not a flexlate-templates branch"
               echo ::set-output name=is_flexlate_branch::false;
@@ -55,16 +58,13 @@ jobs:
           from_branch: flexlate-output-${{ steps.get_branch_name.outputs.use_branch }}
           target_branch: ${{ steps.get_branch_name.outputs.use_branch }}
           github_token: ${{ github.token }}
-      - name: Create PR with template update from feature branch
+      - name: Create PR with template update
         if: steps.get_branch_name.outputs.is_flexlate_branch
-        uses: peter-evans/create-pull-request@v3
+        uses: repo-sync/pull-request@v2
         with:
-          token: ${{ secrets.gh_token }}
-          commit-message: Update project template using Flexlate
-          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          committer: GitHub <noreply@github.com>
-          title: "Update project template using Flexlate"
-          body: |
+          source_branch: ${{ steps.get_branch_name.outputs.use_branch }}
+          pr_title: Update project template using Flexlate
+          pr_body: |
             Update template using Flexlate.
             
             Before merging, review the changes and adjust manually if necessary.
@@ -72,14 +72,5 @@ jobs:
             - Updates coming from [copier-pypi-sphinx-flexlate][1]
             
             [1]: https://github.com/nickderobertis/copier-pypi-sphinx-flexlate
-          labels: no auto merge, automated pr
-          branch: ${{ steps.get_branch_name.outputs.use_branch }}
-      - name: Revert Merge Commit on Templates Branch
-        if: steps.get_branch_name.outputs.is_flexlate_branch
-        run: |
-          templates_branch="flexlate-templates-$BASE_BRANCH_NAME"
-          git checkout "$templates_branch"
-          git reset --hard HEAD~1
-          git push origin "$templates_branch"
-        env:
-          BASE_BRANCH_NAME: ${{ steps.get_branch_name.outputs.use_branch }}
+          pr_label: "no auto merge, automated pr"
+          github_token: ${{ secrets.gh_token }}
