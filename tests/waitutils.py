@@ -27,6 +27,26 @@ def wait_until_file_updates(
     )
 
 
+def wait_until_file_has_content(
+    path: Path, modified_time: float, content: str, timeout: int = DEFAULT_TIMEOUT
+):
+    def file_has_new_content() -> bool:
+        if not path.exists():
+            return False
+        new_modified_time = path.lstat().st_mtime
+        if new_modified_time == modified_time:
+            # File has not been modified, no need to read it
+            return False
+        file_content = path.read_text()
+        return file_content == content
+
+    _wait_until_returns_true(
+        file_has_new_content,
+        f"{path} never got the expected contents. Content: {path.read_text()}. Expect content: {content}",
+        timeout=timeout,
+    )
+
+
 def _wait_until_returns_true(
     exit_callback: Callable[[], bool],
     error_message: str,

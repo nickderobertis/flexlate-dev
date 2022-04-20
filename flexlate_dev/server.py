@@ -7,18 +7,43 @@ from typing import Optional
 
 from flexlate.main import Flexlate
 import flexlate.exc as flexlate_exc
+from git import Repo
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
+from flexlate.template_data import TemplateData
 
-from flexlate_dev.styles import print_styled, INFO_STYLE, SUCCESS_STYLE
+from flexlate_dev.external_command_type import ExternalCLICommandType
+from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
+from flexlate_dev.project_ops import (
+    update_or_initialize_project_get_folder,
+)
+from flexlate_dev.styles import (
+    print_styled,
+    INFO_STYLE,
+    SUCCESS_STYLE,
+)
 
 
 def serve_template(
+    run_config_name: Optional[str] = None,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
+    auto_commit: bool = True,
+    config_path: Optional[Path] = None,
+    save: bool = False,
 ):
-    with run_server(template_path=template_path, out_path=out_path, no_input=no_input):
+    config = load_config(config_path)
+
+    with run_server(
+        config,
+        run_config_name=run_config_name,
+        template_path=template_path,
+        out_path=out_path,
+        no_input=no_input,
+        auto_commit=auto_commit,
+        save=save,
+    ):
         try:
             while True:
                 time.sleep(1)
@@ -28,9 +53,13 @@ def serve_template(
 
 @contextlib.contextmanager
 def run_server(
+    config: FlexlateDevConfig,
+    run_config_name: Optional[str] = None,
     template_path: Path = Path("."),
     out_path: Optional[Path] = None,
     no_input: bool = False,
+    auto_commit: bool = True,
+    save: bool = False,
 ):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
@@ -42,7 +71,15 @@ def run_server(
         INFO_STYLE,
     )
     observer = Observer()
-    event_handler = ServerEventHandler(template_path, out_path, no_input=no_input)
+    event_handler = ServerEventHandler(
+        config,
+        template_path,
+        out_path,
+        run_config_name=run_config_name,
+        no_input=no_input,
+        auto_commit=auto_commit,
+        save=save,
+    )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
     observer.start()
@@ -63,13 +100,29 @@ old = 0.0
 
 
 class ServerEventHandler(FileSystemEventHandler):
-    def __init__(self, template_path: Path, out_root: Path, no_input: bool = False):
+    def __init__(
+        self,
+        config: FlexlateDevConfig,
+        template_path: Path,
+        out_root: Path,
+        run_config_name: Optional[str] = None,
+        no_input: bool = False,
+        auto_commit: bool = True,
+        save: bool = False,
+    ):
         super().__init__()
+        self.config = config
+        self.run_config_name = run_config_name
+        self.run_config = config.get_run_config(
+            ExternalCLICommandType.SERVE, run_config_name
+        )
         self.template_path = template_path
         self.out_root = out_root
         self.no_input = no_input
+        self.auto_commit = auto_commit
+        self.save = save
         self.folder: Optional[str] = None
-        self.initialized = False
+        self.repo: Optional[Repo] = None
         self.fxt = Flexlate()
 
     @property
@@ -77,6 +130,10 @@ class ServerEventHandler(FileSystemEventHandler):
         if self.folder is None:
             raise ValueError("folder must be set")
         return self.out_root / self.folder
+
+    @property
+    def data(self) -> Optional[TemplateData]:
+        return self.run_config.data.data if self.run_config.data else None
 
     def on_modified(self, event: FileSystemEvent):
         global old
@@ -90,25 +147,23 @@ class ServerEventHandler(FileSystemEventHandler):
         new = stat_buf.st_mtime
         if (new - old) > 0.5:
             # This is a valid event, now the main logic
+            print_styled(f"Detected change in {event.src_path}", INFO_STYLE)
             self.sync_output()
         old = new
 
     def sync_output(self):
-        """
-        Run build using subprocess so that imports will be executed every time
-        :param file_path:
-        :return:
-        """
-        if not self.initialized:
-            return self._initialize_project()
-
-        try:
-            self.fxt.update(project_path=self.out_path, no_input=True)
-        except flexlate_exc.TriedToCommitButNoChangesException:
-            print_styled("Update did not have any changes", INFO_STYLE)
-
-    def _initialize_project(self):
-        self.folder = self.fxt.init_project_from(
-            str(self.template_path), path=self.out_root, no_input=self.no_input
+        self.folder = update_or_initialize_project_get_folder(
+            self.template_path,
+            self.out_root,
+            self.config,
+            self.run_config,
+            data=self.data,
+            no_input=self.no_input,
+            auto_commit=self.auto_commit,
+            save=self.save,
+            known_folder_name=self.folder,
+            default_folder_name=self.run_config.data.folder_name
+            if self.run_config.data
+            else DEFAULT_PROJECT_NAME,
         )
-        self.initialized = True
+        self.repo = Repo(self.out_path)
