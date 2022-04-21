@@ -31,6 +31,11 @@ class UserRunConfiguration(BaseModel):
     post_update: Optional[List[Runnable]] = None
     data_name: Optional[str] = None
     out_root: Optional[Path] = None
+    auto_commit_message: Optional[str] = None
+
+    @property
+    def commit_message(self) -> str:
+        return self.auto_commit_message or "chore: auto-commit manual changes"
 
 
 def run_user_hook(

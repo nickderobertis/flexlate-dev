@@ -120,7 +120,7 @@ def update_project(
     except flexlate_exc.GitRepoDirtyException:
         if auto_commit:
             repo = Repo(out_path)
-            stage_and_commit_all(repo, "Auto-commit manual changes")
+            stage_and_commit_all(repo, run_config.config.commit_message)
             print_styled(
                 "Detected manual changes to generated files and auto_commit=True, committing",
                 INFO_STYLE,

@@ -1,3 +1,5 @@
+from git import Repo
+
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig
 from flexlate_dev.user_runner import UserRunConfiguration
@@ -76,3 +78,62 @@ def test_init_project_runs_pre_and_post_update(copier_one_template_path: Path):
     lines = extra_file.read_text().splitlines()
     assert len(lines) == 2
     assert lines[0] != lines[1]
+
+
+def test_init_project_auto_commits_with_correct_message(copier_one_template_path: Path):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig()
+    config.settings.custom_config_folder = GENERATED_FILES_DIR
+    config.settings.config_name = "flexlate-dev"
+    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+
+    initialize_project_get_folder(
+        template_path,
+        GENERATED_FILES_DIR,
+        config,
+        run_config=run_config,
+        no_input=True,
+        data=None,
+        save=True,
+    )
+
+    repo = Repo(project_path)
+
+    def _assert_last_non_merge_commit_message_matches(message: str):
+        assert repo.commit().parents[0].message == f"{message}\n"
+
+    assert expect_file.read_text() == "1"
+
+    # Change the template contents, allowing update
+    template_file.write_text("new content {{ q2 }}")
+
+    # Make a change in the generated project, forcing it to auto-commit
+    temp_path = project_path / "temp.txt"
+    temp_path.touch()
+
+    update_project(project_path, config, run_config, no_input=True)
+
+    # Check for default message
+    _assert_last_non_merge_commit_message_matches("chore: auto-commit manual changes")
+
+    # Ensure update was successful
+    assert expect_file.read_text() == "new content 1"
+
+    # Update the auto-commit message
+    expect_commit_message = "expect commit message"
+    run_config.config.auto_commit_message = expect_commit_message
+
+    # Change template contents again, allowing a second update
+    template_file.write_text("second new content {{ q2 }}")
+
+    # Make another change in the generated project, forcing it to auto-commit
+    temp_path = project_path / "temp2.txt"
+    temp_path.touch()
+
+    update_project(project_path, config, run_config, no_input=True)
+
+    # Check for custom message
+    _assert_last_non_merge_commit_message_matches(expect_commit_message)
