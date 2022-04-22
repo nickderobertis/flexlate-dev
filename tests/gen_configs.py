@@ -77,8 +77,30 @@ def gen_config_with_extend_run_config():
     return config
 
 
+def gen_config_with_extend_default_run_config():
+    extend_run_config = UserRunConfiguration(
+        pre_update=["touch overridden.txt"],
+        auto_commit_message="something",
+        extends="default",
+    )
+    default_serve_config = UserRunConfiguration(
+        pre_update=["touch something.txt"], post_update=["touch something_else.txt"]
+    )
+    run_configs = {
+        "my-run-config": extend_run_config,
+        **create_default_run_configs(),
+        # Override default publish config so it does operations we can verify
+        "default_serve": default_serve_config,
+    }
+    config = FlexlateDevConfig(run_configs=run_configs)
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "extend_default_run"
+    return config
+
+
 if __name__ == "__main__":
     gen_config_with_user_commands().save()
     gen_config_with_blocking_command().save()
     gen_config_with_extend_data().save()
     gen_config_with_extend_run_config().save()
+    gen_config_with_extend_default_run_config().save()

@@ -6,7 +6,7 @@ from tests.config import (
     GENERATED_FILES_DIR,
     WITH_USER_COMMAND_CONFIG_PATH,
     EXTEND_DATA_CONFIG_PATH,
-    EXTEND_RUN_CONFIG_PATH,
+    EXTEND_RUN_CONFIG_PATH, EXTEND_DEFAULT_RUN_CONFIG_PATH,
 )
 from tests.gen_configs import gen_config_with_user_commands
 
@@ -44,6 +44,16 @@ def test_read_extended_data():
 
 def test_read_extended_run_config():
     config = FlexlateDevConfig.load(EXTEND_RUN_CONFIG_PATH)
+    run_config = config.get_full_run_config(
+        ExternalCLICommandType.SERVE, "my-run-config"
+    )
+    assert run_config.config.pre_update == ["touch overridden.txt"]
+    assert run_config.config.post_update == ["touch something_else.txt"]
+    assert run_config.config.auto_commit_message == "something"
+
+
+def test_read_extended_default_run_config():
+    config = FlexlateDevConfig.load(EXTEND_DEFAULT_RUN_CONFIG_PATH)
     run_config = config.get_full_run_config(
         ExternalCLICommandType.SERVE, "my-run-config"
     )
