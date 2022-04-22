@@ -46,11 +46,11 @@
         },
         "babel": {
             "hashes": [
-                "sha256:ab49e12b91d937cd11f0b67cb259a57ab4ad2b59ac7a3b41d6c06c0ac5b0def9",
-                "sha256:bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0"
+                "sha256:3f349e85ad3154559ac4930c3918247d319f21910d5ce4b25d439ed8693b98d2",
+                "sha256:98aeaca086133efb3e1e2aad0396987490c8425929ddbcfe0550184fdc54cd13"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==2.9.1"
+            "markers": "python_version >= '3.6'",
+            "version": "==2.10.1"
         },
         "beautifulsoup4": {
             "hashes": [
@@ -286,11 +286,11 @@
         },
         "flexlate": {
             "hashes": [
-                "sha256:f1e29cff162af5a091119150817524fdcf4d3fb85dcbb902f647d782e3d3bf8b",
-                "sha256:fccab783ad56e9d752e2803eaff1a77eda111f7edbc9eb5d0652c04d96ef818d"
+                "sha256:afed26f252031bf4cb3e24d7688243742507084dacafb24b1b35e0d4a56589e9",
+                "sha256:fe76598c03a46083aff728b7eac68eb875a20a6a998237c16bb93347979121da"
             ],
             "index": "pypi",
-            "version": "==0.13.1"
+            "version": "==0.14.0"
         },
         "gitdb": {
             "hashes": [

@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+from flexlate import branch_update
 from git import Repo
 
 from flexlate_dev.external_command_type import ExternalCLICommandType
@@ -8,7 +11,9 @@ from flexlate_dev.project_ops import initialize_project_get_folder, update_proje
 from tests.fixtures.template_path import *
 
 
-def test_init_project_creates_project_with_default_data(copier_one_template_path: Path):
+def test_update_project_updates_project_with_default_data(
+    copier_one_template_path: Path,
+):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
     expect_file = project_path / "a1.txt"
@@ -38,7 +43,7 @@ def test_init_project_creates_project_with_default_data(copier_one_template_path
     assert expect_file.read_text() == "new content 1"
 
 
-def test_init_project_runs_pre_and_post_update(copier_one_template_path: Path):
+def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
     expect_file = project_path / "a1.txt"
@@ -80,7 +85,9 @@ def test_init_project_runs_pre_and_post_update(copier_one_template_path: Path):
     assert lines[0] != lines[1]
 
 
-def test_init_project_auto_commits_with_correct_message(copier_one_template_path: Path):
+def test_update_project_auto_commits_with_correct_message(
+    copier_one_template_path: Path,
+):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
     expect_file = project_path / "a1.txt"
@@ -137,3 +144,54 @@ def test_init_project_auto_commits_with_correct_message(copier_one_template_path
 
     # Check for custom message
     _assert_last_non_merge_commit_message_matches(expect_commit_message)
+
+
+def test_update_project_does_not_run_post_update_on_conflict_abort(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config_path = project_path / "flexlate-dev.yaml"
+    extra_file = project_path / "extra.txt"
+    config = FlexlateDevConfig.load_or_create(config_path)
+    config.settings.custom_config_folder = GENERATED_FILES_DIR
+    config.settings.config_name = "flexlate-dev"
+    user_run_config = UserRunConfiguration(
+        pre_update=[f"echo $(date +%N) > {extra_file}"],
+        post_update=[f"echo $(date +%N) >> {extra_file}"],
+    )
+    config.run_configs["default_serve"] = user_run_config
+    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+
+    def _reject_update(prompt: str) -> bool:
+        return False
+
+    initialize_project_get_folder(
+        template_path,
+        GENERATED_FILES_DIR,
+        config,
+        run_config=run_config,
+        no_input=True,
+        data=None,
+        save=True,
+    )
+
+    assert expect_file.read_text() == "1"
+
+    # Change the template contents, allowing update
+    template_file.write_text("new content {{ q2 }}")
+
+    # Change the output file, causing a conflict
+    expect_file.write_text("2")
+
+    with patch.object(branch_update, "confirm_user", _reject_update):
+        update_project(project_path, config, run_config, no_input=True)
+
+    # Check that update was skipped
+    assert expect_file.read_text() == "2"
+
+    # Check that only pre-update was run, so there is a single date in the file
+    lines = extra_file.read_text().splitlines()
+    assert len(lines) == 1

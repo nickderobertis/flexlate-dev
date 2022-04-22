@@ -109,14 +109,27 @@ def update_project(
     auto_commit: bool = True,
     save: bool = True,
 ):
+    def run_update_check_was_aborted() -> bool:
+        try:
+            fxt.update(
+                data=[data] if data else None,
+                no_input=no_input,
+                abort_on_conflict=abort_on_conflict,
+                project_path=out_path,
+            )
+            return False
+        except flexlate_exc.TriedToCommitButNoChangesException:
+            print_styled("Update did not have any changes", INFO_STYLE)
+            return True
+        except flexlate_exc.MergeConflictsAndAbortException:
+            print_styled(
+                "User aborted resolving merge conflicts, skipping update", INFO_STYLE
+            )
+            return True
+
     run_user_hook(RunnerHookType.PRE_UPDATE, out_path, run_config.config, config)
     try:
-        fxt.update(
-            data=[data] if data else None,
-            no_input=no_input,
-            abort_on_conflict=abort_on_conflict,
-            project_path=out_path,
-        )
+        aborted = run_update_check_was_aborted()
     except flexlate_exc.GitRepoDirtyException:
         if auto_commit:
             repo = Repo(out_path)
@@ -125,20 +138,16 @@ def update_project(
                 "Detected manual changes to generated files and auto_commit=True, committing",
                 INFO_STYLE,
             )
-            fxt.update(
-                data=[data] if data else None,
-                no_input=no_input,
-                abort_on_conflict=abort_on_conflict,
-                project_path=out_path,
-            )
+            aborted = run_update_check_was_aborted()
         else:
             print_styled(
                 "Detected manual changes to generated files and auto_commit=False. Please manually commit the changes to continue updating",
                 ACTION_REQUIRED_STYLE,
             )
             return
-    except flexlate_exc.TriedToCommitButNoChangesException:
-        print_styled("Update did not have any changes", INFO_STYLE)
+
+    if aborted:
+        # If update was not successful, skip post update hook and saving config
         return
 
     run_user_hook(RunnerHookType.POST_UPDATE, out_path, run_config.config, config)

@@ -62,7 +62,7 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
-    "flexlate>=0.13.1",
+    "flexlate>=0.14.0",
     "watchdog",
     "typer",
     "rich",
