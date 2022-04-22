@@ -89,8 +89,6 @@ class FlexlateDevConfig(BaseConfig):
             return user_data_config
         # Create a new config by extending the referenced config
         extends_config = self.get_data_config(user_data_config.extends)
-        if not extends_config:
-            raise NoSuchDataException(user_data_config.extends)
         extended_data = {**extends_config.data, **user_data_config.data}
         folder_name = user_data_config.folder_name or extends_config.folder_name
         return DataConfiguration(data=extended_data, folder_name=folder_name)
