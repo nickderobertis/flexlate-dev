@@ -64,15 +64,18 @@ class FlexlateDevConfig(BaseConfig):
     def get_full_run_config(
         self, command: ExternalCLICommandType, name: Optional[str] = None
     ) -> FullRunConfiguration:
-        name = name or f"default_{command.value.casefold()}"
-        user_run_config = self.get_run_config(name)
+        user_run_config = self.get_run_config(command, name)
         if user_run_config.data_name is None:
             data_config = self.get_default_data()
         else:
             data_config = self.get_data_config(user_run_config.data_name)
         return FullRunConfiguration(config=user_run_config, data=data_config)
 
-    def get_run_config(self, name: str) -> UserRunConfiguration:
+    def get_run_config(
+        self, command: ExternalCLICommandType, name: Optional[str] = None
+    ) -> UserRunConfiguration:
+        if name == "default" or not name:
+            name = f"default_{command.value.casefold()}"
         user_run_config = self.run_configs.get(name)
         if not user_run_config:
             raise NoSuchRunConfigurationException(name)
@@ -80,7 +83,7 @@ class FlexlateDevConfig(BaseConfig):
             # No extends, so return the config as-is
             return user_run_config
         # Create a new config by extending the referenced config
-        extends_config = self.get_run_config(user_run_config.extends)
+        extends_config = self.get_run_config(command, user_run_config.extends)
         return UserRunConfiguration(
             post_init=user_run_config.post_init or extends_config.post_init,
             post_update=user_run_config.post_update or extends_config.post_update,
