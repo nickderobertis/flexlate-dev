@@ -28,7 +28,7 @@ def publish_template(
         auto_commit=False,
         save=save,
         abort_on_conflict=abort_on_conflict,
-        default_folder_name=run_config.data.folder_name
+        default_folder_name=run_config.data.use_folder_name
         if run_config.data
         else DEFAULT_PROJECT_NAME,
     )

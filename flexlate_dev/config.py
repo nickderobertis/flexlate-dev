@@ -19,7 +19,11 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 
 class DataConfiguration(BaseModel):
     data: TemplateData = Field(default_factory=dict)
-    folder_name: str = DEFAULT_PROJECT_NAME
+    folder_name: Optional[str] = None
+
+    @property
+    def use_folder_name(self) -> str:
+        return self.folder_name or DEFAULT_PROJECT_NAME
 
 
 class UserDataConfiguration(DataConfiguration):

@@ -162,7 +162,7 @@ class ServerEventHandler(FileSystemEventHandler):
             auto_commit=self.auto_commit,
             save=self.save,
             known_folder_name=self.folder,
-            default_folder_name=self.run_config.data.folder_name
+            default_folder_name=self.run_config.data.use_folder_name
             if self.run_config.data
             else DEFAULT_PROJECT_NAME,
         )
