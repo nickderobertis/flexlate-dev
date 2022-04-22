@@ -24,7 +24,7 @@ def test_update_or_init_project_creates_project_when_no_folder_name_in_config(
     config = FlexlateDevConfig()
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     assert not expect_file.exists()
 
@@ -52,7 +52,7 @@ def test_update_or_init_project_creates_project_when_path_does_not_exist(
     config.settings.config_name = "flexlate-dev"
     data_config = UserDataConfiguration(folder_name="project")
     config.data["default"] = data_config
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     assert not expect_file.exists()
 
@@ -81,7 +81,7 @@ def test_update_or_init_project_updates_project_when_folder_is_defined_and_path_
     config.settings.config_name = "flexlate-dev"
     data_config = UserDataConfiguration(folder_name="project")
     config.data["default"] = data_config
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     assert not expect_file.exists()
 

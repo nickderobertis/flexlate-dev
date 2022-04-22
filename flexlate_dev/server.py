@@ -113,7 +113,7 @@ class ServerEventHandler(FileSystemEventHandler):
         super().__init__()
         self.config = config
         self.run_config_name = run_config_name
-        self.run_config = config.get_run_config(
+        self.run_config = config.get_full_run_config(
             ExternalCLICommandType.SERVE, run_config_name
         )
         self.template_path = template_path
