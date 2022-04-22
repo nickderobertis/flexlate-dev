@@ -1,5 +1,5 @@
-watchdog
 typer
-flexlate>=0.14.0
 flexlate-dev
 rich
+flexlate>=0.14.0
+watchdog
