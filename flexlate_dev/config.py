@@ -71,7 +71,9 @@ class FlexlateDevConfig(BaseConfig):
             data_config = self.get_data_config(user_run_config.data_name)
         return FullRunConfiguration(config=user_run_config, data=data_config)
 
-    def get_run_config(self, command: ExternalCLICommandType, name: str) -> UserRunConfiguration:
+    def get_run_config(
+        self, command: ExternalCLICommandType, name: Optional[str] = None
+    ) -> UserRunConfiguration:
         if name == "default" or not name:
             name = f"default_{command.value.casefold()}"
         user_run_config = self.run_configs.get(name)

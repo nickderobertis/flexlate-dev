@@ -6,7 +6,8 @@ from tests.config import (
     GENERATED_FILES_DIR,
     WITH_USER_COMMAND_CONFIG_PATH,
     EXTEND_DATA_CONFIG_PATH,
-    EXTEND_RUN_CONFIG_PATH, EXTEND_DEFAULT_RUN_CONFIG_PATH,
+    EXTEND_RUN_CONFIG_PATH,
+    EXTEND_DEFAULT_RUN_CONFIG_PATH,
 )
 from tests.gen_configs import gen_config_with_user_commands
 
