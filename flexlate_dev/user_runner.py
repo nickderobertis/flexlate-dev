@@ -45,7 +45,7 @@ class UserRunConfiguration(RunConfiguration):
 def run_user_hook(
     hook_type: RunnerHookType,
     out_path: Path,
-    user_run_config: UserRunConfiguration,
+    user_run_config: RunConfiguration,
     config: "FlexlateDevConfig",
 ):
     """
