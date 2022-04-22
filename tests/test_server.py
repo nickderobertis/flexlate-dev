@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from flexlate_dev.config import FlexlateDevConfig, DataConfiguration
+from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.server import run_server
 from tests.config import GENERATED_FILES_DIR, BLOCKING_COMMAND_CONFIG_PATH
 from tests.pathutils import change_directory_to
@@ -87,7 +87,7 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config_path = project_path / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    data_config = DataConfiguration(data=dict(q2=50))
+    data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
     config.run_configs["default_serve"].data_name = "default"
     with run_server(

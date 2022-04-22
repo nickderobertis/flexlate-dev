@@ -22,6 +22,10 @@ class DataConfiguration(BaseModel):
     folder_name: str = DEFAULT_PROJECT_NAME
 
 
+class UserDataConfiguration(DataConfiguration):
+    extends: Optional[str] = None
+
+
 class FullRunConfiguration(BaseModel):
     config: UserRunConfiguration
     data: Optional[DataConfiguration]
@@ -38,7 +42,7 @@ def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
 
 
 class FlexlateDevConfig(BaseConfig):
-    data: Dict[str, DataConfiguration] = Field(default_factory=dict)
+    data: Dict[str, UserDataConfiguration] = Field(default_factory=dict)
     commands: List[UserCommand] = Field(default_factory=list)
     run_configs: Dict[str, UserRunConfiguration] = Field(
         default_factory=create_default_run_configs
@@ -61,12 +65,31 @@ class FlexlateDevConfig(BaseConfig):
         if not user_run_config:
             raise NoSuchRunConfigurationException(name)
         if user_run_config.data_name is None:
-            data_config = self.data.get("default")
+            data_config = self.get_default_data()
         else:
-            data_config = self.data.get(user_run_config.data_name)
-            if not data_config:
-                raise NoSuchDataException(user_run_config.data_name)
+            data_config = self.get_data_config(user_run_config.data_name)
         return FullRunConfiguration(config=user_run_config, data=data_config)
+
+    def get_default_data(self) -> Optional[DataConfiguration]:
+        try:
+            return self.get_data_config("default")
+        except NoSuchDataException:
+            return None
+
+    def get_data_config(self, name: str) -> DataConfiguration:
+        user_data_config = self.data.get(name)
+        if not user_data_config:
+            raise NoSuchDataException(name)
+        if not user_data_config.extends:
+            # No extends, so return the config as-is
+            return user_data_config
+        # Create a new config by extending the referenced config
+        extends_config = self.data.get(user_data_config.extends)
+        if not extends_config:
+            raise NoSuchDataException(user_data_config.extends)
+        extended_data = {**extends_config.data, **user_data_config.data}
+        folder_name = user_data_config.folder_name or extends_config.folder_name
+        return DataConfiguration(data=extended_data, folder_name=folder_name)
 
     def save_data_for_run_config(
         self, run_config: FullRunConfiguration, data: TemplateData

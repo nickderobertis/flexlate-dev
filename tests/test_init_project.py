@@ -3,7 +3,7 @@ from pathlib import Path
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import (
     FlexlateDevConfig,
-    DataConfiguration,
+    UserDataConfiguration,
 )
 from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder
@@ -17,7 +17,7 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
     expect_file = project_path / "a1.txt"
     config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    data_config = DataConfiguration(data=dict(q2=50))
+    data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
     config.run_configs["default_serve"].data_name = "default"
     run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
