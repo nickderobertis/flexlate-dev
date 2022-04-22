@@ -7,6 +7,7 @@ from flexlate_dev.config import (
 )
 from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder
+from tests.config import EXTEND_DATA_CONFIG_PATH
 from tests.fixtures.template_path import *
 
 
@@ -100,3 +101,28 @@ def test_init_project_runs_post_init_after_creating_project(
     # Check that config was saved
     loaded_config = FlexlateDevConfig.load(config_path)
     assert loaded_config.data["default"].data == dict(q1="a1", q2=1, q3=None)
+
+
+def test_init_project_creates_project_with_extended_data(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    custom_folder_name = "custom_folder_name"
+    project_path = GENERATED_FILES_DIR / custom_folder_name
+    expect_file = project_path / "a1.txt"
+    config = FlexlateDevConfig.load(EXTEND_DATA_CONFIG_PATH)
+    run_config = config.get_run_config(ExternalCLICommandType.SERVE, "my-run-config")
+
+    folder = initialize_project_get_folder(
+        template_path,
+        GENERATED_FILES_DIR,
+        config,
+        run_config=run_config,
+        no_input=True,
+        data=run_config.data.data,
+        save=False,
+        default_folder_name=custom_folder_name,
+    )
+
+    assert folder == custom_folder_name
+    assert expect_file.read_text() == "20"
