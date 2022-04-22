@@ -97,7 +97,7 @@ class FlexlateDevConfig(BaseConfig):
         self, run_config: FullRunConfiguration, data: TemplateData
     ):
         data_name = run_config.config.data_name or "default"
-        data_config = self.data.get(data_name) or DataConfiguration()
+        data_config = self.data.get(data_name) or UserDataConfiguration()
         new_data_config = data_config.copy(update=dict(data=data))
         run_config.config.data_name = data_name  # set to default if was previously None
         self.data[data_name] = new_data_config
