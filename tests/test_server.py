@@ -161,6 +161,6 @@ def test_server_resolves_an_extended_run_config_to_run_commands(
         wait_until_file_has_content(expect_file, modified_time, "new content 1")
 
         # Check that it properly extended the config to pick the correct commands
-        assert (project_path / "overridden.txt").exists()
-        assert (project_path / "something_else.txt").exists()
+        wait_until_path_exists(project_path / "overridden.txt")
+        wait_until_path_exists(project_path / "something_else.txt")
         assert not (project_path / "something.txt").exists()
