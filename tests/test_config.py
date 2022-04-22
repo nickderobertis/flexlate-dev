@@ -4,6 +4,7 @@ from tests.config import (
     INPUT_CONFIGS_DIR,
     GENERATED_FILES_DIR,
     WITH_USER_COMMAND_CONFIG_PATH,
+    EXTEND_DATA_CONFIG_PATH,
 )
 from tests.gen_configs import gen_config_with_user_commands
 
@@ -30,3 +31,10 @@ def test_write_config_with_commands():
         WITH_USER_COMMAND_CONFIG_PATH.read_text()
         == (GENERATED_FILES_DIR / "with_user_command.yaml").read_text()
     )
+
+
+def test_read_extended_data():
+    config = FlexlateDevConfig.load(EXTEND_DATA_CONFIG_PATH)
+    data_config = config.get_data_config("my-extend")
+    assert data_config.data == dict(q1="a1", q2=20, q3="a3")
+    assert data_config.folder_name == "a"

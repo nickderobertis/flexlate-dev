@@ -7,7 +7,7 @@ from git import Repo
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import (
     FlexlateDevConfig,
-    DataConfiguration,
+    UserDataConfiguration,
 )
 from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
@@ -50,7 +50,7 @@ def test_update_or_init_project_creates_project_when_path_does_not_exist(
     config = FlexlateDevConfig()
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    data_config = DataConfiguration(folder_name="project")
+    data_config = UserDataConfiguration(folder_name="project")
     config.data["default"] = data_config
     run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
 
@@ -79,7 +79,7 @@ def test_update_or_init_project_updates_project_when_folder_is_defined_and_path_
     config = FlexlateDevConfig()
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    data_config = DataConfiguration(folder_name="project")
+    data_config = UserDataConfiguration(folder_name="project")
     config.data["default"] = data_config
     run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
 

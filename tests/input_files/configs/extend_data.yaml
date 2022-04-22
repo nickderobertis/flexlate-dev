@@ -1,0 +1,21 @@
+commands: []
+data:
+  base:
+    data:
+      q1: a1
+      q2: 2
+    folder_name: a
+  my-extend:
+    data:
+      q2: 20
+      q3: a3
+    extends: base
+run_configs:
+  default_publish:
+    post_init:
+    - gh repo create --source=.
+    post_update:
+    - git push --all origin
+  default_serve: {}
+  my-run-config:
+    data_name: my-extend

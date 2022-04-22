@@ -47,7 +47,7 @@ def update_or_initialize_project_get_folder(
         )
 
     folder = known_folder_name or (
-        run_config.data.folder_name if run_config.data else None
+        run_config.data.use_folder_name if run_config.data else None
     )
     if folder is None:
         print_styled(

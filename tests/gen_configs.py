@@ -1,6 +1,7 @@
 from flexlate_dev.config import (
     FlexlateDevConfig,
     create_default_run_configs,
+    UserDataConfiguration,
 )
 from flexlate_dev.user_runner import UserRunConfiguration
 from flexlate_dev.user_command import UserCommand
@@ -40,6 +41,23 @@ def gen_config_with_blocking_command():
     return config
 
 
+def gen_config_with_extend_data():
+    base_data_config = UserDataConfiguration(data=dict(q1="a1", q2=2), folder_name="a")
+    extend_data_config = UserDataConfiguration(
+        data=dict(q2=20, q3="a3"), extends="base"
+    )
+    run_config = UserRunConfiguration(
+        data_name="my-extend",
+    )
+    run_configs = {"my-run-config": run_config, **create_default_run_configs()}
+    data_configs = {"base": base_data_config, "my-extend": extend_data_config}
+    config = FlexlateDevConfig(run_configs=run_configs, data=data_configs)
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "extend_data"
+    return config
+
+
 if __name__ == "__main__":
     gen_config_with_user_commands().save()
     gen_config_with_blocking_command().save()
+    gen_config_with_extend_data().save()
