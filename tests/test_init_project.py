@@ -21,7 +21,7 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
     data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
     config.run_configs["default_serve"].data_name = "default"
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     folder = initialize_project_get_folder(
         template_path,
@@ -50,7 +50,7 @@ def test_init_project_creates_project_with_default_data(copier_one_template_path
     config = FlexlateDevConfig()
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(
         template_path,
@@ -82,7 +82,7 @@ def test_init_project_runs_post_init_after_creating_project(
     touch_file_path = project_path / touch_file_name
     user_run_config = UserRunConfiguration(post_init=[f"touch {touch_file_name}"])
     config.run_configs["default_serve"] = user_run_config
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, None)
+    run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(
         template_path,
@@ -111,7 +111,9 @@ def test_init_project_creates_project_with_extended_data(
     project_path = GENERATED_FILES_DIR / custom_folder_name
     expect_file = project_path / "a1.txt"
     config = FlexlateDevConfig.load(EXTEND_DATA_CONFIG_PATH)
-    run_config = config.get_run_config(ExternalCLICommandType.SERVE, "my-run-config")
+    run_config = config.get_full_run_config(
+        ExternalCLICommandType.SERVE, "my-run-config"
+    )
 
     folder = initialize_project_get_folder(
         template_path,

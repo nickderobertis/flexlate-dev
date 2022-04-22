@@ -12,7 +12,7 @@ from flexlate_dev.exc import (
     NoSuchCommandException,
 )
 from flexlate_dev.user_command import UserCommand
-from flexlate_dev.user_runner import UserRunConfiguration
+from flexlate_dev.user_runner import UserRunConfiguration, RunConfiguration
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
 
@@ -31,7 +31,7 @@ class UserDataConfiguration(DataConfiguration):
 
 
 class FullRunConfiguration(BaseModel):
-    config: UserRunConfiguration
+    config: RunConfiguration
     data: Optional[DataConfiguration]
 
 
@@ -61,18 +61,35 @@ class FlexlateDevConfig(BaseConfig):
         all_kwargs = dict(exclude_none=True, **kwargs)
         return super().save(serializer_kwargs=serializer_kwargs, **all_kwargs)
 
-    def get_run_config(
+    def get_full_run_config(
         self, command: ExternalCLICommandType, name: Optional[str] = None
     ) -> FullRunConfiguration:
         name = name or f"default_{command.value.casefold()}"
-        user_run_config = self.run_configs.get(name)
-        if not user_run_config:
-            raise NoSuchRunConfigurationException(name)
+        user_run_config = self.get_run_config(name)
         if user_run_config.data_name is None:
             data_config = self.get_default_data()
         else:
             data_config = self.get_data_config(user_run_config.data_name)
         return FullRunConfiguration(config=user_run_config, data=data_config)
+
+    def get_run_config(self, name: str) -> UserRunConfiguration:
+        user_run_config = self.run_configs.get(name)
+        if not user_run_config:
+            raise NoSuchRunConfigurationException(name)
+        if not user_run_config.extends:
+            # No extends, so return the config as-is
+            return user_run_config
+        # Create a new config by extending the referenced config
+        extends_config = self.get_run_config(user_run_config.extends)
+        return UserRunConfiguration(
+            post_init=user_run_config.post_init or extends_config.post_init,
+            post_update=user_run_config.post_update or extends_config.post_update,
+            pre_update=user_run_config.pre_update or extends_config.pre_update,
+            data_name=user_run_config.data_name or extends_config.data_name,
+            out_root=user_run_config.out_root or extends_config.out_root,
+            auto_commit_message=user_run_config.auto_commit_message
+            or extends_config.auto_commit_message,
+        )
 
     def get_default_data(self) -> Optional[DataConfiguration]:
         try:

@@ -25,7 +25,7 @@ class RunnerHookType(str, Enum):
     POST_UPDATE = "post_update"
 
 
-class UserRunConfiguration(BaseModel):
+class RunConfiguration(BaseModel):
     post_init: Optional[List[Runnable]] = None
     pre_update: Optional[List[Runnable]] = None
     post_update: Optional[List[Runnable]] = None
@@ -38,10 +38,14 @@ class UserRunConfiguration(BaseModel):
         return self.auto_commit_message or "chore: auto-commit manual changes"
 
 
+class UserRunConfiguration(RunConfiguration):
+    extends: Optional[str] = None
+
+
 def run_user_hook(
     hook_type: RunnerHookType,
     out_path: Path,
-    user_run_config: UserRunConfiguration,
+    user_run_config: RunConfiguration,
     config: "FlexlateDevConfig",
 ):
     """
