@@ -88,7 +88,7 @@ class FlexlateDevConfig(BaseConfig):
             # No extends, so return the config as-is
             return user_data_config
         # Create a new config by extending the referenced config
-        extends_config = self.data.get(user_data_config.extends)
+        extends_config = self.get_data_config(user_data_config.extends)
         if not extends_config:
             raise NoSuchDataException(user_data_config.extends)
         extended_data = {**extends_config.data, **user_data_config.data}
