@@ -46,7 +46,10 @@ class FullRunConfiguration(BaseModel):
 def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
     default_publish = UserRootRunConfiguration(
         pre_check=[
-            'if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name }} .; fi'
+            'if [ -n "$(find . -prune -empty 2>/dev/null)" ]; '
+            'then gh repo clone {{ data.folder_name }} .; '
+            'else git pull origin master; '
+            'fi'
         ],
         post_init=[
             "gh repo create --public --source=.",
