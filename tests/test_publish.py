@@ -14,6 +14,7 @@ from tests.config import (
     GENERATED_FILES_DIR,
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
     WITH_TEMPLATED_COMMANDS_CONFIG_PATH,
+    WITH_PRE_CHECK_COMMAND_CONFIG_PATH,
 )
 from tests.pathutils import change_directory_to
 from tests.fixtures.template_path import *
@@ -241,3 +242,42 @@ def test_publish_creates_output_with_templated_commands(copier_one_template_path
     # Check that templated command works with post init
     assert (project_path / "2.txt").exists()
     assert (project_path / "my-data.txt").exists()
+
+
+def test_publish_pre_check_can_alter_whether_init_or_update(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
+    shutil.copy(WITH_PRE_CHECK_COMMAND_CONFIG_PATH, config_path)
+
+    # On first publish, there is no folder name defined, so it will bypass check and run init
+    # Set save=True so it will save the folder name into the config
+    assert not expect_file.exists()
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        run_config_name="my-run-config",
+        config_path=config_path,
+        no_input=True,
+        save=True,
+    )
+    assert expect_file.read_text() == "1"
+    assert (project_path / "post-init.txt").exists()
+    assert not (project_path / "post-update.txt").exists()
+
+    # On second publish, project exists and folder name is defined. Normally it would do an update,
+    # but the pre-check command will remove the project, causing it to do another init.
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        run_config_name="my-run-config",
+        config_path=config_path,
+        no_input=True,
+        save=True,
+    )
+    assert expect_file.read_text() == "1"
+    assert (project_path / "post-init.txt").exists()
+    assert not (project_path / "post-update.txt").exists()
