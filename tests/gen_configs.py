@@ -5,7 +5,7 @@ from flexlate_dev.config import (
 )
 from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.user_command import UserCommand
-from tests.config import INPUT_CONFIGS_DIR
+from tests.config import INPUT_CONFIGS_DIR, GENERATED_FILES_DIR
 
 
 def gen_config_with_user_commands():
@@ -159,18 +159,32 @@ def gen_config_with_templated_commands():
 
 
 def gen_config_with_pre_check_command():
-    # data_config = UserDataConfiguration(data=dict(q1="a1", q2=2), folder_name="a")
     run_config = UserRootRunConfiguration(
         pre_check=["cd .. && rm -rf {{ data.folder_name }}"],
         post_init=["touch post-init.txt"],
         post_update=["touch post-update.txt"],
-        # data_name="my-data",
     )
     run_configs = {"my-run-config": run_config, **create_default_run_configs()}
-    # config = FlexlateDevConfig(run_configs=run_configs, data={"my-data": data_config})
     config = FlexlateDevConfig(run_configs=run_configs)
     config.settings.custom_config_folder = INPUT_CONFIGS_DIR
     config.settings.config_name = "with_pre_check_command"
+    return config
+
+
+def gen_config_with_pre_check_create_command():
+    data_config = UserDataConfiguration(folder_name="a")
+    run_config = UserRootRunConfiguration(
+        pre_check=[
+            "cd .. && rm -rf {{ data.folder_name }} && fxt init-from ./one --folder-name {{ data.folder_name }} --no-input"
+        ],
+        post_init=["touch post-init.txt"],
+        pre_update=["touch pre-update.txt"],
+        data_name="my-data",
+    )
+    run_configs = {"my-run-config": run_config, **create_default_run_configs()}
+    config = FlexlateDevConfig(run_configs=run_configs, data={"my-data": data_config})
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "with_pre_check_create_command"
     return config
 
 
@@ -183,3 +197,4 @@ if __name__ == "__main__":
     gen_config_with_separate_publish_and_serve_configs_and_extend_run_config().save()
     gen_config_with_templated_commands().save()
     gen_config_with_pre_check_command().save()
+    gen_config_with_pre_check_create_command().save()

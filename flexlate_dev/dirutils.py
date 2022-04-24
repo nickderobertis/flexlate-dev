@@ -9,3 +9,7 @@ def change_directory_to(path: Path):
     os.chdir(path)
     yield
     os.chdir(current_path)
+
+
+def directory_has_files_or_directories(path: Path):
+    return len(list(path.iterdir())) > 0

@@ -13,7 +13,10 @@ from flexlate_dev.config import (
     FullRunConfiguration,
     DEFAULT_PROJECT_NAME,
 )
-from flexlate_dev.dirutils import change_directory_to
+from flexlate_dev.dirutils import (
+    change_directory_to,
+    directory_has_files_or_directories,
+)
 from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.render import create_jinja_environment
@@ -63,8 +66,10 @@ def update_or_initialize_project_get_folder(
         return init_project()
 
     out_path = out_root / folder
+    if not out_path.exists():
+        out_path.mkdir()
     run_user_hook(RunnerHookType.PRE_CHECK, out_path, run_config, config, jinja_env)
-    if out_path.exists():
+    if out_path.exists() and directory_has_files_or_directories(out_path):
         print_styled(f"{out_path} exists, updating project", INFO_STYLE)
         update_project(
             out_path,
@@ -80,6 +85,9 @@ def update_or_initialize_project_get_folder(
         return folder
 
     print_styled(f"{out_path} does not exist, initializing project", INFO_STYLE)
+    # Clear the folder that was temporarily created to run the check hook. It will be
+    # recreated by the init_project() function.
+    out_path.rmdir()
     return init_project()
 
 
