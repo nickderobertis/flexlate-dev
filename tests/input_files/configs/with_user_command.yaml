@@ -14,7 +14,7 @@ run_configs:
       - git push --all origin
       pre_check:
       - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
-        }} .; fi
+        }} .; else git pull origin master; fi
   my-run-config:
     post_init:
     - run: touch user_command.txt
