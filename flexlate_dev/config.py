@@ -42,7 +42,11 @@ class FullRunConfiguration(BaseModel):
 
 def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
     default_publish = UserRootRunConfiguration(
-        post_init=["gh repo create --public --source=.", "git push --all origin"],
+        post_init=[
+            "gh repo create --public --source=.",
+            "git push origin master",
+            "git push --all origin",
+        ],
         post_update=["fxt merge", "git push --all origin"],
     )
     return dict(
