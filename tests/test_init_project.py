@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import jinja2
+
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import (
     FlexlateDevConfig,
@@ -9,9 +11,12 @@ from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfigurat
 from flexlate_dev.project_ops import initialize_project_get_folder
 from tests.config import EXTEND_DATA_CONFIG_PATH
 from tests.fixtures.template_path import *
+from tests.fixtures.jinja_env import jinja_env
 
 
-def test_init_project_creates_project_with_data(copier_one_template_path: Path):
+def test_init_project_creates_project_with_data(
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
+):
     template_path = copier_one_template_path
     custom_folder_name = "custom_folder_name"
     project_path = GENERATED_FILES_DIR / custom_folder_name
@@ -32,6 +37,7 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
         data=run_config.data.data,
         save=True,
         default_folder_name=custom_folder_name,
+        jinja_env=jinja_env,
     )
 
     assert folder == custom_folder_name
@@ -42,7 +48,9 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
     assert loaded_config.data["default"].data == dict(q1="a1", q2=50, q3=None)
 
 
-def test_init_project_creates_project_with_default_data(copier_one_template_path: Path):
+def test_init_project_creates_project_with_default_data(
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
+):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
     expect_file = project_path / "a1.txt"
@@ -60,6 +68,7 @@ def test_init_project_creates_project_with_default_data(copier_one_template_path
         no_input=True,
         data=None,
         save=True,
+        jinja_env=jinja_env,
     )
 
     assert expect_file.read_text() == "1"
@@ -70,7 +79,7 @@ def test_init_project_creates_project_with_default_data(copier_one_template_path
 
 
 def test_init_project_runs_post_init_after_creating_project(
-    copier_one_template_path: Path,
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
 ):
     template_path = copier_one_template_path
     custom_folder_name = "custom_folder_name"
@@ -94,6 +103,7 @@ def test_init_project_runs_post_init_after_creating_project(
         data=None,
         save=True,
         default_folder_name=custom_folder_name,
+        jinja_env=jinja_env,
     )
 
     assert expect_file.read_text() == "1"
@@ -105,7 +115,7 @@ def test_init_project_runs_post_init_after_creating_project(
 
 
 def test_init_project_creates_project_with_extended_data(
-    copier_one_template_path: Path,
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
 ):
     template_path = copier_one_template_path
     custom_folder_name = "custom_folder_name"
@@ -125,6 +135,7 @@ def test_init_project_creates_project_with_extended_data(
         data=run_config.data.data,
         save=False,
         default_folder_name=custom_folder_name,
+        jinja_env=jinja_env,
     )
 
     assert folder == custom_folder_name

@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+import jinja2
 from flexlate import branch_update
 from git import Repo
 
@@ -9,10 +10,11 @@ from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfigurat
 from flexlate_dev.project_ops import initialize_project_get_folder, update_project
 
 from tests.fixtures.template_path import *
+from tests.fixtures.jinja_env import jinja_env
 
 
 def test_update_project_updates_project_with_default_data(
-    copier_one_template_path: Path,
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
 ):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
@@ -31,6 +33,7 @@ def test_update_project_updates_project_with_default_data(
         no_input=True,
         data=None,
         save=True,
+        jinja_env=jinja_env,
     )
 
     assert expect_file.read_text() == "1"
@@ -38,12 +41,14 @@ def test_update_project_updates_project_with_default_data(
     # Change the template contents, allowing update
     template_file.write_text("new content {{ q2 }}")
 
-    update_project(project_path, config, run_config, no_input=True)
+    update_project(project_path, config, run_config, no_input=True, jinja_env=jinja_env)
 
     assert expect_file.read_text() == "new content 1"
 
 
-def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path):
+def test_update_project_runs_pre_and_post_update(
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
+):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
     expect_file = project_path / "a1.txt"
@@ -71,6 +76,7 @@ def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path)
         no_input=True,
         data=None,
         save=True,
+        jinja_env=jinja_env,
     )
 
     assert expect_file.read_text() == "1"
@@ -78,7 +84,7 @@ def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path)
     # Change the template contents, allowing update
     template_file.write_text("new content {{ q2 }}")
 
-    update_project(project_path, config, run_config, no_input=True)
+    update_project(project_path, config, run_config, no_input=True, jinja_env=jinja_env)
 
     assert expect_file.read_text() == "new content 1"
 
@@ -89,7 +95,7 @@ def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path)
 
 
 def test_update_project_auto_commits_with_correct_message(
-    copier_one_template_path: Path,
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
 ):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
@@ -108,6 +114,7 @@ def test_update_project_auto_commits_with_correct_message(
         no_input=True,
         data=None,
         save=True,
+        jinja_env=jinja_env,
     )
 
     repo = Repo(project_path)
@@ -124,7 +131,7 @@ def test_update_project_auto_commits_with_correct_message(
     temp_path = project_path / "temp.txt"
     temp_path.touch()
 
-    update_project(project_path, config, run_config, no_input=True)
+    update_project(project_path, config, run_config, no_input=True, jinja_env=jinja_env)
 
     # Check for default message
     _assert_last_non_merge_commit_message_matches("chore: auto-commit manual changes")
@@ -143,14 +150,14 @@ def test_update_project_auto_commits_with_correct_message(
     temp_path = project_path / "temp2.txt"
     temp_path.touch()
 
-    update_project(project_path, config, run_config, no_input=True)
+    update_project(project_path, config, run_config, no_input=True, jinja_env=jinja_env)
 
     # Check for custom message
     _assert_last_non_merge_commit_message_matches(expect_commit_message)
 
 
 def test_update_project_does_not_run_post_update_on_conflict_abort(
-    copier_one_template_path: Path,
+    copier_one_template_path: Path, jinja_env: jinja2.Environment
 ):
     template_path = copier_one_template_path
     project_path = GENERATED_FILES_DIR / "project"
@@ -180,6 +187,7 @@ def test_update_project_does_not_run_post_update_on_conflict_abort(
         no_input=True,
         data=None,
         save=True,
+        jinja_env=jinja_env,
     )
 
     assert expect_file.read_text() == "1"
@@ -191,7 +199,9 @@ def test_update_project_does_not_run_post_update_on_conflict_abort(
     expect_file.write_text("2")
 
     with patch.object(branch_update, "confirm_user", _reject_update):
-        update_project(project_path, config, run_config, no_input=True)
+        update_project(
+            project_path, config, run_config, no_input=True, jinja_env=jinja_env
+        )
 
     # Check that update was skipped
     assert expect_file.read_text() == "2"

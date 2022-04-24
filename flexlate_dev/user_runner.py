@@ -6,13 +6,15 @@ focused on just running commands.
 """
 from enum import Enum
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, cast
+from typing import Optional, List, TYPE_CHECKING, cast, Any, Dict
+
+import jinja2
 
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
 
 if TYPE_CHECKING:
-    from flexlate_dev.config import FlexlateDevConfig
+    from flexlate_dev.config import FlexlateDevConfig, FullRunConfiguration
 
 from pydantic import BaseModel
 
@@ -70,18 +72,20 @@ class UserRootRunConfiguration(UserRunConfiguration):
 def run_user_hook(
     hook_type: RunnerHookType,
     out_path: Path,
-    user_run_config: RunConfiguration,
+    run_config: "FullRunConfiguration",
     config: "FlexlateDevConfig",
+    jinja_env: jinja2.Environment,
 ):
     """
     Runs a hook of the given type.
     """
-    hook: Optional[List[Runnable]] = getattr(user_run_config, hook_type.value)
+    hook: Optional[List[Runnable]] = getattr(run_config.config, hook_type.value)
     if hook is not None:
         commands = _create_command_list_resolving_references(hook, config)
+        rendered_commands = _render_commands(commands, run_config, jinja_env)
         print_styled(f"Running {hook_type.value} commands", INFO_STYLE)
         with change_directory_to(out_path):
-            run_command_or_command_strs(commands)
+            run_command_or_command_strs(rendered_commands)
 
 
 def _create_command_list_resolving_references(
@@ -102,3 +106,31 @@ def _create_command_list_resolving_references(
                 add_command = command
         resolved_command_list.append(add_command)
     return resolved_command_list
+
+
+def _render_commands(
+    commands: List[UserCommand],
+    run_config: "FullRunConfiguration",
+    jinja_env: jinja2.Environment,
+) -> List[UserCommand]:
+    """
+    Renders the given commands using the given jinja environment, returning new commands.
+    """
+    return [_render_command(command, run_config, jinja_env) for command in commands]
+
+
+def _render_command(
+    command: UserCommand,
+    run_config: "FullRunConfiguration",
+    jinja_env: jinja2.Environment,
+) -> UserCommand:
+    """
+    Renders the given command using the given jinja environment, returning a new command.
+    """
+    data = run_config.to_jinja_data()
+    update_dict: Dict[str, Any] = {}
+    for attr in ["run", "name"]:
+        value = getattr(command, attr)
+        if value is not None:
+            update_dict[attr] = jinja_env.from_string(value).render(data)
+    return command.copy(update=update_dict)
