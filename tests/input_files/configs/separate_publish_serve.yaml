@@ -1,0 +1,27 @@
+commands: []
+data: {}
+run_configs:
+  base:
+    post_update:
+    - touch base post-update.txt
+    pre_update:
+    - touch base pre-update.txt
+    publish:
+      pre_update:
+      - touch publish pre-update.txt
+  default_publish:
+    post_init:
+    - gh repo create --source=.
+    post_update:
+    - git push --all origin
+  default_serve: {}
+  my-run-config:
+    auto_commit_message: something
+    extends: base
+    pre_update:
+    - touch overridden.txt
+    serve:
+      post_update:
+      - touch serve post-update.txt
+      pre_update:
+      - touch serve pre-update.txt

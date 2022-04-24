@@ -8,6 +8,9 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, List, TYPE_CHECKING, cast
 
+from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
+from flexlate_dev.external_command_type import ExternalCLICommandType
+
 if TYPE_CHECKING:
     from flexlate_dev.config import FlexlateDevConfig
 
@@ -45,6 +48,23 @@ class UserRunConfiguration(RunConfiguration):
 class UserRootRunConfiguration(UserRunConfiguration):
     publish: Optional[UserRunConfiguration] = None
     serve: Optional[UserRunConfiguration] = None
+
+    def get_run_config(self, command: ExternalCLICommandType) -> UserRunConfiguration:
+        # Extend base configuration with command-specific configuration if it exists
+        base_config: UserRunConfiguration = self
+        if command == ExternalCLICommandType.PUBLISH and self.publish:
+            config = UserRunConfiguration(
+                **merge_dicts_preferring_non_none(
+                    base_config.dict(), self.publish.dict()
+                )
+            )
+        elif command == ExternalCLICommandType.SERVE and self.serve:
+            config = UserRunConfiguration(
+                **merge_dicts_preferring_non_none(base_config.dict(), self.serve.dict())
+            )
+        else:
+            config = base_config
+        return config
 
 
 def run_user_hook(

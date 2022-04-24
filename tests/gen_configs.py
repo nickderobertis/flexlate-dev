@@ -3,7 +3,7 @@ from flexlate_dev.config import (
     create_default_run_configs,
     UserDataConfiguration,
 )
-from flexlate_dev.user_runner import UserRootRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.user_command import UserCommand
 from tests.config import INPUT_CONFIGS_DIR
 
@@ -98,9 +98,40 @@ def gen_config_with_extend_default_run_config():
     return config
 
 
+def gen_config_with_separate_publish_and_serve_configs_and_extend_run_config():
+    publish_run_config = UserRunConfiguration(
+        pre_update=["touch publish pre-update.txt"]
+    )
+    serve_run_config = UserRunConfiguration(
+        pre_update=["touch serve pre-update.txt"],
+        post_update=["touch serve post-update.txt"],
+    )
+    base_run_config = UserRootRunConfiguration(
+        pre_update=["touch base pre-update.txt"],
+        post_update=["touch base post-update.txt"],
+        publish=publish_run_config,
+    )
+    extend_run_config = UserRootRunConfiguration(
+        pre_update=["touch overridden.txt"],
+        auto_commit_message="something",
+        extends="base",
+        serve=serve_run_config,
+    )
+    run_configs = {
+        "my-run-config": extend_run_config,
+        "base": base_run_config,
+        **create_default_run_configs(),
+    }
+    config = FlexlateDevConfig(run_configs=run_configs)
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "separate_publish_serve"
+    return config
+
+
 if __name__ == "__main__":
     gen_config_with_user_commands().save()
     gen_config_with_blocking_command().save()
     gen_config_with_extend_data().save()
     gen_config_with_extend_run_config().save()
     gen_config_with_extend_default_run_config().save()
+    gen_config_with_separate_publish_and_serve_configs_and_extend_run_config().save()
