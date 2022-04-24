@@ -5,7 +5,7 @@ from flexlate_dev.config import (
     FlexlateDevConfig,
     UserDataConfiguration,
 )
-from flexlate_dev.user_runner import UserRootRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder
 from tests.config import EXTEND_DATA_CONFIG_PATH
 from tests.fixtures.template_path import *
@@ -20,7 +20,7 @@ def test_init_project_creates_project_with_data(copier_one_template_path: Path):
     config = FlexlateDevConfig.load_or_create(config_path)
     data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
-    config.run_configs["default_serve"].data_name = "default"
+    config.run_configs["default"].data_name = "default"
     run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     folder = initialize_project_get_folder(
@@ -80,8 +80,9 @@ def test_init_project_runs_post_init_after_creating_project(
     config = FlexlateDevConfig.load_or_create(config_path)
     touch_file_name = "myfile.txt"
     touch_file_path = project_path / touch_file_name
-    user_run_config = UserRootRunConfiguration(post_init=[f"touch {touch_file_name}"])
-    config.run_configs["default_serve"] = user_run_config
+    serve_run_config = UserRunConfiguration(post_init=[f"touch {touch_file_name}"])
+    user_run_config = UserRootRunConfiguration(serve=serve_run_config)
+    config.run_configs["default"] = user_run_config
     run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(

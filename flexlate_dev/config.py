@@ -41,12 +41,12 @@ class FullRunConfiguration(BaseModel):
 
 
 def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
+    default_publish = UserRootRunConfiguration(
+        post_init=["gh repo create --public --source=.", "git push --all origin"],
+        post_update=["fxt merge", "git push --all origin"],
+    )
     return dict(
-        default_serve=UserRootRunConfiguration(),
-        default_publish=UserRootRunConfiguration(
-            post_init=["gh repo create --source=."],
-            post_update=["git push --all origin"],
-        ),
+        default=UserRootRunConfiguration(publish=default_publish),
     )
 
 
@@ -79,8 +79,7 @@ class FlexlateDevConfig(BaseConfig):
     def get_run_config(
         self, command: ExternalCLICommandType, name: Optional[str] = None
     ) -> UserRunConfiguration:
-        if name == "default" or not name:
-            name = f"default_{command.value.casefold()}"
+        name = name or "default"
         user_root_run_config = self.run_configs.get(name)
         if not user_root_run_config:
             raise NoSuchRunConfigurationException(name)

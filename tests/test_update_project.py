@@ -5,7 +5,7 @@ from git import Repo
 
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig
-from flexlate_dev.user_runner import UserRootRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder, update_project
 
 from tests.fixtures.template_path import *
@@ -53,11 +53,14 @@ def test_update_project_runs_pre_and_post_update(copier_one_template_path: Path)
     config = FlexlateDevConfig.load_or_create(config_path)
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    user_run_config = UserRootRunConfiguration(
+    serve_config = UserRunConfiguration(
         pre_update=[f"echo $(date +%N) > {extra_file}"],
         post_update=[f"echo $(date +%N) >> {extra_file}"],
     )
-    config.run_configs["default_serve"] = user_run_config
+    user_run_config = UserRootRunConfiguration(
+        serve=serve_config,
+    )
+    config.run_configs["default"] = user_run_config
     run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     initialize_project_get_folder(
@@ -158,11 +161,12 @@ def test_update_project_does_not_run_post_update_on_conflict_abort(
     config = FlexlateDevConfig.load_or_create(config_path)
     config.settings.custom_config_folder = GENERATED_FILES_DIR
     config.settings.config_name = "flexlate-dev"
-    user_run_config = UserRootRunConfiguration(
+    serve_run_config = UserRunConfiguration(
         pre_update=[f"echo $(date +%N) > {extra_file}"],
         post_update=[f"echo $(date +%N) >> {extra_file}"],
     )
-    config.run_configs["default_serve"] = user_run_config
+    user_run_config = UserRootRunConfiguration(serve=serve_run_config)
+    config.run_configs["default"] = user_run_config
     run_config = config.get_full_run_config(ExternalCLICommandType.SERVE, None)
 
     def _reject_update(prompt: str) -> bool:

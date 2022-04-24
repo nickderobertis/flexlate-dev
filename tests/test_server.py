@@ -2,6 +2,7 @@ from pathlib import Path
 
 from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.server import run_server
+from flexlate_dev.user_runner import UserRunConfiguration
 from tests.config import (
     GENERATED_FILES_DIR,
     BLOCKING_COMMAND_CONFIG_PATH,
@@ -95,7 +96,8 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
     config = FlexlateDevConfig.load_or_create(config_path)
     data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
-    config.run_configs["default_serve"].data_name = "default"
+    serve_config = UserRunConfiguration(data_name="default")
+    config.run_configs["default"].serve = serve_config
     with run_server(
         config, None, template_path, GENERATED_FILES_DIR, no_input=True, save=True
     ):

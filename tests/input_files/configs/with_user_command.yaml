@@ -3,12 +3,14 @@ commands:
   run: touch referenced.txt
 data: {}
 run_configs:
-  default_publish:
-    post_init:
-    - gh repo create --source=.
-    post_update:
-    - git push --all origin
-  default_serve: {}
+  default:
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
   my-run-config:
     post_init:
     - run: touch user_command.txt

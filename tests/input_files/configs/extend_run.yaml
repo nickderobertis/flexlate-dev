@@ -6,12 +6,14 @@ run_configs:
     - touch something_else.txt
     pre_update:
     - touch something.txt
-  default_publish:
-    post_init:
-    - gh repo create --source=.
-    post_update:
-    - git push --all origin
-  default_serve: {}
+  default:
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
   my-run-config:
     auto_commit_message: something
     extends: base
