@@ -3,7 +3,7 @@ from flexlate_dev.config import (
     create_default_run_configs,
     UserDataConfiguration,
 )
-from flexlate_dev.user_runner import UserRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration
 from flexlate_dev.user_command import UserCommand
 from tests.config import INPUT_CONFIGS_DIR
 
@@ -15,7 +15,7 @@ def gen_config_with_user_commands():
     referenced_command = UserCommand(run="touch referenced.txt", id="separate_command")
     referencing_command = UserCommand(id="separate_command")
     run_config_command = UserCommand(run="touch user_command.txt")
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         post_init=[run_config_command, referencing_command],
         post_update=["touch string_command.txt"],
     )
@@ -31,7 +31,7 @@ def gen_config_with_blocking_command():
     Generate a configuration file with a user command.
     """
     blocking_command = UserCommand(run="sleep 10", background=True)
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         post_init=[blocking_command],
     )
     run_configs = {"my-run-config": run_config, **create_default_run_configs()}
@@ -46,7 +46,7 @@ def gen_config_with_extend_data():
     extend_data_config = UserDataConfiguration(
         data=dict(q2=20, q3="a3"), extends="base"
     )
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         data_name="my-extend",
     )
     run_configs = {"my-run-config": run_config, **create_default_run_configs()}
@@ -58,10 +58,10 @@ def gen_config_with_extend_data():
 
 
 def gen_config_with_extend_run_config():
-    base_run_config = UserRunConfiguration(
+    base_run_config = UserRootRunConfiguration(
         pre_update=["touch something.txt"], post_update=["touch something_else.txt"]
     )
-    extend_run_config = UserRunConfiguration(
+    extend_run_config = UserRootRunConfiguration(
         pre_update=["touch overridden.txt"],
         auto_commit_message="something",
         extends="base",
@@ -78,12 +78,12 @@ def gen_config_with_extend_run_config():
 
 
 def gen_config_with_extend_default_run_config():
-    extend_run_config = UserRunConfiguration(
+    extend_run_config = UserRootRunConfiguration(
         pre_update=["touch overridden.txt"],
         auto_commit_message="something",
         extends="default",
     )
-    default_serve_config = UserRunConfiguration(
+    default_serve_config = UserRootRunConfiguration(
         pre_update=["touch something.txt"], post_update=["touch something_else.txt"]
     )
     run_configs = {

@@ -12,7 +12,7 @@ from flexlate_dev.exc import (
     NoSuchCommandException,
 )
 from flexlate_dev.user_command import UserCommand
-from flexlate_dev.user_runner import UserRunConfiguration, RunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration, RunConfiguration
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
 
@@ -35,10 +35,10 @@ class FullRunConfiguration(BaseModel):
     data: Optional[DataConfiguration]
 
 
-def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
+def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
     return dict(
-        default_serve=UserRunConfiguration(),
-        default_publish=UserRunConfiguration(
+        default_serve=UserRootRunConfiguration(),
+        default_publish=UserRootRunConfiguration(
             post_init=["gh repo create --source=."],
             post_update=["git push --all origin"],
         ),
@@ -48,7 +48,7 @@ def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
 class FlexlateDevConfig(BaseConfig):
     data: Dict[str, UserDataConfiguration] = Field(default_factory=dict)
     commands: List[UserCommand] = Field(default_factory=list)
-    run_configs: Dict[str, UserRunConfiguration] = Field(
+    run_configs: Dict[str, UserRootRunConfiguration] = Field(
         default_factory=create_default_run_configs
     )
     _settings = AppConfig(
@@ -73,7 +73,7 @@ class FlexlateDevConfig(BaseConfig):
 
     def get_run_config(
         self, command: ExternalCLICommandType, name: Optional[str] = None
-    ) -> UserRunConfiguration:
+    ) -> UserRootRunConfiguration:
         if name == "default" or not name:
             name = f"default_{command.value.casefold()}"
         user_run_config = self.run_configs.get(name)
@@ -84,7 +84,7 @@ class FlexlateDevConfig(BaseConfig):
             return user_run_config
         # Create a new config by extending the referenced config
         extends_config = self.get_run_config(command, user_run_config.extends)
-        return UserRunConfiguration(
+        return UserRootRunConfiguration(
             post_init=user_run_config.post_init or extends_config.post_init,
             post_update=user_run_config.post_update or extends_config.post_update,
             pre_update=user_run_config.pre_update or extends_config.pre_update,

@@ -42,6 +42,11 @@ class UserRunConfiguration(RunConfiguration):
     extends: Optional[str] = None
 
 
+class UserRootRunConfiguration(UserRunConfiguration):
+    publish: Optional[UserRunConfiguration] = None
+    serve: Optional[UserRunConfiguration] = None
+
+
 def run_user_hook(
     hook_type: RunnerHookType,
     out_path: Path,

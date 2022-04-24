@@ -6,7 +6,7 @@ from flexlate_dev.config import (
     FlexlateDevConfig,
     DataConfiguration,
 )
-from flexlate_dev.user_runner import UserRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.publish import publish_template
 from flexlate_dev.server import run_server
@@ -23,7 +23,7 @@ def test_publish_creates_output(copier_one_template_path: Path):
 
     config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         post_init=["touch one.txt"], post_update=["touch two.txt"]
     )
     config.run_configs["default_publish"] = run_config
@@ -48,7 +48,7 @@ def test_publish_updates_existing_output(copier_one_template_path: Path):
 
     config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         post_init=["touch one.txt"], post_update=["touch two.txt"]
     )
     config.run_configs["default_publish"] = run_config
@@ -98,7 +98,7 @@ def test_publish_updates_existing_output_from_template_path_with_publish_up_one_
 
     config_path = template_path / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    run_config = UserRunConfiguration(
+    run_config = UserRootRunConfiguration(
         post_init=["touch one.txt"], post_update=["touch two.txt"]
     )
     config.run_configs["default_publish"] = run_config
