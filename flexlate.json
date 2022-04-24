@@ -27,7 +27,7 @@
         "logo_url": "",
         "install_packages": ""
       },
-      "version": "c92b5c1f3fae3e9e9df04cb7a6712ea356869543",
+        "version": "c92b5c1f3fae3e9e9df04cb7a6712ea356869543",
       "add_mode": "local",
       "root": "."
     }
