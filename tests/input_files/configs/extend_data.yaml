@@ -11,11 +11,13 @@ data:
       q3: a3
     extends: base
 run_configs:
-  default_publish:
-    post_init:
-    - gh repo create --source=.
-    post_update:
-    - git push --all origin
-  default_serve: {}
+  default:
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
   my-run-config:
     data_name: my-extend

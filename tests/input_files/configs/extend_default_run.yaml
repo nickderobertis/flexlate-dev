@@ -1,16 +1,12 @@
 commands: []
 data: {}
 run_configs:
-  default_publish:
-    post_init:
-    - gh repo create --source=.
-    post_update:
-    - git push --all origin
-  default_serve:
-    post_update:
-    - touch something_else.txt
-    pre_update:
-    - touch something.txt
+  default:
+    serve:
+      post_update:
+      - touch something_else.txt
+      pre_update:
+      - touch something.txt
   my-run-config:
     auto_commit_message: something
     extends: default

@@ -83,14 +83,17 @@ def gen_config_with_extend_default_run_config():
         auto_commit_message="something",
         extends="default",
     )
-    default_serve_config = UserRootRunConfiguration(
+    default_serve_config = UserRunConfiguration(
         pre_update=["touch something.txt"], post_update=["touch something_else.txt"]
+    )
+    default_config = UserRootRunConfiguration(
+        serve=default_serve_config,
     )
     run_configs = {
         "my-run-config": extend_run_config,
         **create_default_run_configs(),
         # Override default publish config so it does operations we can verify
-        "default_serve": default_serve_config,
+        "default": default_config,
     }
     config = FlexlateDevConfig(run_configs=run_configs)
     config.settings.custom_config_folder = INPUT_CONFIGS_DIR
