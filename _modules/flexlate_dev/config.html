@@ -46,7 +46,7 @@
   
   
   
-    <title>flexlate_dev.config &#8212; flexlate-dev 0.8.0 documentation</title>
+    <title>flexlate_dev.config &#8212; flexlate-dev 0.9.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="flexlate-dev 0.8.0 documentation"
+        <a href="../../index.html" title="flexlate-dev 0.9.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.8.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.9.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="flexlate-dev 0.8.0 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="flexlate-dev 0.9.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="flexlate-dev 0.8.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.9.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -268,6 +268,7 @@
 <span class="kn">from</span> <span class="nn">pyappconf</span> <span class="kn">import</span> <span class="n">BaseConfig</span><span class="p">,</span> <span class="n">AppConfig</span><span class="p">,</span> <span class="n">ConfigFormats</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
+<span class="kn">from</span> <span class="nn">flexlate_dev.dict_merge</span> <span class="kn">import</span> <span class="n">merge_dicts_preferring_non_none</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.external_command_type</span> <span class="kn">import</span> <span class="n">ExternalCLICommandType</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.exc</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">NoSuchRunConfigurationException</span><span class="p">,</span>
@@ -275,7 +276,11 @@
     <span class="n">NoSuchCommandException</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.user_command</span> <span class="kn">import</span> <span class="n">UserCommand</span>
-<span class="kn">from</span> <span class="nn">flexlate_dev.user_runner</span> <span class="kn">import</span> <span class="n">UserRunConfiguration</span><span class="p">,</span> <span class="n">RunConfiguration</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.user_runner</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">UserRootRunConfiguration</span><span class="p">,</span>
+    <span class="n">RunConfiguration</span><span class="p">,</span>
+    <span class="n">UserRunConfiguration</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">DEFAULT_PROJECT_NAME</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"project"</span>
 
@@ -298,10 +303,10 @@
     <span class="n">data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataConfiguration</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="create_default_run_configs"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.create_default_run_configs">[docs]</a><span class="k">def</span> <span class="nf">create_default_run_configs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRunConfiguration</span><span class="p">]:</span>
+<div class="viewcode-block" id="create_default_run_configs"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.create_default_run_configs">[docs]</a><span class="k">def</span> <span class="nf">create_default_run_configs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRootRunConfiguration</span><span class="p">]:</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">default_serve</span><span class="o">=</span><span class="n">UserRunConfiguration</span><span class="p">(),</span>
-        <span class="n">default_publish</span><span class="o">=</span><span class="n">UserRunConfiguration</span><span class="p">(</span>
+        <span class="n">default_serve</span><span class="o">=</span><span class="n">UserRootRunConfiguration</span><span class="p">(),</span>
+        <span class="n">default_publish</span><span class="o">=</span><span class="n">UserRootRunConfiguration</span><span class="p">(</span>
             <span class="n">post_init</span><span class="o">=</span><span class="p">[</span><span class="s2">"gh repo create --source=."</span><span class="p">],</span>
             <span class="n">post_update</span><span class="o">=</span><span class="p">[</span><span class="s2">"git push --all origin"</span><span class="p">],</span>
         <span class="p">),</span>
@@ -311,7 +316,7 @@
 <div class="viewcode-block" id="FlexlateDevConfig"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig">[docs]</a><span class="k">class</span> <span class="nc">FlexlateDevConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserDataConfiguration</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">commands</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">UserCommand</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
-    <span class="n">run_configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRunConfiguration</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">run_configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRootRunConfiguration</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="n">create_default_run_configs</span>
     <span class="p">)</span>
     <span class="n">_settings</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">(</span>
@@ -339,22 +344,19 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserRunConfiguration</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"default"</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"default_</span><span class="si">{</span><span class="n">command</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
-        <span class="n">user_run_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">user_run_config</span><span class="p">:</span>
+        <span class="n">user_root_run_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user_root_run_config</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoSuchRunConfigurationException</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">user_run_config</span> <span class="o">=</span> <span class="n">user_root_run_config</span><span class="o">.</span><span class="n">get_run_config</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">user_run_config</span><span class="o">.</span><span class="n">extends</span><span class="p">:</span>
             <span class="c1"># No extends, so return the config as-is</span>
             <span class="k">return</span> <span class="n">user_run_config</span>
         <span class="c1"># Create a new config by extending the referenced config</span>
         <span class="n">extends_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_run_config</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">user_run_config</span><span class="o">.</span><span class="n">extends</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">UserRunConfiguration</span><span class="p">(</span>
-            <span class="n">post_init</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">post_init</span> <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">post_init</span><span class="p">,</span>
-            <span class="n">post_update</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">post_update</span> <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">post_update</span><span class="p">,</span>
-            <span class="n">pre_update</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">pre_update</span> <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">pre_update</span><span class="p">,</span>
-            <span class="n">data_name</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">data_name</span> <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">data_name</span><span class="p">,</span>
-            <span class="n">out_root</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">out_root</span> <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">out_root</span><span class="p">,</span>
-            <span class="n">auto_commit_message</span><span class="o">=</span><span class="n">user_run_config</span><span class="o">.</span><span class="n">auto_commit_message</span>
-            <span class="ow">or</span> <span class="n">extends_config</span><span class="o">.</span><span class="n">auto_commit_message</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">merge_dicts_preferring_non_none</span><span class="p">(</span>
+                <span class="n">extends_config</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span> <span class="n">user_run_config</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
+            <span class="p">)</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="FlexlateDevConfig.get_default_data"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.get_default_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataConfiguration</span><span class="p">]:</span>

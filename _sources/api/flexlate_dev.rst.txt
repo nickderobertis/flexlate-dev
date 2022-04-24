@@ -33,6 +33,14 @@ flexlate\_dev.config module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.dict\_merge module
+--------------------------------
+
+.. automodule:: flexlate_dev.dict_merge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.dirutils module
 -----------------------------
 
