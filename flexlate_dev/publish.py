@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, DEFAULT_PROJECT_NAME, load_config
@@ -34,3 +34,34 @@ def publish_template(
         if run_config.data
         else DEFAULT_PROJECT_NAME,
     )
+
+
+def publish_all_templates(
+    template_path: Path,
+    out_root: Path,
+    config_path: Optional[Path] = None,
+    always_include_default: bool = False,
+    exclude: Optional[List[str]] = None,
+    no_input: bool = False,
+    save: bool = False,
+    abort_on_conflict: bool = False,
+):
+    config = load_config(config_path)
+    exclude = exclude or []
+    run_config_names = [
+        name
+        for name in config.get_run_config_names(
+            always_include_default=always_include_default
+        )
+        if name not in exclude
+    ]
+    for run_config_name in run_config_names:
+        publish_template(
+            template_path,
+            out_root,
+            run_config_name=run_config_name,
+            config_path=config_path,
+            no_input=no_input,
+            save=save,
+            abort_on_conflict=abort_on_conflict,
+        )
