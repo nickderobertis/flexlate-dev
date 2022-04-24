@@ -18,10 +18,11 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
+          token: ${{ secrets.gh_token }}
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: nickderobertis/flexlate-update-action@main
+      - uses: nickderobertis/flexlate-update-action@dev
         with:
           gh_token: ${{ secrets.gh_token }}
