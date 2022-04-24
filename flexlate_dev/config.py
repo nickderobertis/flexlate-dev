@@ -99,6 +99,12 @@ class FlexlateDevConfig(BaseConfig):
             )
         )
 
+    def get_run_config_names(self, always_include_default: bool = False) -> List[str]:
+        names = list(self.run_configs.keys())
+        if not always_include_default and len(names) > 1:
+            names.remove("default")
+        return names
+
     def get_default_data(self) -> Optional[DataConfiguration]:
         try:
             return self.get_data_config("default")
