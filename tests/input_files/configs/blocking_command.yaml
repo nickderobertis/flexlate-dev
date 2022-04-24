@@ -5,6 +5,7 @@ run_configs:
     publish:
       post_init:
       - gh repo create --public --source=.
+      - git push origin master
       - git push --all origin
       post_update:
       - fxt merge
