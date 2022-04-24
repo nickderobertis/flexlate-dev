@@ -46,7 +46,7 @@
   
   
   
-    <title>flexlate_dev.config &#8212; flexlate-dev 0.10.0 documentation</title>
+    <title>flexlate_dev.config &#8212; flexlate-dev 0.11.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="flexlate-dev 0.10.0 documentation"
+        <a href="../../index.html" title="flexlate-dev 0.11.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.10.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.11.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="flexlate-dev 0.10.0 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="flexlate-dev 0.11.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="flexlate-dev 0.10.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.11.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -305,7 +305,11 @@
 
 <div class="viewcode-block" id="create_default_run_configs"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.create_default_run_configs">[docs]</a><span class="k">def</span> <span class="nf">create_default_run_configs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">UserRootRunConfiguration</span><span class="p">]:</span>
     <span class="n">default_publish</span> <span class="o">=</span> <span class="n">UserRootRunConfiguration</span><span class="p">(</span>
-        <span class="n">post_init</span><span class="o">=</span><span class="p">[</span><span class="s2">"gh repo create --public --source=."</span><span class="p">,</span> <span class="s2">"git push --all origin"</span><span class="p">],</span>
+        <span class="n">post_init</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">"gh repo create --public --source=."</span><span class="p">,</span>
+            <span class="s2">"git push origin master"</span><span class="p">,</span>
+            <span class="s2">"git push --all origin"</span><span class="p">,</span>
+        <span class="p">],</span>
         <span class="n">post_update</span><span class="o">=</span><span class="p">[</span><span class="s2">"fxt merge"</span><span class="p">,</span> <span class="s2">"git push --all origin"</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
@@ -357,6 +361,12 @@
                 <span class="n">extends_config</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span> <span class="n">user_run_config</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FlexlateDevConfig.get_run_config_names"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.get_run_config_names">[docs]</a>    <span class="k">def</span> <span class="nf">get_run_config_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">always_include_default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run_configs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">always_include_default</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"default"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">names</span></div>
 
 <div class="viewcode-block" id="FlexlateDevConfig.get_default_data"><a class="viewcode-back" href="../../api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.get_default_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_default_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataConfiguration</span><span class="p">]:</span>
         <span class="k">try</span><span class="p">:</span>
