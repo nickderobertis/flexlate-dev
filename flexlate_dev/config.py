@@ -5,6 +5,7 @@ from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
 from pydantic import BaseModel, Field
 
+from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.exc import (
     NoSuchRunConfigurationException,
@@ -12,7 +13,11 @@ from flexlate_dev.exc import (
     NoSuchCommandException,
 )
 from flexlate_dev.user_command import UserCommand
-from flexlate_dev.user_runner import UserRunConfiguration, RunConfiguration
+from flexlate_dev.user_runner import (
+    UserRootRunConfiguration,
+    RunConfiguration,
+    UserRunConfiguration,
+)
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
 
@@ -35,10 +40,10 @@ class FullRunConfiguration(BaseModel):
     data: Optional[DataConfiguration]
 
 
-def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
+def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
     return dict(
-        default_serve=UserRunConfiguration(),
-        default_publish=UserRunConfiguration(
+        default_serve=UserRootRunConfiguration(),
+        default_publish=UserRootRunConfiguration(
             post_init=["gh repo create --source=."],
             post_update=["git push --all origin"],
         ),
@@ -48,7 +53,7 @@ def create_default_run_configs() -> Dict[str, UserRunConfiguration]:
 class FlexlateDevConfig(BaseConfig):
     data: Dict[str, UserDataConfiguration] = Field(default_factory=dict)
     commands: List[UserCommand] = Field(default_factory=list)
-    run_configs: Dict[str, UserRunConfiguration] = Field(
+    run_configs: Dict[str, UserRootRunConfiguration] = Field(
         default_factory=create_default_run_configs
     )
     _settings = AppConfig(
@@ -76,22 +81,19 @@ class FlexlateDevConfig(BaseConfig):
     ) -> UserRunConfiguration:
         if name == "default" or not name:
             name = f"default_{command.value.casefold()}"
-        user_run_config = self.run_configs.get(name)
-        if not user_run_config:
+        user_root_run_config = self.run_configs.get(name)
+        if not user_root_run_config:
             raise NoSuchRunConfigurationException(name)
+        user_run_config = user_root_run_config.get_run_config(command)
         if not user_run_config.extends:
             # No extends, so return the config as-is
             return user_run_config
         # Create a new config by extending the referenced config
         extends_config = self.get_run_config(command, user_run_config.extends)
         return UserRunConfiguration(
-            post_init=user_run_config.post_init or extends_config.post_init,
-            post_update=user_run_config.post_update or extends_config.post_update,
-            pre_update=user_run_config.pre_update or extends_config.pre_update,
-            data_name=user_run_config.data_name or extends_config.data_name,
-            out_root=user_run_config.out_root or extends_config.out_root,
-            auto_commit_message=user_run_config.auto_commit_message
-            or extends_config.auto_commit_message,
+            **merge_dicts_preferring_non_none(
+                extends_config.dict(), user_run_config.dict()
+            )
         )
 
     def get_default_data(self) -> Optional[DataConfiguration]:
