@@ -20,5 +20,8 @@ run_configs:
       post_update:
       - fxt merge
       - git push --all origin
+      pre_check:
+      - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
+        }} .; fi
   my-run-config:
     data_name: my-extend
