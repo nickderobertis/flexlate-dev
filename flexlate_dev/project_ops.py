@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+import jinja2
 from flexlate import Flexlate
 from flexlate.config import FlexlateConfig
 from flexlate.template_data import TemplateData
@@ -15,6 +16,7 @@ from flexlate_dev.config import (
 from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.render import create_jinja_environment
 from flexlate_dev.styles import print_styled, INFO_STYLE, ACTION_REQUIRED_STYLE
 from flexlate_dev.user_runner import run_user_hook, RunnerHookType
 
@@ -34,12 +36,16 @@ def update_or_initialize_project_get_folder(
     known_folder_name: Optional[str] = None,
     default_folder_name: str = DEFAULT_PROJECT_NAME,
 ) -> str:
+    # TODO: Allow passing options to Jinja environment
+    jinja_env = create_jinja_environment()
+
     def init_project() -> str:
         return initialize_project_get_folder(
             template_path,
             out_root,
             config,
             run_config,
+            jinja_env,
             no_input=no_input,
             data=data,
             save=save,
@@ -63,6 +69,7 @@ def update_or_initialize_project_get_folder(
             out_path,
             config,
             run_config,
+            jinja_env,
             data=data,
             no_input=no_input,
             abort_on_conflict=abort_on_conflict,
@@ -80,6 +87,7 @@ def initialize_project_get_folder(
     out_root: Path,
     config: FlexlateDevConfig,
     run_config: FullRunConfiguration,
+    jinja_env: jinja2.Environment,
     no_input: bool = False,
     data: Optional[TemplateData] = None,
     save: bool = True,
@@ -93,7 +101,7 @@ def initialize_project_get_folder(
         default_folder_name=default_folder_name,
     )
     out_path = out_root / folder
-    run_user_hook(RunnerHookType.POST_INIT, out_path, run_config.config, config)
+    run_user_hook(RunnerHookType.POST_INIT, out_path, run_config, config, jinja_env)
     if save:
         _save_config(out_path, config, run_config)
     return folder
@@ -103,6 +111,7 @@ def update_project(
     out_path: Path,
     config: FlexlateDevConfig,
     run_config: FullRunConfiguration,
+    jinja_env: jinja2.Environment,
     data: Optional[TemplateData] = None,
     no_input: bool = False,
     abort_on_conflict: bool = False,
@@ -127,7 +136,7 @@ def update_project(
             )
             return True
 
-    run_user_hook(RunnerHookType.PRE_UPDATE, out_path, run_config.config, config)
+    run_user_hook(RunnerHookType.PRE_UPDATE, out_path, run_config, config, jinja_env)
     try:
         aborted = run_update_check_was_aborted()
     except flexlate_exc.GitRepoDirtyException:
@@ -150,7 +159,7 @@ def update_project(
         # If update was not successful, skip post update hook and saving config
         return
 
-    run_user_hook(RunnerHookType.POST_UPDATE, out_path, run_config.config, config)
+    run_user_hook(RunnerHookType.POST_UPDATE, out_path, run_config, config, jinja_env)
     if save:
         _save_config(out_path, config, run_config)
 

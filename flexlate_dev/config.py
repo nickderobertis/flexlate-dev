@@ -39,6 +39,9 @@ class FullRunConfiguration(BaseModel):
     config: RunConfiguration
     data: Optional[DataConfiguration]
 
+    def to_jinja_data(self) -> Dict[str, Any]:
+        return self.dict()
+
 
 def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
     default_publish = UserRootRunConfiguration(

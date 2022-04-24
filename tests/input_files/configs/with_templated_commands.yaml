@@ -1,0 +1,22 @@
+commands: []
+data:
+  my-data:
+    data:
+      q1: a1
+      q2: 2
+    folder_name: a
+run_configs:
+  default:
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push origin master
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
+  my-run-config:
+    data_name: my-data
+    post_init:
+    - run: touch {{ data.data.q2 }}.txt
+    - run: touch {{ config.data_name }}.txt
