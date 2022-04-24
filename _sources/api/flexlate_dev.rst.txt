@@ -105,6 +105,14 @@ flexlate\_dev.publish module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.render module
+---------------------------
+
+.. automodule:: flexlate_dev.render
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.server module
 ---------------------------
 

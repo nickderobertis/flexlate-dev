@@ -46,7 +46,7 @@
   
   
   
-    <title>Index &#8212; flexlate-dev 0.11.0 documentation</title>
+    <title>Index &#8212; flexlate-dev 0.12.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/material.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="flexlate-dev 0.11.0 documentation"
+        <a href="index.html" title="flexlate-dev 0.12.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">flexlate-dev 0.11.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">flexlate-dev 0.12.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -185,13 +185,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="flexlate-dev 0.11.0 documentation" class="md-nav__button md-logo">
+    <a href="index.html" title="flexlate-dev 0.12.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="index.html"
-       title="flexlate-dev 0.11.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.12.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -279,6 +279,7 @@
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  
 </div>
@@ -313,13 +314,15 @@
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.config.FlexlateDevConfig.commands">commands (flexlate_dev.config.FlexlateDevConfig attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunConfiguration.commit_message">commit_message (flexlate_dev.user_runner.RunConfiguration property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/flexlate_dev.html#flexlate_dev.config.FullRunConfiguration.config">config (flexlate_dev.config.FullRunConfiguration attribute)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.config.create_default_run_configs">create_default_run_configs() (in module flexlate_dev.config)</a>
+</li>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.render.create_jinja_environment">create_jinja_environment() (in module flexlate_dev.render)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -342,6 +345,8 @@
       <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunConfiguration.data_name">data_name (flexlate_dev.user_runner.RunConfiguration attribute)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.config.DataConfiguration">DataConfiguration (class in flexlate_dev.config)</a>
+</li>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.dirutils.directory_has_files_or_directories">directory_has_files_or_directories() (in module flexlate_dev.dirutils)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.user_command.UserCommand.display_name">display_name (flexlate_dev.user_command.UserCommand property)</a>
 </li>
@@ -458,6 +463,13 @@
 
       <ul>
         <li><a href="api/flexlate_dev.html#module-flexlate_dev.publish">module</a>
+</li>
+      </ul></li>
+      <li>
+    flexlate_dev.render
+
+      <ul>
+        <li><a href="api/flexlate_dev.html#module-flexlate_dev.render">module</a>
 </li>
       </ul></li>
       <li>
@@ -584,6 +596,8 @@
 </li>
         <li><a href="api/flexlate_dev.html#module-flexlate_dev.publish">flexlate_dev.publish</a>
 </li>
+        <li><a href="api/flexlate_dev.html#module-flexlate_dev.render">flexlate_dev.render</a>
+</li>
         <li><a href="api/flexlate_dev.html#module-flexlate_dev.server">flexlate_dev.server</a>
 </li>
         <li><a href="api/flexlate_dev.html#module-flexlate_dev.styles">flexlate_dev.styles</a>
@@ -637,14 +651,18 @@
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunnerHookType.POST_UPDATE">POST_UPDATE (flexlate_dev.user_runner.RunnerHookType attribute)</a>
 </li>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunConfiguration.pre_check">pre_check (flexlate_dev.user_runner.RunConfiguration attribute)</a>
+</li>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunnerHookType.PRE_CHECK">PRE_CHECK (flexlate_dev.user_runner.RunnerHookType attribute)</a>
+</li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.cli.pre_execute">pre_execute() (in module flexlate_dev.cli)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunConfiguration.pre_update">pre_update (flexlate_dev.user_runner.RunConfiguration attribute)</a>
 </li>
-      <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunnerHookType.PRE_UPDATE">PRE_UPDATE (flexlate_dev.user_runner.RunnerHookType attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.user_runner.RunnerHookType.PRE_UPDATE">PRE_UPDATE (flexlate_dev.user_runner.RunnerHookType attribute)</a>
+</li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.styles.print_styled">print_styled() (in module flexlate_dev.styles)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.external_command_type.ExternalCLICommandType.PUBLISH">PUBLISH (flexlate_dev.external_command_type.ExternalCLICommandType attribute)</a>
@@ -716,6 +734,14 @@
       <li><a href="api/flexlate_dev.html#flexlate_dev.styles.styled">styled() (in module flexlate_dev.styles)</a>
 </li>
       <li><a href="api/flexlate_dev.html#flexlate_dev.server.ServerEventHandler.sync_output">sync_output() (flexlate_dev.server.ServerEventHandler method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/flexlate_dev.html#flexlate_dev.config.FullRunConfiguration.to_jinja_data">to_jinja_data() (flexlate_dev.config.FullRunConfiguration method)</a>
 </li>
   </ul></td>
 </tr></table>

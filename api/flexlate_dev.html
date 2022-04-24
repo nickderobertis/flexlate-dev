@@ -47,7 +47,7 @@
   
   
   
-    <title>flexlate_dev package &#8212; flexlate-dev 0.11.0 documentation</title>
+    <title>flexlate_dev package &#8212; flexlate-dev 0.12.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -89,7 +89,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="flexlate-dev 0.11.0 documentation"
+        <a href="../index.html" title="flexlate-dev 0.12.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -175,7 +175,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">flexlate-dev 0.11.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">flexlate-dev 0.12.0 documentation</a></li>
           <li class="md-tabs__item"><a href="modules.html" class="md-tabs__link">flexlate_dev</a></li>
       </ul>
     </div>
@@ -188,13 +188,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="flexlate-dev 0.11.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="flexlate-dev 0.12.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../index.html"
-       title="flexlate-dev 0.11.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.12.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -273,6 +273,8 @@
         <li class="md-nav__item"><a href="#module-flexlate_dev.project_ops" class="md-nav__link">flexlate_dev.project_ops module</a>
         </li>
         <li class="md-nav__item"><a href="#module-flexlate_dev.publish" class="md-nav__link">flexlate_dev.publish module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-flexlate_dev.render" class="md-nav__link">flexlate_dev.render module</a>
         </li>
         <li class="md-nav__item"><a href="#module-flexlate_dev.server" class="md-nav__link">flexlate_dev.server module</a>
         </li>
@@ -384,6 +386,13 @@
     <li class="md-nav__item">
     
     
+      <a href="#module-flexlate_dev.render" class="md-nav__link">flexlate_dev.render module</a>
+      
+    
+    </li>
+    <li class="md-nav__item">
+    
+    
       <a href="#module-flexlate_dev.server" class="md-nav__link">flexlate_dev.server module</a>
       
     
@@ -454,6 +463,8 @@
         <li class="md-nav__item"><a href="#module-flexlate_dev.project_ops" class="md-nav__link">flexlate_dev.project_ops module</a>
         </li>
         <li class="md-nav__item"><a href="#module-flexlate_dev.publish" class="md-nav__link">flexlate_dev.publish module</a>
+        </li>
+        <li class="md-nav__item"><a href="#module-flexlate_dev.render" class="md-nav__link">flexlate_dev.render module</a>
         </li>
         <li class="md-nav__item"><a href="#module-flexlate_dev.server" class="md-nav__link">flexlate_dev.server module</a>
         </li>
@@ -633,6 +644,15 @@
 <dt class="sig sig-object py" id="flexlate_dev.config.FullRunConfiguration.data">
 <span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.config.DataConfiguration" title="flexlate_dev.config.DataConfiguration"><span class="pre">flexlate_dev.config.DataConfiguration</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.config.FullRunConfiguration.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="flexlate_dev.config.FullRunConfiguration.to_jinja_data">
+<span class="sig-name descname"><span class="pre">to_jinja_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/config.html#FullRunConfiguration.to_jinja_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.config.FullRunConfiguration.to_jinja_data" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.10)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="flexlate_dev.config.UserDataConfiguration">
@@ -682,6 +702,10 @@ all the dicts have the value None for that key.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.dirutils.change_directory_to">
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.dirutils.</span></span><span class="sig-name descname"><span class="pre">change_directory_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/dirutils.html#change_directory_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.dirutils.change_directory_to" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.dirutils.directory_has_files_or_directories">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.dirutils.</span></span><span class="sig-name descname"><span class="pre">directory_has_files_or_directories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/dirutils.html#directory_has_files_or_directories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.dirutils.directory_has_files_or_directories" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </section>
 <section id="module-flexlate_dev.exc">
@@ -763,7 +787,7 @@ all the dicts have the value None for that key.</p>
 <span id="flexlate-dev-project-ops-module"></span><h2 id="module-flexlate_dev.project_ops">flexlate_dev.project_ops module<a class="headerlink" href="#module-flexlate_dev.project_ops" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.project_ops.initialize_project_get_folder">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.project_ops.</span></span><span class="sig-name descname"><span class="pre">initialize_project_get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'project'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/project_ops.html#initialize_project_get_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.project_ops.initialize_project_get_folder" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.project_ops.</span></span><span class="sig-name descname"><span class="pre">initialize_project_get_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jinja_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_folder_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'project'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/project_ops.html#initialize_project_get_folder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.project_ops.initialize_project_get_folder" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
@@ -781,7 +805,7 @@ all the dicts have the value None for that key.</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.project_ops.update_project">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.project_ops.</span></span><span class="sig-name descname"><span class="pre">update_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort_on_conflict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/project_ops.html#update_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.project_ops.update_project" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.project_ops.</span></span><span class="sig-name descname"><span class="pre">update_project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jinja_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort_on_conflict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/project_ops.html#update_project"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.project_ops.update_project" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </section>
 <section id="module-flexlate_dev.publish">
@@ -794,6 +818,16 @@ all the dicts have the value None for that key.</p>
 <dt class="sig sig-object py" id="flexlate_dev.publish.publish_template">
 <span class="sig-prename descclassname"><span class="pre">flexlate_dev.publish.</span></span><span class="sig-name descname"><span class="pre">publish_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abort_on_conflict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/publish.html#publish_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.publish.publish_template" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+</section>
+<section id="module-flexlate_dev.render">
+<span id="flexlate-dev-render-module"></span><h2 id="module-flexlate_dev.render">flexlate_dev.render module<a class="headerlink" href="#module-flexlate_dev.render" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="flexlate_dev.render.create_jinja_environment">
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.render.</span></span><span class="sig-name descname"><span class="pre">create_jinja_environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/render.html#create_jinja_environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.render.create_jinja_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a jinja environment for rendering templates.
+:rtype: <code class="xref py py-class docutils literal notranslate"><span class="pre">Environment</span></code>
+:return: jinja2 environment</p>
+</dd></dl>
 </section>
 <section id="module-flexlate_dev.server">
 <span id="flexlate-dev-server-module"></span><h2 id="module-flexlate_dev.server">flexlate_dev.server module<a class="headerlink" href="#module-flexlate_dev.server" title="Permalink to this headline">¶</a></h2>
@@ -952,6 +986,10 @@ focused on just running commands.</p>
 <span class="sig-name descname"><span class="pre">post_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunConfiguration.post_update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunConfiguration.pre_check">
+<span class="sig-name descname"><span class="pre">pre_check</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunConfiguration.pre_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.user_runner.RunConfiguration.pre_update">
 <span class="sig-name descname"><span class="pre">pre_update</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#flexlate_dev.user_command.UserCommand" title="flexlate_dev.user_command.UserCommand"><span class="pre">flexlate_dev.user_command.UserCommand</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunConfiguration.pre_update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -968,6 +1006,10 @@ focused on just running commands.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.POST_UPDATE">
 <span class="sig-name descname"><span class="pre">POST_UPDATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'post_update'</span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType.POST_UPDATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.PRE_CHECK">
+<span class="sig-name descname"><span class="pre">PRE_CHECK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pre_check'</span></em><a class="headerlink" href="#flexlate_dev.user_runner.RunnerHookType.PRE_CHECK" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="flexlate_dev.user_runner.RunnerHookType.PRE_UPDATE">
@@ -1007,7 +1049,7 @@ focused on just running commands.</p>
 </dd></dl>
 <dl class="py function">
 <dt class="sig sig-object py" id="flexlate_dev.user_runner.run_user_hook">
-<span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_runner.</span></span><span class="sig-name descname"><span class="pre">run_user_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_runner.html#run_user_hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_runner.run_user_hook" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">flexlate_dev.user_runner.</span></span><span class="sig-name descname"><span class="pre">run_user_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jinja_env</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/flexlate_dev/user_runner.html#run_user_hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flexlate_dev.user_runner.run_user_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs a hook of the given type.</p>
 </dd></dl>
 </section>
