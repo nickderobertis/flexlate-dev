@@ -69,11 +69,17 @@ def test_read_separate_publish_and_serve_configs():
     serve_run_config = config.get_full_run_config(
         ExternalCLICommandType.SERVE, "my-run-config"
     )
-    assert serve_run_config.config.pre_update == ["touch serve pre-update.txt"]
-    assert serve_run_config.config.post_update == ["touch serve post-update.txt"]
+    assert serve_run_config.config.pre_update == ["touch serve-pre-update.txt"]
+    assert serve_run_config.config.post_update == ["touch serve-post-update.txt"]
+    assert serve_run_config.config.post_init == ["touch post-init.txt"]
 
     publish_run_config = config.get_full_run_config(
         ExternalCLICommandType.PUBLISH, "my-run-config"
     )
-    assert publish_run_config.config.pre_update == ["touch overridden.txt"]
-    assert publish_run_config.config.post_update == ["touch base post-update.txt"]
+    assert publish_run_config.config.pre_update == [
+        "touch overridden.txt",
+        "git add overridden.txt",
+        "git commit -m 'overridden'",
+    ]
+    assert publish_run_config.config.post_update == ["touch base-post-update.txt"]
+    assert publish_run_config.config.post_init == ["touch publish-post-init.txt"]

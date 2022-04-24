@@ -99,23 +99,32 @@ def gen_config_with_extend_default_run_config():
 
 
 def gen_config_with_separate_publish_and_serve_configs_and_extend_run_config():
-    publish_run_config = UserRunConfiguration(
-        pre_update=["touch publish pre-update.txt"]
+    base_publish_run_config = UserRunConfiguration(
+        pre_update=["touch publish-pre-update.txt"]
+    )
+    extend_publish_run_config = UserRunConfiguration(
+        post_init=["touch publish-post-init.txt"],
     )
     serve_run_config = UserRunConfiguration(
-        pre_update=["touch serve pre-update.txt"],
-        post_update=["touch serve post-update.txt"],
+        pre_update=["touch serve-pre-update.txt"],
+        post_update=["touch serve-post-update.txt"],
     )
     base_run_config = UserRootRunConfiguration(
-        pre_update=["touch base pre-update.txt"],
-        post_update=["touch base post-update.txt"],
-        publish=publish_run_config,
+        pre_update=["touch base-pre-update.txt"],
+        post_update=["touch base-post-update.txt"],
+        publish=base_publish_run_config,
     )
     extend_run_config = UserRootRunConfiguration(
-        pre_update=["touch overridden.txt"],
+        pre_update=[
+            "touch overridden.txt",
+            "git add overridden.txt",
+            "git commit -m 'overridden'",
+        ],
+        post_init=["touch post-init.txt"],
         auto_commit_message="something",
         extends="base",
         serve=serve_run_config,
+        publish=extend_publish_run_config,
     )
     run_configs = {
         "my-run-config": extend_run_config,
