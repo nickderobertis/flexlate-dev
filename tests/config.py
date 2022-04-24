@@ -23,3 +23,6 @@ EXTEND_DEFAULT_RUN_CONFIG_PATH = INPUT_CONFIGS_DIR / "extend_default_run.yaml"
 SEPARATE_PUBLISH_SERVE_CONFIG_PATH = INPUT_CONFIGS_DIR / "separate_publish_serve.yaml"
 WITH_TEMPLATED_COMMANDS_CONFIG_PATH = INPUT_CONFIGS_DIR / "with_templated_commands.yaml"
 WITH_PRE_CHECK_COMMAND_CONFIG_PATH = INPUT_CONFIGS_DIR / "with_pre_check_command.yaml"
+WITH_PRE_CHECK_CREATE_COMMAND_CONFIG_PATH = (
+    INPUT_CONFIGS_DIR / "with_pre_check_create_command.yaml"
+)

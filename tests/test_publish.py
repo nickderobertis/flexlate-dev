@@ -15,6 +15,7 @@ from tests.config import (
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
     WITH_TEMPLATED_COMMANDS_CONFIG_PATH,
     WITH_PRE_CHECK_COMMAND_CONFIG_PATH,
+    WITH_PRE_CHECK_CREATE_COMMAND_CONFIG_PATH,
 )
 from tests.pathutils import change_directory_to
 from tests.fixtures.template_path import *
@@ -281,3 +282,27 @@ def test_publish_pre_check_can_alter_whether_init_or_update(
     assert expect_file.read_text() == "1"
     assert (project_path / "post-init.txt").exists()
     assert not (project_path / "post-update.txt").exists()
+
+
+def test_publish_pre_check_can_make_first_operation_an_update(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "a"
+    expect_file = project_path / "a1.txt"
+    config_path = WITH_PRE_CHECK_CREATE_COMMAND_CONFIG_PATH
+
+    # On first publish, there is a folder name defined but no folder exists, so it will
+    # create the folder and then run check in the folder. This check command then sets up
+    # the project to make it run an update rather than an init.
+    assert not expect_file.exists()
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        run_config_name="my-run-config",
+        config_path=config_path,
+        no_input=True,
+    )
+    assert expect_file.read_text() == "1"
+    assert not (project_path / "post-init.txt").exists()
+    assert (project_path / "pre-update.txt").exists()
