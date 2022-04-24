@@ -63,6 +63,7 @@ def update_or_initialize_project_get_folder(
         return init_project()
 
     out_path = out_root / folder
+    run_user_hook(RunnerHookType.PRE_CHECK, out_path, run_config, config, jinja_env)
     if out_path.exists():
         print_styled(f"{out_path} exists, updating project", INFO_STYLE)
         update_project(

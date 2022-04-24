@@ -25,12 +25,14 @@ from flexlate_dev.user_command import UserCommand
 
 
 class RunnerHookType(str, Enum):
+    PRE_CHECK = "pre_check"
     POST_INIT = "post_init"
     PRE_UPDATE = "pre_update"
     POST_UPDATE = "post_update"
 
 
 class RunConfiguration(BaseModel):
+    pre_check: Optional[List[Runnable]] = None
     post_init: Optional[List[Runnable]] = None
     pre_update: Optional[List[Runnable]] = None
     post_update: Optional[List[Runnable]] = None
