@@ -23,6 +23,6 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: nickderobertis/flexlate-update-action@dev
+      - uses: nickderobertis/flexlate-update-action@alpha
         with:
           gh_token: ${{ secrets.gh_token }}
