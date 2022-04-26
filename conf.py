@@ -20,7 +20,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 1, 0)
+PACKAGE_VERSION_TUPLE = (0, 12, 0)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Development tools for template authors using Flexlate"
@@ -62,6 +62,10 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
+    "flexlate>=0.14.0",
+    "watchdog",
+    "typer",
+    "rich",
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
@@ -95,7 +99,7 @@ DOCS_OTHER_MOCK_IMPORTS = [
 
 # Add any Python scripts which should be exposed to the command line in the format:
 # CONSOLE_SCRIPTS = ['funniest-joke=funniest.command_line:main']
-CONSOLE_SCRIPTS = [],
+CONSOLE_SCRIPTS = ["dfxt=flexlate_dev.cli:cli"],
 
 # Add any arbitrary scripts to be exposed to the command line in the format:
 # SCRIPTS = ['bin/funniest-joke']
