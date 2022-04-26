@@ -15,5 +15,8 @@ run_configs:
         }} .; else git pull origin master; fi
   my-run-config:
     post_init:
-    - background: true
-      run: sleep 10
+    - touch post-init.txt
+    post_update:
+    - touch post-update.txt
+    pre_check:
+    - cd .. && rm -rf {{ data.folder_name }}

@@ -20,7 +20,7 @@ REPO_MAINTAINERS = [
 ]
 
 # Package version in the format (major, minor, release)
-PACKAGE_VERSION_TUPLE = (0, 6, 0)
+PACKAGE_VERSION_TUPLE = (0, 12, 0)
 
 # Short description of the package
 PACKAGE_SHORT_DESCRIPTION = "Development tools for template authors using Flexlate"
@@ -62,7 +62,7 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
-    "flexlate>=0.12.4",
+    "flexlate>=0.14.0",
     "watchdog",
     "typer",
     "rich",

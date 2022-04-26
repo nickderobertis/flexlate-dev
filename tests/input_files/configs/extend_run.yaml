@@ -1,6 +1,11 @@
 commands: []
 data: {}
 run_configs:
+  base:
+    post_update:
+    - touch something_else.txt
+    pre_update:
+    - touch something.txt
   default:
     publish:
       post_init:
@@ -14,6 +19,7 @@ run_configs:
       - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
         }} .; else git pull origin master; fi
   my-run-config:
-    post_init:
-    - background: true
-      run: sleep 10
+    auto_commit_message: something
+    extends: base
+    pre_update:
+    - touch overridden.txt

@@ -1,8 +1,15 @@
 from pathlib import Path
 
-from flexlate_dev.config import FlexlateDevConfig, DataConfiguration
+from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.server import run_server
-from tests.config import GENERATED_FILES_DIR, BLOCKING_COMMAND_CONFIG_PATH
+from flexlate_dev.user_runner import UserRunConfiguration
+from tests.config import (
+    GENERATED_FILES_DIR,
+    BLOCKING_COMMAND_CONFIG_PATH,
+    EXTEND_RUN_CONFIG_PATH,
+    EXTEND_DEFAULT_RUN_CONFIG_PATH,
+    SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+)
 from tests.pathutils import change_directory_to
 from tests.waitutils import (
     wait_until_path_exists,
@@ -87,9 +94,10 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config_path = project_path / "flexlate-dev.yaml"
     config = FlexlateDevConfig.load_or_create(config_path)
-    data_config = DataConfiguration(data=dict(q2=50))
+    data_config = UserDataConfiguration(data=dict(q2=50))
     config.data["default"] = data_config
-    config.run_configs["default_serve"].data_name = "default"
+    serve_config = UserRunConfiguration(data_name="default")
+    config.run_configs["default"].serve = serve_config
     with run_server(
         config, None, template_path, GENERATED_FILES_DIR, no_input=True, save=True
     ):
@@ -127,3 +135,67 @@ def test_server_runs_a_background_command_and_keeps_reloading(
 
         # Check reload
         wait_until_file_has_content(expect_file, modified_time, "new content 1")
+
+
+@pytest.mark.parametrize(
+    "config_path", [EXTEND_RUN_CONFIG_PATH, EXTEND_DEFAULT_RUN_CONFIG_PATH]
+)
+def test_server_resolves_an_extended_run_config_to_run_commands(
+    copier_one_template_path: Path,
+    config_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig.load(config_path)
+    with run_server(
+        config, "my-run-config", template_path, GENERATED_FILES_DIR, no_input=True
+    ):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        modified_time = expect_file.lstat().st_mtime
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(expect_file, modified_time, "new content 1")
+
+        # Check that it properly extended the config to pick the correct commands
+        wait_until_path_exists(project_path / "overridden.txt")
+        wait_until_path_exists(project_path / "something_else.txt")
+        assert not (project_path / "something.txt").exists()
+
+
+def test_server_resolves_a_separate_serve_config_to_run_commands(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig.load(SEPARATE_PUBLISH_SERVE_CONFIG_PATH)
+    with run_server(
+        config, "my-run-config", template_path, GENERATED_FILES_DIR, no_input=True
+    ):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        modified_time = expect_file.lstat().st_mtime
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(expect_file, modified_time, "new content 1")
+
+        # Check that it properly used the serve key in the config to pick the correct commands
+        wait_until_path_exists(project_path / "serve-pre-update.txt")
+        wait_until_path_exists(project_path / "serve-post-update.txt")
+        wait_until_path_exists(project_path / "post-init.txt")
+        assert not (project_path / "overridden.txt").exists()
+        assert not (project_path / "base-pre-update.txt").exists()
+        assert not (project_path / "base-post-update.txt").exists()
+        assert not (project_path / "publish-pre-update.txt").exists()

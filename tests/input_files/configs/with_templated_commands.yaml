@@ -1,5 +1,10 @@
 commands: []
-data: {}
+data:
+  my-data:
+    data:
+      q1: a1
+      q2: 2
+    folder_name: a
 run_configs:
   default:
     publish:
@@ -14,6 +19,7 @@ run_configs:
       - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
         }} .; else git pull origin master; fi
   my-run-config:
+    data_name: my-data
     post_init:
-    - background: true
-      run: sleep 10
+    - run: touch {{ data.data.q2 }}.txt
+    - run: touch {{ config.data_name }}.txt

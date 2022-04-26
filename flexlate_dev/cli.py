@@ -1,10 +1,10 @@
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import typer
 
 from flexlate_dev import get_version
-from flexlate_dev.publish import publish_template
+from flexlate_dev.publish import publish_template, publish_all_templates
 from flexlate_dev.server import serve_template
 from flexlate_dev.styles import print_styled, INFO_STYLE
 
@@ -109,6 +109,47 @@ def publish(
         config_path=config_path,
         save=save,
         no_input=no_input,
+    )
+
+
+@cli.command(name="publish-all")
+def publish_all(
+    out_path: Path = typer.Argument(
+        ...,
+        help="Location to publish built templates to",
+    ),
+    template_path: Path = TEMPLATE_PATH_OPTION,
+    config_path: Optional[Path] = CONFIG_PATH_OPTION,
+    always_include_default: bool = typer.Option(
+        False,
+        "--always-include-default",
+        "-a",
+        show_default=False,
+        help="Always include the default run configuration even when other "
+        "run configurations are defined. Default: Only use the default "
+        "config when no other run configurations are defined.",
+    ),
+    exclude: Optional[List[str]] = typer.Option(
+        None,
+        "--exclude",
+        "-e",
+        help="Exclude run configurations by name. Can be specified multiple "
+        "times to exclude multiple run configurations.",
+    ),
+    no_input: bool = NO_INPUT_OPTION,
+    save: bool = SAVE_OPTION,
+):
+    """
+    Sync rendered output of a template for all run configurations in the config file
+    """
+    publish_all_templates(
+        template_path,
+        out_path,
+        config_path=config_path,
+        save=save,
+        no_input=no_input,
+        always_include_default=always_include_default,
+        exclude=exclude,
     )
 
 
