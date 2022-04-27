@@ -1,0 +1,27 @@
+commands: []
+data:
+  my-data:
+    data: {}
+    folder_name: a
+run_configs:
+  default:
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push origin master
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
+      pre_check:
+      - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
+        }} .; else git pull origin master; fi
+  my-run-config:
+    data_name: my-data
+    post_init:
+    - touch post-init.txt
+    pre_check:
+    - cd .. && rm -rf {{ data.folder_name }} && fxt init-from ./one --folder-name
+      {{ data.folder_name }} --no-input
+    pre_update:
+    - touch pre-update.txt
