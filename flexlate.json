@@ -40,6 +40,13 @@
       "version": "26fe30f1a62c2526566d0601e56e890f6e16f692",
       "add_mode": "local",
       "root": "."
+    },
+    {
+      "name": "copier-flexlate-github-actions",
+      "data": {},
+      "version": "24539b2fccf8b287b090a1088761e28d3ef7801f",
+      "add_mode": "local",
+      "root": "."
     }
   ]
 }
