@@ -27,7 +27,8 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
-      - uses: nickderobertis/flexlate-merge-action@alpha
+      - uses: nickderobertis/flexlate-merge-action@v1
         with:
-          branch-name: ${{ inputs.branch }}
+          branch_name: ${{ inputs.branch }}
           gh_token: ${{ secrets.GH_TOKEN }}
+          main_branch_name: master
