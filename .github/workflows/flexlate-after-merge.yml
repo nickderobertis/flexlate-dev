@@ -1,4 +1,4 @@
-name: Merge Flexlate Branches
+name: Flexlate After-Merge
 on:
   pull_request:
     branches:
@@ -31,4 +31,4 @@ jobs:
         with:
           branch_name: ${{ inputs.branch }}
           gh_token: ${{ secrets.GH_TOKEN }}
-          main_branch_name: master
+          main_branch: master
