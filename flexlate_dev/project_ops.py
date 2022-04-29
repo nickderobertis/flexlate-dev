@@ -112,6 +112,8 @@ def initialize_project_get_folder(
     out_path = out_root / folder
     run_user_hook(RunnerHookType.POST_INIT, out_path, run_config, config, jinja_env)
     if save:
+        if run_config.data:
+            run_config.data.folder_name = folder
         _save_config(out_path, config, run_config)
     return folder
 
