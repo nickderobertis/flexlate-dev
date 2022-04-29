@@ -114,7 +114,9 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
 
         # Check that config was saved
         config = FlexlateDevConfig.load(config_path)
-        assert config.data["default"].data == dict(q1="a1", q2=50, q3=None)
+        data_config = config.data["default"]
+        assert data_config.data == dict(q1="a1", q2=50, q3=None)
+        assert data_config.folder_name == "project"
 
 
 def test_server_runs_a_background_command_and_keeps_reloading(
