@@ -5,6 +5,7 @@ from git import Repo
 from flexlate_dev.config import (
     FlexlateDevConfig,
     DataConfiguration,
+    UserDataConfiguration,
 )
 from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
@@ -306,3 +307,38 @@ def test_publish_pre_check_can_make_first_operation_an_update(
     assert expect_file.read_text() == "1"
     assert not (project_path / "post-init.txt").exists()
     assert (project_path / "pre-update.txt").exists()
+
+
+def test_publish_overrides_data_and_folder_name_from_config(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    custom_folder_name = "custom-folder-name"
+    project_path = GENERATED_FILES_DIR / custom_folder_name
+    expect_file = project_path / "a1.txt"
+
+    config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
+    config = FlexlateDevConfig.load_or_create(config_path)
+    data_config = UserDataConfiguration(data=dict(q2=3), folder_name="not-used")
+    config.data["my-data"] = data_config
+    publish_run_config = UserRunConfiguration(
+        post_init=["touch one.txt"], post_update=["touch two.txt"], data_name="my-data"
+    )
+    run_config = UserRootRunConfiguration(publish=publish_run_config)
+    config.run_configs["default"] = run_config
+    config.save()
+
+    assert not expect_file.exists()
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        config_path=config_path,
+        no_input=True,
+        data=dict(q2=2),
+        folder_name=custom_folder_name,
+    )
+    assert expect_file.read_text() == "2"
+
+    # Check that post init but not post update was run
+    assert (project_path / "one.txt").exists()
+    assert not (project_path / "two.txt").exists()

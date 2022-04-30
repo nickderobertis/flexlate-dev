@@ -12,6 +12,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 from flexlate.template_data import TemplateData
 
+from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.project_ops import (
@@ -32,6 +33,8 @@ def serve_template(
     auto_commit: bool = True,
     config_path: Optional[Path] = None,
     save: bool = False,
+    data: Optional[TemplateData] = None,
+    folder_name: Optional[str] = None,
 ):
     config = load_config(config_path)
 
@@ -43,6 +46,8 @@ def serve_template(
         no_input=no_input,
         auto_commit=auto_commit,
         save=save,
+        data=data,
+        folder_name=folder_name,
     ):
         try:
             while True:
@@ -60,6 +65,8 @@ def run_server(
     no_input: bool = False,
     auto_commit: bool = True,
     save: bool = False,
+    data: Optional[TemplateData] = None,
+    folder_name: Optional[str] = None,
 ):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
@@ -79,6 +86,8 @@ def run_server(
         no_input=no_input,
         auto_commit=auto_commit,
         save=save,
+        data=data,
+        folder_name=folder_name,
     )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
@@ -109,6 +118,8 @@ class ServerEventHandler(FileSystemEventHandler):
         no_input: bool = False,
         auto_commit: bool = True,
         save: bool = False,
+        data: Optional[TemplateData] = None,
+        folder_name: Optional[str] = None,
     ):
         super().__init__()
         self.config = config
@@ -121,6 +132,8 @@ class ServerEventHandler(FileSystemEventHandler):
         self.no_input = no_input
         self.auto_commit = auto_commit
         self.save = save
+        self.cli_data = data
+        self.cli_folder_name = folder_name
         self.folder: Optional[str] = None
         self.repo: Optional[Repo] = None
         self.fxt = Flexlate()
@@ -132,8 +145,11 @@ class ServerEventHandler(FileSystemEventHandler):
         return self.out_root / self.folder
 
     @property
-    def data(self) -> Optional[TemplateData]:
-        return self.run_config.data.data if self.run_config.data else None
+    def data(self) -> TemplateData:
+        return merge_dicts_preferring_non_none(
+            self.run_config.data.data if self.run_config.data else {},
+            self.cli_data or {},
+        )
 
     def on_modified(self, event: FileSystemEvent):
         global old
@@ -162,8 +178,11 @@ class ServerEventHandler(FileSystemEventHandler):
             auto_commit=self.auto_commit,
             save=self.save,
             known_folder_name=self.folder,
-            default_folder_name=self.run_config.data.use_folder_name
-            if self.run_config.data
-            else DEFAULT_PROJECT_NAME,
+            default_folder_name=self.cli_folder_name
+            or (
+                self.run_config.data.use_folder_name
+                if self.run_config.data
+                else DEFAULT_PROJECT_NAME
+            ),
         )
         self.repo = Repo(self.out_path)
