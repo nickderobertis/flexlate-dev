@@ -17,6 +17,14 @@ flexlate\_dev.cli module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.cli\_validators module
+------------------------------------
+
+.. automodule:: flexlate_dev.cli_validators
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.command\_runner module
 ------------------------------------
 
