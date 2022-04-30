@@ -21,7 +21,9 @@ from tests.fixtures.template_path import *
 
 def test_server_creates_and_updates_template_on_change(copier_one_template_path: Path):
     template_path = copier_one_template_path
-    expect_file = GENERATED_FILES_DIR / "project" / "a1.txt"
+    folder_name = "project"
+    project_path = GENERATED_FILES_DIR / folder_name
+    expect_file = project_path / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config = FlexlateDevConfig()
     with run_server(config, None, template_path, GENERATED_FILES_DIR, no_input=True):
@@ -201,3 +203,31 @@ def test_server_resolves_a_separate_serve_config_to_run_commands(
         assert not (project_path / "base-pre-update.txt").exists()
         assert not (project_path / "base-post-update.txt").exists()
         assert not (project_path / "publish-pre-update.txt").exists()
+
+
+def test_server_overrides_data_and_folder_name(copier_one_template_path: Path):
+    template_path = copier_one_template_path
+    folder_name = "custom-folder-name"
+    project_path = GENERATED_FILES_DIR / folder_name
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig()
+    with run_server(
+        config,
+        None,
+        template_path,
+        GENERATED_FILES_DIR,
+        no_input=True,
+        data=dict(q2=4),
+        folder_name=folder_name,
+    ):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "4"
+        modified_time = expect_file.lstat().st_mtime
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(expect_file, modified_time, "new content 4")
