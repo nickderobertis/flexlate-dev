@@ -9,6 +9,7 @@ from tests.config import (
     EXTEND_RUN_CONFIG_PATH,
     EXTEND_DEFAULT_RUN_CONFIG_PATH,
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+    IGNORES_AND_EXTEND_DATA_PATH,
 )
 from tests.gen_configs import gen_config_with_user_commands
 
@@ -83,3 +84,17 @@ def test_read_separate_publish_and_serve_configs():
     ]
     assert publish_run_config.config.post_update == ["touch base-post-update.txt"]
     assert publish_run_config.config.post_init == ["touch publish-post-init.txt"]
+
+
+def test_ignores_work_with_extensions():
+    config = FlexlateDevConfig.load(IGNORES_AND_EXTEND_DATA_PATH)
+    default_serve_config = config.get_full_run_config(ExternalCLICommandType.SERVE)
+    assert default_serve_config.ignore_matches("ignored.txt")
+    assert default_serve_config.ignore_matches(".git/a.txt")
+    assert not default_serve_config.ignore_matches("a.txt")
+    serve_config_unignore_git = config.get_full_run_config(
+        ExternalCLICommandType.SERVE, "my-run-config"
+    )
+    assert serve_config_unignore_git.ignore_matches("ignored.txt")
+    assert not serve_config_unignore_git.ignore_matches(".git/a.txt")
+    assert not serve_config_unignore_git.ignore_matches("a.txt")

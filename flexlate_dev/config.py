@@ -1,9 +1,11 @@
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional, Dict, List, Final, Any
+from typing import Optional, Dict, List, Final, Any, Callable, Union
 
 from flexlate.template_data import TemplateData
 from pyappconf import BaseConfig, AppConfig, ConfigFormats
 from pydantic import BaseModel, Field
+from gitignore_parser import parse_gitignore
 
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
@@ -12,6 +14,7 @@ from flexlate_dev.exc import (
     NoSuchDataException,
     NoSuchCommandException,
 )
+from flexlate_dev.ignore import IgnoreSpecification
 from flexlate_dev.user_command import UserCommand
 from flexlate_dev.user_runner import (
     UserRootRunConfiguration,
@@ -25,6 +28,7 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 class DataConfiguration(BaseModel):
     data: TemplateData = Field(default_factory=dict)
     folder_name: Optional[str] = None
+    ignore: List[str] = Field(default_factory=list)
 
     @property
     def use_folder_name(self) -> str:
@@ -35,12 +39,26 @@ class UserDataConfiguration(DataConfiguration):
     extends: Optional[str] = None
 
 
-class FullRunConfiguration(BaseModel):
+@dataclass
+class FullRunConfiguration:
     config: RunConfiguration
     data: Optional[DataConfiguration]
+    _ignore_spec: IgnoreSpecification = field(init=False)
+
+    def __post_init__(self):
+        self._ignore_spec = IgnoreSpecification(ignore_list=self._use_ignore)
 
     def to_jinja_data(self) -> Dict[str, Any]:
-        return self.dict()
+        return dict(
+            config=self.config.dict(), data=self.data.dict() if self.data else {}
+        )
+
+    @property
+    def _use_ignore(self) -> List[str]:
+        return self.data.ignore if self.data is not None else []
+
+    def ignore_matches(self, to_match: Union[str, Path]) -> bool:
+        return self._ignore_spec.file_is_ignored(to_match)
 
 
 def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
@@ -131,7 +149,16 @@ class FlexlateDevConfig(BaseConfig):
         extends_config = self.get_data_config(user_data_config.extends)
         extended_data = {**extends_config.data, **user_data_config.data}
         folder_name = user_data_config.folder_name or extends_config.folder_name
-        return DataConfiguration(data=extended_data, folder_name=folder_name)
+        if extends_config.ignore is None:
+            extended_ignore = user_data_config.ignore
+        elif user_data_config.ignore is None:
+            extended_ignore = extends_config.ignore
+        else:
+            # Both specified ignores, extend the list
+            extended_ignore = [*extends_config.ignore, *user_data_config.ignore]
+        return DataConfiguration(
+            data=extended_data, folder_name=folder_name, ignore=extended_ignore
+        )
 
     def save_data_for_run_config(
         self, run_config: FullRunConfiguration, data: TemplateData
