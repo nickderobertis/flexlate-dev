@@ -15,6 +15,7 @@ from flexlate.template_data import TemplateData
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
+from flexlate_dev.logger import log
 from flexlate_dev.project_ops import (
     update_or_initialize_project_get_folder,
 )
@@ -154,15 +155,19 @@ class ServerEventHandler(FileSystemEventHandler):
     def on_modified(self, event: FileSystemEvent):
         global old
         super().on_modified(event)
+        log.debug(f"on_modified called with {event=}")
         if not os.path.exists(event.src_path):
+            log.debug(f"{event.src_path} does not exist, will not update")
             return
 
         relative_path = Path(event.src_path).relative_to(self.template_path)
         if relative_path == Path("."):
             # Watchdog seems to throw events on the whole directory after a file in the directory changed, ignore those
+            log.debug("Got root template folder as change, ignoring")
             return
         if self.run_config.ignore_matches(relative_path):
             # Ignored file changed, don't trigger reload
+            log.debug(f"Ignored file {relative_path} changed, ignoring")
             return
 
         # Watchdog has a bug where two events will be triggered very quickly for one modification.
@@ -174,6 +179,8 @@ class ServerEventHandler(FileSystemEventHandler):
             # This is a valid event, now the main logic
             print_styled(f"Detected change in {event.src_path}", INFO_STYLE)
             self.sync_output()
+        else:
+            log.debug(f"Ignoring duplicate event {event.src_path}")
         old = new
 
     def sync_output(self):
