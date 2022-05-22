@@ -97,6 +97,14 @@ flexlate\_dev.gituitls module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.ignore module
+---------------------------
+
+.. automodule:: flexlate_dev.ignore
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.project\_ops module
 ---------------------------------
 

@@ -46,7 +46,7 @@
   
   
   
-    <title>flexlate_dev.server &#8212; flexlate-dev 0.15.0 documentation</title>
+    <title>flexlate_dev.server &#8212; flexlate-dev 0.16.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="flexlate-dev 0.15.0 documentation"
+        <a href="../../index.html" title="flexlate-dev 0.16.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.15.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.16.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="flexlate-dev 0.15.0 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="flexlate-dev 0.16.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="flexlate-dev 0.15.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.16.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -419,6 +419,15 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">on_modified</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">src_path</span><span class="p">):</span>
             <span class="k">return</span>
+
+        <span class="n">relative_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">src_path</span><span class="p">)</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">template_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">relative_path</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"."</span><span class="p">):</span>
+            <span class="c1"># Watchdog seems to throw events on the whole directory after a file in the directory changed, ignore those</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_config</span><span class="o">.</span><span class="n">ignore_matches</span><span class="p">(</span><span class="n">relative_path</span><span class="p">):</span>
+            <span class="c1"># Ignored file changed, don't trigger reload</span>
+            <span class="k">return</span>
+
         <span class="c1"># Watchdog has a bug where two events will be triggered very quickly for one modification.</span>
         <span class="c1"># Track whether it's been at least a half second since the last modification, and only then</span>
         <span class="c1"># consider it a valid event</span>
