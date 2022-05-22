@@ -1,0 +1,31 @@
+commands: []
+data:
+  base:
+    data:
+      q1: a1
+      q2: 2
+    ignore:
+    - ignored.txt
+  my-extend:
+    data:
+      q2: 20
+      q3: a3
+    extends: base
+    ignore:
+    - '!.git/'
+run_configs:
+  default:
+    data_name: base
+    publish:
+      post_init:
+      - gh repo create --public --source=.
+      - git push origin master
+      - git push --all origin
+      post_update:
+      - fxt merge
+      - git push --all origin
+      pre_check:
+      - if [ -n "$(find . -prune -empty 2>/dev/null)" ]; then gh repo clone {{ data.folder_name
+        }} .; else git pull origin master; fi
+  my-run-config:
+    data_name: my-extend

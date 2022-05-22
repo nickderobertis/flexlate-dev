@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
@@ -9,6 +10,7 @@ from tests.config import (
     EXTEND_RUN_CONFIG_PATH,
     EXTEND_DEFAULT_RUN_CONFIG_PATH,
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+    IGNORES_AND_EXTEND_DATA_PATH,
 )
 from tests.pathutils import change_directory_to
 from tests.waitutils import (
@@ -231,3 +233,50 @@ def test_server_overrides_data_and_folder_name(copier_one_template_path: Path):
 
         # Check reload
         wait_until_file_has_content(expect_file, modified_time, "new content 4")
+
+
+def test_server_ignores_changes_to_ignored_files(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    project_path = GENERATED_FILES_DIR / "project"
+    default_ignored_template_file = template_path / ".git" / "something.txt"
+    default_ignored_template_file.parent.mkdir()
+    default_ignored_template_file.write_text("initial content")
+    default_ignored_expect_file = project_path / ".git" / "something.txt"
+    custom_ignored_template_file = template_path / "ignored.txt"
+    custom_ignored_template_file.write_text("initial content")
+    custom_ignored_expect_file = project_path / "ignored.txt"
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    config = FlexlateDevConfig.load(IGNORES_AND_EXTEND_DATA_PATH)
+    with run_server(config, None, template_path, GENERATED_FILES_DIR, no_input=True):
+        wait_until_path_exists(expect_file)
+        wait_until_path_exists(custom_ignored_expect_file)
+        assert not default_ignored_expect_file.exists()
+        # Check initial load
+        assert expect_file.read_text() == "2"
+        assert custom_ignored_expect_file.read_text() == "initial content"
+
+        # Should not reload from a change to the custom or default ignored file
+        custom_ignored_template_file.write_text("new content")
+        default_ignored_template_file.write_text("new content")
+
+        # TODO: Need a better wait to wait until the server has processed the change, perhaps can expose events from the server
+        time.sleep(5)
+
+        # Files should be unchanged
+        assert expect_file.read_text() == "2"
+        assert not default_ignored_expect_file.exists()
+        assert custom_ignored_expect_file.read_text() == "initial content"
+
+        # Cause a reload
+        modified_time = expect_file.lstat().st_mtime
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(expect_file, modified_time, "new content 2")
+        # Should have updated the files that were ignored. Content still updates once they actually do get reloaded.
+        # The default ignore is in the .git directory, and so it should never exist.
+        assert custom_ignored_expect_file.read_text() == "new content"
+        assert not default_ignored_expect_file.exists()

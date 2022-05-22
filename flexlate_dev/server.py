@@ -156,6 +156,15 @@ class ServerEventHandler(FileSystemEventHandler):
         super().on_modified(event)
         if not os.path.exists(event.src_path):
             return
+
+        relative_path = Path(event.src_path).relative_to(self.template_path)
+        if relative_path == Path("."):
+            # Watchdog seems to throw events on the whole directory after a file in the directory changed, ignore those
+            return
+        if self.run_config.ignore_matches(relative_path):
+            # Ignored file changed, don't trigger reload
+            return
+
         # Watchdog has a bug where two events will be triggered very quickly for one modification.
         # Track whether it's been at least a half second since the last modification, and only then
         # consider it a valid event

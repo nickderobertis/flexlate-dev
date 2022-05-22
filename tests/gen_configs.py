@@ -188,6 +188,26 @@ def gen_config_with_pre_check_create_command():
     return config
 
 
+def gen_config_with_ignores_and_extend_data():
+    base_data_config = UserDataConfiguration(
+        data=dict(q1="a1", q2=2), ignore=["ignored.txt"]
+    )
+    extend_data_config = UserDataConfiguration(
+        data=dict(q2=20, q3="a3"), ignore=["!.git/"], extends="base"
+    )
+    run_config = UserRootRunConfiguration(
+        data_name="my-extend",
+    )
+    defaults = create_default_run_configs()
+    defaults["default"].data_name = "base"
+    run_configs = {"my-run-config": run_config, **defaults}
+    data_configs = {"base": base_data_config, "my-extend": extend_data_config}
+    config = FlexlateDevConfig(run_configs=run_configs, data=data_configs)
+    config.settings.custom_config_folder = INPUT_CONFIGS_DIR
+    config.settings.config_name = "ignores_and_extend_data"
+    return config
+
+
 if __name__ == "__main__":
     gen_config_with_user_commands().save()
     gen_config_with_blocking_command().save()
@@ -198,3 +218,4 @@ if __name__ == "__main__":
     gen_config_with_templated_commands().save()
     gen_config_with_pre_check_command().save()
     gen_config_with_pre_check_create_command().save()
+    gen_config_with_ignores_and_extend_data().save()
