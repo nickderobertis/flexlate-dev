@@ -66,6 +66,7 @@ PACKAGE_INSTALL_REQUIRES = [
     "watchdog",
     "typer",
     "rich",
+    "gitignore_parser",
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here
