@@ -93,7 +93,8 @@ def test_server_creates_and_updates_template_on_change_after_generated_project_c
 
 def test_server_creates_project_with_config_data(copier_one_template_path: Path):
     template_path = copier_one_template_path
-    project_path = GENERATED_FILES_DIR / "project"
+    custom_folder_name = "custom_folder_name"
+    project_path = GENERATED_FILES_DIR / custom_folder_name
     expect_file = project_path / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
     config_path = project_path / "flexlate-dev.yaml"
@@ -103,7 +104,13 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
     serve_config = UserRunConfiguration(data_name="default")
     config.run_configs["default"].serve = serve_config
     with run_server(
-        config, None, template_path, GENERATED_FILES_DIR, no_input=True, save=True
+        config,
+        None,
+        template_path,
+        GENERATED_FILES_DIR,
+        no_input=True,
+        save=True,
+        folder_name=custom_folder_name,
     ):
         wait_until_path_exists(expect_file)
         # Check initial load
@@ -120,7 +127,7 @@ def test_server_creates_project_with_config_data(copier_one_template_path: Path)
         config = FlexlateDevConfig.load(config_path)
         data_config = config.data["default"]
         assert data_config.data == dict(q1="a1", q2=50, q3=None)
-        assert data_config.folder_name == "project"
+        assert data_config.folder_name == custom_folder_name
 
 
 def test_server_runs_a_background_command_and_keeps_reloading(
