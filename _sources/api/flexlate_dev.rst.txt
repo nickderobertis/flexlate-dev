@@ -105,6 +105,14 @@ flexlate\_dev.ignore module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.logger module
+---------------------------
+
+.. automodule:: flexlate_dev.logger
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.project\_ops module
 ---------------------------------
 
