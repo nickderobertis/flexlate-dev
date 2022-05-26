@@ -36,8 +36,7 @@
         "author_email": "derobertis.nick@gmail.com",
         "google_analytics_id": "",
         "os_support": [
-          "ubuntu",
-          "windows"
+          "ubuntu"
         ],
         "minimum_python_version": "3.8",
         "logo_url": "",
