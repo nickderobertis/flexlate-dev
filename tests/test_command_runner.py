@@ -3,7 +3,6 @@ import timeit
 from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.user_command import UserCommand
 from tests.config import GENERATED_FILES_DIR
-
 from tests.fixtures.temp_dir import inside_generated_dir
 
 

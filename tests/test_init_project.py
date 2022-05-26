@@ -2,16 +2,13 @@ from pathlib import Path
 
 import jinja2
 
+from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.external_command_type import ExternalCLICommandType
-from flexlate_dev.config import (
-    FlexlateDevConfig,
-    UserDataConfiguration,
-)
-from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.project_ops import initialize_project_get_folder
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from tests.config import EXTEND_DATA_CONFIG_PATH
-from tests.fixtures.template_path import *
 from tests.fixtures.jinja_env import jinja_env
+from tests.fixtures.template_path import *
 
 
 def test_init_project_creates_project_with_data(

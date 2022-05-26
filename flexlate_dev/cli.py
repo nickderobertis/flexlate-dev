@@ -1,15 +1,15 @@
 import ast
 from pathlib import Path
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
 
 import typer
 from flexlate.template_data import TemplateData
 
 from flexlate_dev import get_version
 from flexlate_dev.cli_validators import parse_data_from_str
-from flexlate_dev.publish import publish_template, publish_all_templates
+from flexlate_dev.publish import publish_all_templates, publish_template
 from flexlate_dev.server import serve_template
-from flexlate_dev.styles import print_styled, INFO_STYLE
+from flexlate_dev.styles import INFO_STYLE, print_styled
 
 cli = typer.Typer()
 

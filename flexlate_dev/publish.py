@@ -1,11 +1,11 @@
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 from flexlate.template_data import TemplateData
 
+from flexlate_dev.config import DEFAULT_PROJECT_NAME, FlexlateDevConfig, load_config
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
-from flexlate_dev.config import FlexlateDevConfig, DEFAULT_PROJECT_NAME, load_config
 from flexlate_dev.project_ops import update_or_initialize_project_get_folder
 
 

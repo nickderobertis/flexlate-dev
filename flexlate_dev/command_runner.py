@@ -1,10 +1,10 @@
 from typing import Sequence, Union
 
 from flexlate_dev.ext_subprocess import (
-    run_command_stream_output,
     run_command_in_background_stream_output,
+    run_command_stream_output,
 )
-from flexlate_dev.styles import print_styled, INFO_STYLE
+from flexlate_dev.styles import INFO_STYLE, print_styled
 from flexlate_dev.user_command import UserCommand
 
 Runnable = Union[UserCommand, str]

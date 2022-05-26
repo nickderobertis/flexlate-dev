@@ -1,11 +1,11 @@
 from flexlate_dev.config import (
     FlexlateDevConfig,
-    create_default_run_configs,
     UserDataConfiguration,
+    create_default_run_configs,
 )
-from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.user_command import UserCommand
-from tests.config import INPUT_CONFIGS_DIR, GENERATED_FILES_DIR
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
+from tests.config import GENERATED_FILES_DIR, INPUT_CONFIGS_DIR
 
 
 def gen_config_with_user_commands():

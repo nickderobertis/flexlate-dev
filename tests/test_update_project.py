@@ -4,13 +4,12 @@ import jinja2
 from flexlate import branch_update
 from git import Repo
 
-from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig
-from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.project_ops import initialize_project_get_folder, update_project
-
-from tests.fixtures.template_path import *
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from tests.fixtures.jinja_env import jinja_env
+from tests.fixtures.template_path import *
 
 
 def test_update_project_updates_project_with_default_data(

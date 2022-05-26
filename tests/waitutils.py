@@ -2,7 +2,7 @@ import time
 import timeit
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Final, Callable
+from typing import Callable, Final
 
 DEFAULT_TIMEOUT: Final = 5
 

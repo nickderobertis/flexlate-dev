@@ -3,23 +3,23 @@ from pathlib import Path
 from git import Repo
 
 from flexlate_dev.config import (
-    FlexlateDevConfig,
     DataConfiguration,
+    FlexlateDevConfig,
     UserDataConfiguration,
 )
-from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.publish import publish_template
 from flexlate_dev.server import run_server
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from tests.config import (
     GENERATED_FILES_DIR,
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
-    WITH_TEMPLATED_COMMANDS_CONFIG_PATH,
     WITH_PRE_CHECK_COMMAND_CONFIG_PATH,
     WITH_PRE_CHECK_CREATE_COMMAND_CONFIG_PATH,
+    WITH_TEMPLATED_COMMANDS_CONFIG_PATH,
 )
-from tests.pathutils import change_directory_to
 from tests.fixtures.template_path import *
+from tests.pathutils import change_directory_to
 from tests.test_config import WITH_USER_COMMAND_CONFIG_PATH
 
 

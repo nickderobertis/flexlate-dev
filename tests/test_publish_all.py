@@ -1,6 +1,6 @@
 from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.publish import publish_all_templates
-from flexlate_dev.user_runner import UserRunConfiguration, UserRootRunConfiguration
+from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from tests.config import GENERATED_FILES_DIR
 from tests.fixtures.template_path import *
 

@@ -1,7 +1,7 @@
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Callable, Union, Final
+from typing import Callable, Final, List, Union
 
 from gitignore_parser import parse_gitignore
 

@@ -2,14 +2,14 @@ from flexlate_dev.config import FlexlateDevConfig
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.user_command import UserCommand
 from tests.config import (
-    INPUT_CONFIGS_DIR,
-    GENERATED_FILES_DIR,
-    WITH_USER_COMMAND_CONFIG_PATH,
     EXTEND_DATA_CONFIG_PATH,
-    EXTEND_RUN_CONFIG_PATH,
     EXTEND_DEFAULT_RUN_CONFIG_PATH,
-    SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+    EXTEND_RUN_CONFIG_PATH,
+    GENERATED_FILES_DIR,
     IGNORES_AND_EXTEND_DATA_PATH,
+    INPUT_CONFIGS_DIR,
+    SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+    WITH_USER_COMMAND_CONFIG_PATH,
 )
 from tests.gen_configs import gen_config_with_user_commands
 
