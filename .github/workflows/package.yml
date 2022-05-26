@@ -4,7 +4,7 @@ name: Test, Build and Push Python Package and Docs
 on:
   push:
     branches:
-      - main
+      - master
       - alpha
       - beta
       - "*.*.*"
