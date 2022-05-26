@@ -7,10 +7,24 @@ def test_ignore_file():
     assert not ignore.file_is_ignored("b.txt")
 
 
-def test_ignore_folder():
+def test_ignore_folder_only():
     ignore = IgnoreSpecification(ignore_list=["a/"])
     assert ignore.file_is_ignored("a/b.txt")
+    assert not ignore.file_is_ignored("a")
     assert not ignore.file_is_ignored("b.txt")
+
+
+def test_ignore_folder_or_file():
+    ignore = IgnoreSpecification(ignore_list=["a"])
+    assert ignore.file_is_ignored("a/b.txt")
+    assert ignore.file_is_ignored("a")
+    assert not ignore.file_is_ignored("b.txt")
+
+
+def test_ignore_folder_does_not_ignore_folders_that_start_with_that_name():
+    ignore = IgnoreSpecification(ignore_list=["a/"])
+    assert ignore.file_is_ignored("a/b.txt")
+    assert not ignore.file_is_ignored("ab/c.txt")
 
 
 def test_negate_ignore():

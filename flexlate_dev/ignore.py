@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Callable, Final, List, Union
 
 from gitignore_parser import parse_gitignore
+from pathspec import PathSpec
 
 ALWAYS_IGNORE: Final[List[str]] = [".git/"]
 
@@ -30,18 +31,13 @@ class IgnoreSpecification:
 def parse_gitignore_list_into_matcher(
     gitignore_list: List[str],
 ) -> Callable[[Union[str, Path]], bool]:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        temp_path = Path(temp_dir)
-        gitignore_path = temp_path / ".gitignore"
-        gitignore_path.write_text("\n".join(gitignore_list) + "\n")
-        base_matcher = parse_gitignore(gitignore_path, base_dir=temp_dir)
+    spec = PathSpec.from_lines("gitwildmatch", gitignore_list)
 
     def matcher(file_path: Union[str, Path]) -> bool:
         """
         Adjust the base_matcher from gitignore_parser so that relative paths are
         resolved in the temp directory.
         """
-        full_path = temp_path / file_path
-        return base_matcher(full_path)
+        return spec.match_file(file_path)
 
     return matcher
