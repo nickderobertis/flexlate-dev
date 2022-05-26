@@ -12,8 +12,10 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler, FileSystemEvent
 from flexlate.template_data import TemplateData
 
+from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
+from flexlate_dev.logger import log
 from flexlate_dev.project_ops import (
     update_or_initialize_project_get_folder,
 )
@@ -32,6 +34,8 @@ def serve_template(
     auto_commit: bool = True,
     config_path: Optional[Path] = None,
     save: bool = False,
+    data: Optional[TemplateData] = None,
+    folder_name: Optional[str] = None,
 ):
     config = load_config(config_path)
 
@@ -43,6 +47,8 @@ def serve_template(
         no_input=no_input,
         auto_commit=auto_commit,
         save=save,
+        data=data,
+        folder_name=folder_name,
     ):
         try:
             while True:
@@ -60,6 +66,8 @@ def run_server(
     no_input: bool = False,
     auto_commit: bool = True,
     save: bool = False,
+    data: Optional[TemplateData] = None,
+    folder_name: Optional[str] = None,
 ):
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
@@ -79,6 +87,8 @@ def run_server(
         no_input=no_input,
         auto_commit=auto_commit,
         save=save,
+        data=data,
+        folder_name=folder_name,
     )
     event_handler.sync_output()  # do a sync before starting watcher
     observer.schedule(event_handler, str(template_path), recursive=True)
@@ -109,6 +119,8 @@ class ServerEventHandler(FileSystemEventHandler):
         no_input: bool = False,
         auto_commit: bool = True,
         save: bool = False,
+        data: Optional[TemplateData] = None,
+        folder_name: Optional[str] = None,
     ):
         super().__init__()
         self.config = config
@@ -121,6 +133,8 @@ class ServerEventHandler(FileSystemEventHandler):
         self.no_input = no_input
         self.auto_commit = auto_commit
         self.save = save
+        self.cli_data = data
+        self.cli_folder_name = folder_name
         self.folder: Optional[str] = None
         self.repo: Optional[Repo] = None
         self.fxt = Flexlate()
@@ -132,14 +146,30 @@ class ServerEventHandler(FileSystemEventHandler):
         return self.out_root / self.folder
 
     @property
-    def data(self) -> Optional[TemplateData]:
-        return self.run_config.data.data if self.run_config.data else None
+    def data(self) -> TemplateData:
+        return merge_dicts_preferring_non_none(
+            self.run_config.data.data if self.run_config.data else {},
+            self.cli_data or {},
+        )
 
     def on_modified(self, event: FileSystemEvent):
         global old
         super().on_modified(event)
+        log.debug(f"on_modified called with {event=}")
         if not os.path.exists(event.src_path):
+            log.debug(f"{event.src_path} does not exist, will not update")
             return
+
+        relative_path = Path(event.src_path).relative_to(self.template_path)
+        if relative_path == Path("."):
+            # Watchdog seems to throw events on the whole directory after a file in the directory changed, ignore those
+            log.debug("Got root template folder as change, ignoring")
+            return
+        if self.run_config.ignore_matches(relative_path):
+            # Ignored file changed, don't trigger reload
+            log.debug(f"Ignored file {relative_path} changed, ignoring")
+            return
+
         # Watchdog has a bug where two events will be triggered very quickly for one modification.
         # Track whether it's been at least a half second since the last modification, and only then
         # consider it a valid event
@@ -149,6 +179,8 @@ class ServerEventHandler(FileSystemEventHandler):
             # This is a valid event, now the main logic
             print_styled(f"Detected change in {event.src_path}", INFO_STYLE)
             self.sync_output()
+        else:
+            log.debug(f"Ignoring duplicate event {event.src_path}")
         old = new
 
     def sync_output(self):
@@ -162,8 +194,11 @@ class ServerEventHandler(FileSystemEventHandler):
             auto_commit=self.auto_commit,
             save=self.save,
             known_folder_name=self.folder,
-            default_folder_name=self.run_config.data.use_folder_name
-            if self.run_config.data
-            else DEFAULT_PROJECT_NAME,
+            default_folder_name=self.cli_folder_name
+            or (
+                self.run_config.data.use_folder_name
+                if self.run_config.data
+                else DEFAULT_PROJECT_NAME
+            ),
         )
         self.repo = Repo(self.out_path)

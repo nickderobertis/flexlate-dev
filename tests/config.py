@@ -26,3 +26,4 @@ WITH_PRE_CHECK_COMMAND_CONFIG_PATH = INPUT_CONFIGS_DIR / "with_pre_check_command
 WITH_PRE_CHECK_CREATE_COMMAND_CONFIG_PATH = (
     INPUT_CONFIGS_DIR / "with_pre_check_create_command.yaml"
 )
+IGNORES_AND_EXTEND_DATA_PATH = INPUT_CONFIGS_DIR / "ignores_and_extend_data.yaml"

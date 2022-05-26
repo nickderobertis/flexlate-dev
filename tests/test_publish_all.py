@@ -154,3 +154,29 @@ def _create_config_with_default_and_two_run_configs():
     config.run_configs["two"] = two_run_config
     config.data["two"] = two_data_config
     config.save()
+
+
+def test_publish_overrides_data_for_all_run_configurations(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    config_path = GENERATED_FILES_DIR / "flexlate-dev.yaml"
+    _create_config_with_default_and_two_run_configs()
+
+    publish_all_templates(
+        template_path,
+        GENERATED_FILES_DIR,
+        config_path=config_path,
+        no_input=True,
+        always_include_default=True,
+        data=dict(q2=3),
+    )
+
+    folder_names = ["default", "out-one", "out-two"]
+    for folder_name in folder_names:
+        project_path = GENERATED_FILES_DIR / folder_name
+        expect_file = project_path / "a1.txt"
+        assert expect_file.read_text() == "3"
+        # Check that post init but not post update was run
+        assert (project_path / f"{folder_name}-one.txt").exists()
+        assert not (project_path / f"{folder_name}-two.txt").exists()
