@@ -46,7 +46,7 @@
   
   
   
-    <title>flexlate_dev.project_ops &#8212; flexlate-dev 0.17.0 documentation</title>
+    <title>flexlate_dev.project_ops &#8212; flexlate-dev 0.17.1a1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
@@ -87,7 +87,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="flexlate-dev 0.17.0 documentation"
+        <a href="../../index.html" title="flexlate-dev 0.17.1a1 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -173,7 +173,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.17.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">flexlate-dev 0.17.1a1 documentation</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -186,13 +186,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="flexlate-dev 0.17.0 documentation" class="md-nav__button md-logo">
+    <a href="../../index.html" title="flexlate-dev 0.17.1a1 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="../../index.html"
-       title="flexlate-dev 0.17.0 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.17.1a1 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -266,25 +266,25 @@
 
 <span class="kn">import</span> <span class="nn">jinja2</span>
 <span class="kn">from</span> <span class="nn">flexlate</span> <span class="kn">import</span> <span class="n">Flexlate</span>
+<span class="kn">from</span> <span class="nn">flexlate</span> <span class="kn">import</span> <span class="n">exc</span> <span class="k">as</span> <span class="n">flexlate_exc</span>
 <span class="kn">from</span> <span class="nn">flexlate.config</span> <span class="kn">import</span> <span class="n">FlexlateConfig</span>
 <span class="kn">from</span> <span class="nn">flexlate.template_data</span> <span class="kn">import</span> <span class="n">TemplateData</span>
-<span class="kn">from</span> <span class="nn">flexlate</span> <span class="kn">import</span> <span class="n">exc</span> <span class="k">as</span> <span class="n">flexlate_exc</span>
 <span class="kn">from</span> <span class="nn">git</span> <span class="kn">import</span> <span class="n">Repo</span>
 
+<span class="kn">from</span> <span class="nn">flexlate_dev.command_runner</span> <span class="kn">import</span> <span class="n">run_command_or_command_strs</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_PROJECT_NAME</span><span class="p">,</span>
     <span class="n">FlexlateDevConfig</span><span class="p">,</span>
     <span class="n">FullRunConfiguration</span><span class="p">,</span>
-    <span class="n">DEFAULT_PROJECT_NAME</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.dirutils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">change_directory_to</span><span class="p">,</span>
     <span class="n">directory_has_files_or_directories</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">flexlate_dev.command_runner</span> <span class="kn">import</span> <span class="n">run_command_or_command_strs</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.gituitls</span> <span class="kn">import</span> <span class="n">stage_and_commit_all</span>
 <span class="kn">from</span> <span class="nn">flexlate_dev.render</span> <span class="kn">import</span> <span class="n">create_jinja_environment</span>
-<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="n">print_styled</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">,</span> <span class="n">ACTION_REQUIRED_STYLE</span>
-<span class="kn">from</span> <span class="nn">flexlate_dev.user_runner</span> <span class="kn">import</span> <span class="n">run_user_hook</span><span class="p">,</span> <span class="n">RunnerHookType</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.styles</span> <span class="kn">import</span> <span class="n">ACTION_REQUIRED_STYLE</span><span class="p">,</span> <span class="n">INFO_STYLE</span><span class="p">,</span> <span class="n">print_styled</span>
+<span class="kn">from</span> <span class="nn">flexlate_dev.user_runner</span> <span class="kn">import</span> <span class="n">RunnerHookType</span><span class="p">,</span> <span class="n">run_user_hook</span>
 
 <span class="n">fxt</span> <span class="o">=</span> <span class="n">Flexlate</span><span class="p">()</span>
 

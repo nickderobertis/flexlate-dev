@@ -1,6 +1,5 @@
-typer
 rich
-watchdog
 flexlate>=0.14.0
 flexlate-dev
-gitignore_parser
+watchdog
+typer
