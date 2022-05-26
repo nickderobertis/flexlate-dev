@@ -67,3 +67,5 @@ _examples
 **/.ipynb_checkpoints
 .vscode
 tests/generated
+.nox
+node_modules
