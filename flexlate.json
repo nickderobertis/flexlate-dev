@@ -31,7 +31,7 @@
         "repo_name": "flexlate-dev",
         "repo_username": "nickderobertis",
         "short_description": "Development tools for template authors using Flexlate",
-        "main_branch_name": "main",
+        "main_branch_name": "master",
         "package_author": "Nick DeRobertis",
         "author_email": "derobertis.nick@gmail.com",
         "google_analytics_id": "",
