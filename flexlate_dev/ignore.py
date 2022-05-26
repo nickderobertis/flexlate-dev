@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Final, List, Union
 
-from gitignore_parser import parse_gitignore
 from pathspec import PathSpec
 
 ALWAYS_IGNORE: Final[List[str]] = [".git/"]

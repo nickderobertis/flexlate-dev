@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Final, List, Optional, Union
 
 from flexlate.template_data import TemplateData
-from gitignore_parser import parse_gitignore
 from pyappconf import AppConfig, BaseConfig, ConfigFormats
 from pydantic import BaseModel, Field
 

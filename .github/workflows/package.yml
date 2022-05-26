@@ -4,7 +4,7 @@ name: Test, Build and Push Python Package and Docs
 on:
   push:
     branches:
-      - main
+      - master
       - alpha
       - beta
       - "*.*.*"
@@ -14,7 +14,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest, ]
+        os: [ubuntu-latest, ]
         python-version: ["3.8", "3.9", "3.10", ]
     runs-on: ${{ matrix.os }}
     steps:
