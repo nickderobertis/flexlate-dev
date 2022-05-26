@@ -1,8 +1,9 @@
 import os
-import pytest
 
+import pytest
 from flexlate import template_path
-from tests.config import PROJECT_DIR, GENERATED_FILES_DIR
+
+from tests.config import GENERATED_FILES_DIR, PROJECT_DIR
 from tests.dirutils import wipe_generated_folder
 
 

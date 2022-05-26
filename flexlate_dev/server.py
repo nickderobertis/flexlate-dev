@@ -5,25 +5,19 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from flexlate.main import Flexlate
 import flexlate.exc as flexlate_exc
-from git import Repo
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler, FileSystemEvent
+from flexlate.main import Flexlate
 from flexlate.template_data import TemplateData
+from git import Repo
+from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
 
+from flexlate_dev.config import DEFAULT_PROJECT_NAME, FlexlateDevConfig, load_config
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
 from flexlate_dev.external_command_type import ExternalCLICommandType
-from flexlate_dev.config import FlexlateDevConfig, load_config, DEFAULT_PROJECT_NAME
 from flexlate_dev.logger import log
-from flexlate_dev.project_ops import (
-    update_or_initialize_project_get_folder,
-)
-from flexlate_dev.styles import (
-    print_styled,
-    INFO_STYLE,
-    SUCCESS_STYLE,
-)
+from flexlate_dev.project_ops import update_or_initialize_project_get_folder
+from flexlate_dev.styles import INFO_STYLE, SUCCESS_STYLE, print_styled
 
 
 def serve_template(

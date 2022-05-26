@@ -3,25 +3,25 @@ from typing import Optional
 
 import jinja2
 from flexlate import Flexlate
+from flexlate import exc as flexlate_exc
 from flexlate.config import FlexlateConfig
 from flexlate.template_data import TemplateData
-from flexlate import exc as flexlate_exc
 from git import Repo
 
+from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.config import (
+    DEFAULT_PROJECT_NAME,
     FlexlateDevConfig,
     FullRunConfiguration,
-    DEFAULT_PROJECT_NAME,
 )
 from flexlate_dev.dirutils import (
     change_directory_to,
     directory_has_files_or_directories,
 )
-from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.render import create_jinja_environment
-from flexlate_dev.styles import print_styled, INFO_STYLE, ACTION_REQUIRED_STYLE
-from flexlate_dev.user_runner import run_user_hook, RunnerHookType
+from flexlate_dev.styles import ACTION_REQUIRED_STYLE, INFO_STYLE, print_styled
+from flexlate_dev.user_runner import RunnerHookType, run_user_hook
 
 fxt = Flexlate()
 

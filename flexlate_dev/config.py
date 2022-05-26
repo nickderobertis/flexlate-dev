@@ -1,24 +1,24 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional, Dict, List, Final, Any, Callable, Union
+from typing import Any, Callable, Dict, Final, List, Optional, Union
 
 from flexlate.template_data import TemplateData
-from pyappconf import BaseConfig, AppConfig, ConfigFormats
-from pydantic import BaseModel, Field
 from gitignore_parser import parse_gitignore
+from pyappconf import AppConfig, BaseConfig, ConfigFormats
+from pydantic import BaseModel, Field
 
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
-from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.exc import (
-    NoSuchRunConfigurationException,
-    NoSuchDataException,
     NoSuchCommandException,
+    NoSuchDataException,
+    NoSuchRunConfigurationException,
 )
+from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.ignore import IgnoreSpecification
 from flexlate_dev.user_command import UserCommand
 from flexlate_dev.user_runner import (
-    UserRootRunConfiguration,
     RunConfiguration,
+    UserRootRunConfiguration,
     UserRunConfiguration,
 )
 

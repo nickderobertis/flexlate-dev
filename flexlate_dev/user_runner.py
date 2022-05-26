@@ -6,7 +6,7 @@ focused on just running commands.
 """
 from enum import Enum
 from pathlib import Path
-from typing import Optional, List, TYPE_CHECKING, cast, Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, cast
 
 import jinja2
 
@@ -20,7 +20,7 @@ from pydantic import BaseModel
 
 from flexlate_dev.command_runner import Runnable, run_command_or_command_strs
 from flexlate_dev.dirutils import change_directory_to
-from flexlate_dev.styles import print_styled, INFO_STYLE
+from flexlate_dev.styles import INFO_STYLE, print_styled
 from flexlate_dev.user_command import UserCommand
 
 

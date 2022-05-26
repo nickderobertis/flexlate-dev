@@ -5,20 +5,20 @@ from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
 from flexlate_dev.server import run_server
 from flexlate_dev.user_runner import UserRunConfiguration
 from tests.config import (
-    GENERATED_FILES_DIR,
     BLOCKING_COMMAND_CONFIG_PATH,
-    EXTEND_RUN_CONFIG_PATH,
     EXTEND_DEFAULT_RUN_CONFIG_PATH,
-    SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
+    EXTEND_RUN_CONFIG_PATH,
+    GENERATED_FILES_DIR,
     IGNORES_AND_EXTEND_DATA_PATH,
-)
-from tests.pathutils import change_directory_to
-from tests.waitutils import (
-    wait_until_path_exists,
-    wait_until_file_updates,
-    wait_until_file_has_content,
+    SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
 )
 from tests.fixtures.template_path import *
+from tests.pathutils import change_directory_to
+from tests.waitutils import (
+    wait_until_file_has_content,
+    wait_until_file_updates,
+    wait_until_path_exists,
+)
 
 
 def test_server_creates_and_updates_template_on_change(copier_one_template_path: Path):
