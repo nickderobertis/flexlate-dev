@@ -1,4 +1,4 @@
-[![](https://codecov.io/gh/nickderobertis/flexlate-dev/branch/main/graph/badge.svg)](https://codecov.io/gh/nickderobertis/flexlate-dev)
+[![](https://codecov.io/gh/nickderobertis/flexlate-dev/branch/master/graph/badge.svg)](https://codecov.io/gh/nickderobertis/flexlate-dev)
 [![PyPI](https://img.shields.io/pypi/v/flexlate-dev)](https://pypi.org/project/flexlate-dev/)
 ![PyPI - License](https://img.shields.io/pypi/l/flexlate-dev)
 [![Documentation](https://img.shields.io/badge/documentation-pass-green)](https://nickderobertis.github.io/flexlate-dev/)
@@ -37,6 +37,16 @@ https://nickderobertis.github.io/flexlate-dev/tutorial.html
 This project is currently in early-stage development. There may be
 breaking changes often. While the major version is 0, minor version
 upgrades will often have breaking changes.
+
+## Developing
+
+First ensure that you have `pipx` installed, if not, install it with `pip install pipx`.
+
+Then clone the repo and run `npm install` and `pipenv sync`. Run `pipenv shell`
+to use the virtual environment. Make your changes and then run `nox` to run formatting,
+linting, and tests.
+
+Develop documentation by running `nox -s docs` to start up a dev server.
 
 ## Author
 
