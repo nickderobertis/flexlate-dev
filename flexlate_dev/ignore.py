@@ -1,3 +1,4 @@
+import os.path
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -34,9 +35,14 @@ def parse_gitignore_list_into_matcher(
 
     def matcher(file_path: Union[str, Path]) -> bool:
         """
-        Adjust the base_matcher from gitignore_parser so that relative paths are
-        resolved in the temp directory.
+        Adjust the base_matcher from pathspec gitwildmatch so that passed
+        directories end in a trailing slash.
         """
-        return spec.match_file(file_path)
+        path = Path(file_path)
+        if path.is_dir():
+            match_path = str(path) + os.path.sep
+        else:
+            match_path = str(path)
+        return spec.match_file(match_path)
 
     return matcher
