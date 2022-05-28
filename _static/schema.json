@@ -1,0 +1,251 @@
+{
+  "title": "FlexlateDevConfig",
+  "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+  "type": "object",
+  "properties": {
+    "data": {
+      "title": "Data",
+      "env_names": [
+        "data"
+      ],
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/UserDataConfiguration"
+      }
+    },
+    "commands": {
+      "title": "Commands",
+      "env_names": [
+        "commands"
+      ],
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UserCommand"
+      }
+    },
+    "run_configs": {
+      "title": "Run Configs",
+      "env_names": [
+        "run_configs"
+      ],
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/UserRootRunConfiguration"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "UserDataConfiguration": {
+      "title": "UserDataConfiguration",
+      "type": "object",
+      "properties": {
+        "data": {
+          "title": "Data",
+          "type": "object"
+        },
+        "folder_name": {
+          "title": "Folder Name",
+          "type": "string"
+        },
+        "ignore": {
+          "title": "Ignore",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extends": {
+          "title": "Extends",
+          "type": "string"
+        }
+      }
+    },
+    "UserCommand": {
+      "title": "UserCommand",
+      "type": "object",
+      "properties": {
+        "run": {
+          "title": "Run",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "background": {
+          "title": "Background",
+          "type": "boolean"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        }
+      }
+    },
+    "UserRunConfiguration": {
+      "title": "UserRunConfiguration",
+      "type": "object",
+      "properties": {
+        "pre_check": {
+          "title": "Pre Check",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_init": {
+          "title": "Post Init",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "pre_update": {
+          "title": "Pre Update",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_update": {
+          "title": "Post Update",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "data_name": {
+          "title": "Data Name",
+          "type": "string"
+        },
+        "out_root": {
+          "title": "Out Root",
+          "type": "string",
+          "format": "path"
+        },
+        "auto_commit_message": {
+          "title": "Auto Commit Message",
+          "type": "string"
+        },
+        "extends": {
+          "title": "Extends",
+          "type": "string"
+        }
+      }
+    },
+    "UserRootRunConfiguration": {
+      "title": "UserRootRunConfiguration",
+      "type": "object",
+      "properties": {
+        "pre_check": {
+          "title": "Pre Check",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_init": {
+          "title": "Post Init",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "pre_update": {
+          "title": "Pre Update",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_update": {
+          "title": "Post Update",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "data_name": {
+          "title": "Data Name",
+          "type": "string"
+        },
+        "out_root": {
+          "title": "Out Root",
+          "type": "string",
+          "format": "path"
+        },
+        "auto_commit_message": {
+          "title": "Auto Commit Message",
+          "type": "string"
+        },
+        "extends": {
+          "title": "Extends",
+          "type": "string"
+        },
+        "publish": {
+          "$ref": "#/definitions/UserRunConfiguration"
+        },
+        "serve": {
+          "$ref": "#/definitions/UserRunConfiguration"
+        }
+      }
+    }
+  }
+}
