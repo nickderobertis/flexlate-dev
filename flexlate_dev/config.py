@@ -25,9 +25,20 @@ DEFAULT_PROJECT_NAME: Final[str] = "project"
 
 
 class DataConfiguration(BaseModel):
-    data: TemplateData = Field(default_factory=dict)
-    folder_name: Optional[str] = None
-    ignore: List[str] = Field(default_factory=list)
+    data: TemplateData = Field(
+        default_factory=dict,
+        description="Key-value pairs of data to be used in the template",
+    )
+    folder_name: Optional[str] = Field(
+        default=None,
+        description="Name of the folder to be created for the project, "
+        "if it is a template type that does not specify a name",
+    )
+    ignore: List[str] = Field(
+        default_factory=list,
+        description="List of files or folders to ignore when creating the project. "
+        "Full git wildmatch syntax (like .gitignore) is supported including negations",
+    )
 
     @property
     def use_folder_name(self) -> str:
@@ -81,10 +92,20 @@ def create_default_run_configs() -> Dict[str, UserRootRunConfiguration]:
 
 
 class FlexlateDevConfig(BaseConfig):
-    data: Dict[str, UserDataConfiguration] = Field(default_factory=dict)
-    commands: List[UserCommand] = Field(default_factory=list)
+    """
+    Flexlate Dev configuration.
+    """
+
+    data: Dict[str, UserDataConfiguration] = Field(
+        default_factory=dict, description="Data configurations by name"
+    )
+    commands: List[UserCommand] = Field(
+        default_factory=list,
+        description="Commands that can be used across multiple configurations",
+    )
     run_configs: Dict[str, UserRootRunConfiguration] = Field(
-        default_factory=create_default_run_configs
+        default_factory=create_default_run_configs,
+        description="Root run configurations by name",
     )
     _settings = AppConfig(
         app_name="flexlate-dev",
