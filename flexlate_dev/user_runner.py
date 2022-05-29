@@ -16,7 +16,7 @@ from flexlate_dev.external_command_type import ExternalCLICommandType
 if TYPE_CHECKING:
     from flexlate_dev.config import FlexlateDevConfig, FullRunConfiguration
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from flexlate_dev.command_runner import Runnable, run_command_or_command_strs
 from flexlate_dev.dirutils import change_directory_to
@@ -32,13 +32,28 @@ class RunnerHookType(str, Enum):
 
 
 class RunConfiguration(BaseModel):
-    pre_check: Optional[List[Runnable]] = None
-    post_init: Optional[List[Runnable]] = None
-    pre_update: Optional[List[Runnable]] = None
-    post_update: Optional[List[Runnable]] = None
-    data_name: Optional[str] = None
-    out_root: Optional[Path] = None
-    auto_commit_message: Optional[str] = None
+    pre_check: Optional[List[Runnable]] = Field(
+        default=None,
+        help="Commands to run before checking whether it is an initialization or update.",
+    )
+    post_init: Optional[List[Runnable]] = Field(
+        default=None, help="Commands to run after initializing."
+    )
+    pre_update: Optional[List[Runnable]] = Field(
+        default=None, help="Commands to run before updating."
+    )
+    post_update: Optional[List[Runnable]] = Field(
+        default=None, help="Commands to run after updating."
+    )
+    data_name: Optional[str] = Field(
+        default=None, help="Name of the data configuration to use."
+    )
+    out_root: Optional[Path] = Field(
+        default=None, help="Root directory to use for output."
+    )
+    auto_commit_message: Optional[str] = Field(
+        default=None, help="Message to use when auto-committing changes during serve."
+    )
 
     @property
     def commit_message(self) -> str:
@@ -46,12 +61,18 @@ class RunConfiguration(BaseModel):
 
 
 class UserRunConfiguration(RunConfiguration):
-    extends: Optional[str] = None
+    extends: Optional[str] = Field(
+        default=None, help="Name of the run configuration to extend."
+    )
 
 
 class UserRootRunConfiguration(UserRunConfiguration):
-    publish: Optional[UserRunConfiguration] = None
-    serve: Optional[UserRunConfiguration] = None
+    publish: Optional[UserRunConfiguration] = Field(
+        default=None, help="Parts of run configuration to use only when publishing."
+    )
+    serve: Optional[UserRunConfiguration] = Field(
+        default=None, help="Parts of run configuration to use only when serving."
+    )
 
     def get_run_config(self, command: ExternalCLICommandType) -> UserRunConfiguration:
         # Extend base configuration with command-specific configuration if it exists

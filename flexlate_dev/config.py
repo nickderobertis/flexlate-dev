@@ -46,7 +46,9 @@ class DataConfiguration(BaseModel):
 
 
 class UserDataConfiguration(DataConfiguration):
-    extends: Optional[str] = None
+    extends: Optional[str] = Field(
+        default=None, description="Name of the data configuration to extend"
+    )
 
 
 @dataclass
