@@ -25,8 +25,5 @@ flake8 = "*"
 watchdog = "*"
 typer = "*"
 rich = "*"
-py-app-conf = "==0.6.0a1"
+py-app-conf = "*"
 jinja2 = "*"
-
-[pipenv]
-allow_prereleases = true

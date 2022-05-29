@@ -1,10 +1,11 @@
 {
   "title": "FlexlateDevConfig",
-  "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+  "description": "Flexlate Dev configuration.",
   "type": "object",
   "properties": {
     "data": {
       "title": "Data",
+      "description": "Data configurations by name",
       "env_names": [
         "data"
       ],
@@ -15,6 +16,7 @@
     },
     "commands": {
       "title": "Commands",
+      "description": "Commands that can be used across multiple configurations",
       "env_names": [
         "commands"
       ],
@@ -25,6 +27,7 @@
     },
     "run_configs": {
       "title": "Run Configs",
+      "description": "Root run configurations by name",
       "env_names": [
         "run_configs"
       ],
@@ -42,14 +45,17 @@
       "properties": {
         "data": {
           "title": "Data",
+          "description": "Key-value pairs of data to be used in the template",
           "type": "object"
         },
         "folder_name": {
           "title": "Folder Name",
+          "description": "Name of the folder to be created for the project, if it is a template type that does not specify a name",
           "type": "string"
         },
         "ignore": {
           "title": "Ignore",
+          "description": "List of files or folders to ignore when creating the project. Full git wildmatch syntax (like .gitignore) is supported including negations",
           "type": "array",
           "items": {
             "type": "string"
@@ -57,6 +63,7 @@
         },
         "extends": {
           "title": "Extends",
+          "description": "Name of the data configuration to extend",
           "type": "string"
         }
       }
@@ -89,6 +96,7 @@
       "properties": {
         "pre_check": {
           "title": "Pre Check",
+          "help": "Commands to run before checking whether it is an initialization or update.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -103,6 +111,7 @@
         },
         "post_init": {
           "title": "Post Init",
+          "help": "Commands to run after initializing.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -117,6 +126,7 @@
         },
         "pre_update": {
           "title": "Pre Update",
+          "help": "Commands to run before updating.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -131,6 +141,7 @@
         },
         "post_update": {
           "title": "Post Update",
+          "help": "Commands to run after updating.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -145,19 +156,23 @@
         },
         "data_name": {
           "title": "Data Name",
+          "help": "Name of the data configuration to use.",
           "type": "string"
         },
         "out_root": {
           "title": "Out Root",
+          "help": "Root directory to use for output.",
           "type": "string",
           "format": "path"
         },
         "auto_commit_message": {
           "title": "Auto Commit Message",
+          "help": "Message to use when auto-committing changes during serve.",
           "type": "string"
         },
         "extends": {
           "title": "Extends",
+          "help": "Name of the run configuration to extend.",
           "type": "string"
         }
       }
@@ -168,6 +183,7 @@
       "properties": {
         "pre_check": {
           "title": "Pre Check",
+          "help": "Commands to run before checking whether it is an initialization or update.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -182,6 +198,7 @@
         },
         "post_init": {
           "title": "Post Init",
+          "help": "Commands to run after initializing.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -196,6 +213,7 @@
         },
         "pre_update": {
           "title": "Pre Update",
+          "help": "Commands to run before updating.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -210,6 +228,7 @@
         },
         "post_update": {
           "title": "Post Update",
+          "help": "Commands to run after updating.",
           "type": "array",
           "items": {
             "anyOf": [
@@ -224,26 +243,42 @@
         },
         "data_name": {
           "title": "Data Name",
+          "help": "Name of the data configuration to use.",
           "type": "string"
         },
         "out_root": {
           "title": "Out Root",
+          "help": "Root directory to use for output.",
           "type": "string",
           "format": "path"
         },
         "auto_commit_message": {
           "title": "Auto Commit Message",
+          "help": "Message to use when auto-committing changes during serve.",
           "type": "string"
         },
         "extends": {
           "title": "Extends",
+          "help": "Name of the run configuration to extend.",
           "type": "string"
         },
         "publish": {
-          "$ref": "#/definitions/UserRunConfiguration"
+          "title": "Publish",
+          "help": "Parts of run configuration to use only when publishing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserRunConfiguration"
+            }
+          ]
         },
         "serve": {
-          "$ref": "#/definitions/UserRunConfiguration"
+          "title": "Serve",
+          "help": "Parts of run configuration to use only when serving.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserRunConfiguration"
+            }
+          ]
         }
       }
     }
