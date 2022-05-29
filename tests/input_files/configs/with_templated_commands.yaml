@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://nickderobertis.github.io/flexlate-dev/_static/config-schema.json
 commands: []
 data:
   my-data:
@@ -5,6 +6,7 @@ data:
       q1: a1
       q2: 2
     folder_name: a
+    ignore: []
 run_configs:
   default:
     publish:

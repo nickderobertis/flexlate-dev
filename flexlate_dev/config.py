@@ -22,6 +22,9 @@ from flexlate_dev.user_runner import (
 )
 
 DEFAULT_PROJECT_NAME: Final[str] = "project"
+SCHEMA_URL: Final[
+    str
+] = "https://nickderobertis.github.io/flexlate-dev/_static/config-schema.json"
 
 
 class DataConfiguration(BaseModel):
@@ -113,6 +116,7 @@ class FlexlateDevConfig(BaseConfig):
         app_name="flexlate-dev",
         default_format=ConfigFormats.YAML,
         config_name="flexlate-dev",
+        schema_url=SCHEMA_URL,
     )
 
     def save(self, serializer_kwargs: Optional[Dict[str, Any]] = None, **kwargs):

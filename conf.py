@@ -58,6 +58,7 @@ PACKAGE_INSTALL_REQUIRES = [
     # 'package',
     # 'otherpackage>=1,<2'
     "flexlate>=0.14.0",
+    "py-app-conf>=1.1.0",
     "watchdog",
     "typer",
     "rich",
