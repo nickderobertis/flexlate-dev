@@ -41,6 +41,14 @@ flexlate\_dev.config module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.config\_schema module
+-----------------------------------
+
+.. automodule:: flexlate_dev.config_schema
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.dict\_merge module
 --------------------------------
 
