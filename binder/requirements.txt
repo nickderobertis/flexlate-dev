@@ -1,5 +1,6 @@
-typer
-flexlate-dev
 flexlate>=0.14.0
-rich
 watchdog
+flexlate-dev
+py-app-conf>=1.1.0
+typer
+rich
