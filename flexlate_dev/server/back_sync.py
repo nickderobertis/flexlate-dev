@@ -1,12 +1,15 @@
 import time
+from copy import deepcopy
 from pathlib import Path
 from typing import Optional
 
+import patch
 from flexlate import Flexlate
 from git import Repo
 from unidiff import PatchedFile, PatchSet
 
 from flexlate_dev.config import FlexlateDevConfig
+from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.logger import log
 
@@ -57,12 +60,23 @@ def apply_diff_to_project(project_path: Path, diff: PatchSet) -> None:
         apply_file_diff_to_project(project_path, file_diff)
 
 
+def _get_content_from_file_added_diff(diff: PatchedFile) -> str:
+    # Combine lines
+    return "\n".join(["".join([line.value for line in hunk]) for hunk in diff])
+
+
 def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
     def project_file_path(diff_path: str) -> Optional[Path]:
-        file_path = _relative_path_from_diff_path(diff.target_file)
+        file_path = _relative_path_from_diff_path(diff_path)
         if file_path is None:
             return None
         return project_path / file_path
+
+    def apply_patch():
+        patch_set = patch.fromstring(str(diff).encode("utf-8"))
+        with change_directory_to(project_path):
+            patch_set.apply()
+        return
 
     log.debug(
         f"Applying diff {diff.source_file} to {diff.target_file} in {project_path}"
@@ -72,7 +86,7 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
 
     if diff.is_added_file:
         out_path = target_path
-        content = "TODO add content"
+        content = _get_content_from_file_added_diff(diff)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(content)
     elif diff.is_removed_file:
@@ -80,10 +94,11 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
         out_path.unlink()
     elif diff.is_rename:
         # TODO: rename with modifications?
+        target_path.parent.mkdir(parents=True, exist_ok=True)
         source_path.rename(target_path)
     elif diff.is_modified_file:
         out_path = target_path
-        raise NotImplementedError("TODO modify file")
+        apply_patch()
     else:
         raise NotImplementedError("Unknown diff type")
 
