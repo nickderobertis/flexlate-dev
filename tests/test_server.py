@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 
 from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
-from flexlate_dev.server import run_server
+from flexlate_dev.server.main import run_server
 from flexlate_dev.user_runner import UserRunConfiguration
 from tests.config import (
     BLOCKING_COMMAND_CONFIG_PATH,

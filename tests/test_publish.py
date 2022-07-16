@@ -9,7 +9,7 @@ from flexlate_dev.config import (
 )
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.publish import publish_template
-from flexlate_dev.server import run_server
+from flexlate_dev.server.main import run_server
 from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
 from tests.config import (
     GENERATED_FILES_DIR,
