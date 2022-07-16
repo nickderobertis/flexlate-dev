@@ -37,6 +37,9 @@ def test_apply_removed_file_diff_to_project(
     assert not expect_path.exists()
 
 
+# TODO: Add test for renamed without modify
+
+
 def test_apply_renamed_and_modified_file_diff_to_project(
     file_renamed_diff: PatchedFile, inside_generated_dir: None
 ):

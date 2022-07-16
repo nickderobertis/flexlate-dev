@@ -1,7 +1,7 @@
 import time
 from copy import deepcopy
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 import patch
 from flexlate import Flexlate
@@ -65,6 +65,13 @@ def _get_content_from_file_added_diff(diff: PatchedFile) -> str:
     return "\n".join(["".join([line.value for line in hunk]) for hunk in diff])
 
 
+def _apply_patch(diff: Union[PatchedFile, PatchSet, str], project_path: Path) -> None:
+    patch_set = patch.fromstring(str(diff).encode("utf-8"))
+    with change_directory_to(project_path):
+        patch_set.apply()
+    return
+
+
 def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
     def project_file_path(diff_path: str) -> Optional[Path]:
         file_path = _relative_path_from_diff_path(diff_path)
@@ -72,17 +79,15 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
             return None
         return project_path / file_path
 
-    def apply_patch():
-        patch_set = patch.fromstring(str(diff).encode("utf-8"))
-        with change_directory_to(project_path):
-            patch_set.apply()
-        return
-
     log.debug(
         f"Applying diff {diff.source_file} to {diff.target_file} in {project_path}"
     )
     target_path = project_file_path(diff.target_file)
     source_path = project_file_path(diff.source_file)
+
+    # Can have modifications and also be renamed, so handle modifications separately
+    if diff.is_modified_file:
+        _apply_patch(diff, project_path)
 
     if diff.is_added_file:
         out_path = target_path
@@ -96,10 +101,7 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
         # TODO: rename with modifications?
         target_path.parent.mkdir(parents=True, exist_ok=True)
         source_path.rename(target_path)
-    elif diff.is_modified_file:
-        out_path = target_path
-        apply_patch()
-    else:
+    elif not diff.is_modified_file:
         raise NotImplementedError("Unknown diff type")
 
 
@@ -132,15 +134,17 @@ class BackSyncServer:
 
     def start(self):
         while True:
-            if self._update_commit_get_changed():
-                self.sync()
+            new_commit = get_last_commit_sha(self.repo)
+            if self.last_commit == new_commit:
+                time.sleep(self.check_interval_seconds)
+                continue
+            self.sync(new_commit)
             time.sleep(self.check_interval_seconds)
 
-    def sync(self):
-        pass
-
-    def _update_commit_get_changed(self) -> bool:
-        if self.last_commit != get_last_commit_sha(self.repo):
-            self.last_commit = get_last_commit_sha(self.repo)
-            return True
-        return False
+    def sync(self, new_commit: Optional[str] = None):
+        new_commit = new_commit or get_last_commit_sha(self.repo)
+        log.info(f"Back-syncing to commit {new_commit}")
+        apply_diff_between_commits_to_separate_project(
+            self.repo, new_commit, self.last_commit, self.out_folder
+        )
+        self.last_commit = new_commit
