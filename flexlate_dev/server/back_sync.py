@@ -1,16 +1,13 @@
 import time
-from copy import deepcopy
 from pathlib import Path
 from typing import Optional, Union
 
 import patch
-from flexlate import Flexlate
 from git import Repo
 from unidiff import PatchedFile, PatchSet
 
-from flexlate_dev.config import FlexlateDevConfig
 from flexlate_dev.dirutils import change_directory_to
-from flexlate_dev.external_command_type import ExternalCLICommandType
+from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.logger import log
 from flexlate_dev.styles import INFO_STYLE, print_styled
 
@@ -22,6 +19,15 @@ def get_last_commit_sha(repo: Repo) -> str:
 def get_diff_between_commits(repo: Repo, sha1: str, sha2: str) -> PatchSet:
     diff_str = repo.git.diff(sha1, sha2)
     return PatchSet(diff_str)
+
+
+def commit_in_one_repo_with_another_repo_commit_message(
+    repo: Repo,
+    other_repo: Repo,
+    commit_sha: str,
+) -> None:
+    commit_message = other_repo.commit(commit_sha).message
+    stage_and_commit_all(repo, commit_message)
 
 
 def _relative_path_from_diff_path(diff_path: str) -> Optional[Path]:
@@ -108,33 +114,26 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
 class BackSyncServer:
     def __init__(
         self,
-        config: FlexlateDevConfig,
         template_path: Path,
         out_folder: Path,
-        run_config_name: Optional[str] = None,
-        no_input: bool = False,
         auto_commit: bool = True,
         check_interval_seconds: int = 1,
     ):
         super().__init__()
-        self.config = config
-        self.run_config_name = run_config_name
-        self.run_config = config.get_full_run_config(
-            ExternalCLICommandType.SERVE, run_config_name
-        )
         self.template_path = template_path
         self.out_folder = out_folder
-        self.no_input = no_input
         self.auto_commit = auto_commit
         self.check_interval_seconds = check_interval_seconds
 
-        self.repo: Repo = Repo(self.out_folder)
-        self.fxt = Flexlate()
-        self.last_commit = get_last_commit_sha(self.repo)
+        self.project_repo: Repo = Repo(self.out_folder)
+        self.template_repo: Repo = Repo(
+            self.template_path, search_parent_directories=True
+        )
+        self.last_commit = get_last_commit_sha(self.project_repo)
 
     def start(self):
         while True:
-            new_commit = get_last_commit_sha(self.repo)
+            new_commit = get_last_commit_sha(self.project_repo)
             if self.last_commit == new_commit:
                 time.sleep(self.check_interval_seconds)
                 continue
@@ -142,9 +141,13 @@ class BackSyncServer:
             time.sleep(self.check_interval_seconds)
 
     def sync(self, new_commit: Optional[str] = None):
-        new_commit = new_commit or get_last_commit_sha(self.repo)
+        new_commit = new_commit or get_last_commit_sha(self.project_repo)
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         apply_diff_between_commits_to_separate_project(
-            self.repo, new_commit, self.last_commit, self.out_folder
+            self.project_repo, new_commit, self.last_commit, self.out_folder
         )
         self.last_commit = new_commit
+        if self.auto_commit:
+            commit_in_one_repo_with_another_repo_commit_message(
+                self.project_repo, self.template_repo, new_commit
+            )

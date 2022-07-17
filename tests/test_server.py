@@ -329,3 +329,4 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
 
 
 # TODO: add tests for back sync cookiecutter
+# TODO: add tests for auto-commit, need to set up temp git repos
