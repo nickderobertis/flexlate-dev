@@ -9,6 +9,7 @@ from unidiff import PatchedFile, PatchSet
 from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.gituitls import stage_and_commit_all
 from flexlate_dev.logger import log
+from flexlate_dev.server.sync import SyncServerManager, pause_sync
 from flexlate_dev.styles import INFO_STYLE, print_styled
 
 
@@ -116,12 +117,14 @@ class BackSyncServer:
         self,
         template_path: Path,
         out_folder: Path,
+        sync_manager: SyncServerManager,
         auto_commit: bool = True,
         check_interval_seconds: int = 1,
     ):
         super().__init__()
         self.template_path = template_path
         self.out_folder = out_folder
+        self.sync_manager = sync_manager
         self.auto_commit = auto_commit
         self.check_interval_seconds = check_interval_seconds
 
@@ -143,11 +146,12 @@ class BackSyncServer:
     def sync(self, new_commit: Optional[str] = None):
         new_commit = new_commit or get_last_commit_sha(self.project_repo)
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
-        apply_diff_between_commits_to_separate_project(
-            self.project_repo, new_commit, self.last_commit, self.out_folder
-        )
-        self.last_commit = new_commit
-        if self.auto_commit:
-            commit_in_one_repo_with_another_repo_commit_message(
-                self.project_repo, self.template_repo, new_commit
+        with pause_sync(self.sync_manager):
+            apply_diff_between_commits_to_separate_project(
+                self.project_repo, new_commit, self.last_commit, self.out_folder
             )
+            self.last_commit = new_commit
+            if self.auto_commit:
+                commit_in_one_repo_with_another_repo_commit_message(
+                    self.project_repo, self.template_repo, new_commit
+                )
