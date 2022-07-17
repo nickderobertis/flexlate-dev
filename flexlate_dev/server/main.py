@@ -8,7 +8,7 @@ from flexlate.template_data import TemplateData
 from watchdog.observers import Observer
 
 from flexlate_dev.config import FlexlateDevConfig, load_config
-from flexlate_dev.server.sync import ServerEventHandler
+from flexlate_dev.server.sync import ServerEventHandler, create_sync_server
 from flexlate_dev.styles import INFO_STYLE, SUCCESS_STYLE, print_styled
 
 
@@ -62,13 +62,11 @@ def run_server(
     if out_path is None:
         temp_file = tempfile.TemporaryDirectory()
         out_path = Path(temp_file.name)
-    # setting up inotify and specifying path to watch
     print_styled(
         f"Starting server, watching for changes in {template_path}. Generating output at {out_path}",
         INFO_STYLE,
     )
-    observer = Observer()
-    event_handler = ServerEventHandler(
+    with create_sync_server(
         config,
         template_path,
         out_path,
@@ -78,18 +76,14 @@ def run_server(
         save=save,
         data=data,
         folder_name=folder_name,
-    )
-    event_handler.sync_output()  # do a sync before starting watcher
-    observer.schedule(event_handler, str(template_path), recursive=True)
-    observer.start()
-    print_styled(
-        f"Running auto-reloader, updating {event_handler.out_path} with changes to {template_path}",
-        SUCCESS_STYLE,
-    )
+    ) as sync_manager:
 
-    yield
+        print_styled(
+            f"Running auto-reloader, updating {sync_manager.handler.out_path} with changes to {template_path}",
+            SUCCESS_STYLE,
+        )
 
-    observer.stop()
-    observer.join()
+        yield
+
     if temp_file is not None:
         temp_file.cleanup()

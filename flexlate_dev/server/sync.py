@@ -1,11 +1,13 @@
+import contextlib
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from flexlate import Flexlate
 from flexlate.template_data import TemplateData
 from git import Repo
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
 
 from flexlate_dev.config import DEFAULT_PROJECT_NAME, FlexlateDevConfig
 from flexlate_dev.dict_merge import merge_dicts_preferring_non_none
@@ -110,3 +112,68 @@ class ServerEventHandler(FileSystemEventHandler):
             ),
         )
         self.repo = Repo(self.out_path)
+
+
+class SyncServerManager:
+    def __init__(self, handler: ServerEventHandler):
+        self.observer = Observer()
+        self.handler = handler
+
+    def start(self):
+        self.handler.sync_output()  # do a sync before starting watcher
+        # setting up inotify and specifying path to watch
+        self.observer.schedule(
+            self.handler, str(self.handler.template_path), recursive=True
+        )
+        self.observer.start()
+        log.debug("Watching for changes in template folder in sync server manager")
+
+    def stop(self):
+        self.observer.stop()
+        self.observer.join()
+        log.debug(
+            "Stopped watching for changes in template folder in sync server manager"
+        )
+        # Recycle observer so that it can be restarted
+        self.observer = Observer()
+
+    def __enter__(self) -> "SyncServerManager":
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
+
+
+@contextlib.contextmanager
+def pause_sync(manager: SyncServerManager):
+    manager.stop()
+    yield
+    manager.start()
+
+
+@contextlib.contextmanager
+def create_sync_server(
+    config: FlexlateDevConfig,
+    template_path: Path,
+    out_root: Path,
+    run_config_name: Optional[str] = None,
+    no_input: bool = False,
+    auto_commit: bool = True,
+    save: bool = False,
+    data: Optional[TemplateData] = None,
+    folder_name: Optional[str] = None,
+) -> SyncServerManager:
+    event_handler = ServerEventHandler(
+        config,
+        template_path,
+        out_root,
+        run_config_name=run_config_name,
+        no_input=no_input,
+        auto_commit=auto_commit,
+        save=save,
+        data=data,
+        folder_name=folder_name,
+    )
+    with SyncServerManager(event_handler) as manager:
+        yield manager
