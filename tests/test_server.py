@@ -287,3 +287,45 @@ def test_server_ignores_changes_to_ignored_files(
         # The default ignore is in the .git directory, and so it should never exist.
         assert custom_ignored_expect_file.read_text() == "new content"
         assert not default_ignored_expect_file.exists()
+
+
+def test_server_back_syncs_changes_from_project_to_template_copier(
+    copier_one_template_path: Path,
+):
+    template_path = copier_one_template_path
+    folder_name = "project"
+    project_path = GENERATED_FILES_DIR / folder_name
+    expect_file = project_path / "a1.txt"
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    non_templated_template_file = template_path / "README.md"
+    non_templated_expect_file = project_path / "README.md"
+    config = FlexlateDevConfig()
+    with run_server(
+        config, None, template_path, GENERATED_FILES_DIR, no_input=True, back_sync=True
+    ):
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        templated_modified_time = expect_file.lstat().st_mtime
+        assert non_templated_expect_file.read_text() == "some existing content"
+        assert non_templated_template_file.read_text() == "some existing content"
+        non_templated_modified_time = non_templated_template_file.lstat().st_mtime
+
+        # Cause a back sync
+        non_templated_expect_file.write_text("new content")
+
+        # Check back sync
+        wait_until_file_has_content(
+            non_templated_template_file, non_templated_modified_time, "new content"
+        )
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(
+            expect_file, templated_modified_time, "new content 1"
+        )
+
+
+# TODO: add tests for back sync cookiecutter
