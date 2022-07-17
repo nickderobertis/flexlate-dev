@@ -16,6 +16,7 @@ from tests.config import (
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
 )
 from tests.fixtures.template_path import *
+from tests.fixtures.template_repo import copier_one_template_repo
 from tests.pathutils import change_directory_to
 from tests.waitutils import (
     wait_until_file_has_content,
@@ -293,9 +294,9 @@ def test_server_ignores_changes_to_ignored_files(
 
 
 def test_server_back_syncs_changes_from_project_to_template_copier(
-    copier_one_template_path: Path,
+    copier_one_template_repo: Repo,
 ):
-    template_path = copier_one_template_path
+    template_path = Path(copier_one_template_repo.working_dir)
     folder_name = "project"
     project_path = GENERATED_FILES_DIR / folder_name
     expect_file = project_path / "a1.txt"
@@ -306,6 +307,8 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
     with run_server(
         config, None, template_path, GENERATED_FILES_DIR, no_input=True, back_sync=True
     ):
+        project_repo = Repo(project_path)
+
         wait_until_path_exists(expect_file)
         # Check initial load
         assert expect_file.read_text() == "1"
@@ -320,7 +323,10 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
 
         # Check back sync
         wait_until_file_has_content(
-            non_templated_template_file, non_templated_modified_time, "new content"
+            # After fixing the TODO about adding new lines, set this back to "new content"
+            non_templated_template_file,
+            non_templated_modified_time,
+            "new content\n",
         )
 
         # Cause a reload

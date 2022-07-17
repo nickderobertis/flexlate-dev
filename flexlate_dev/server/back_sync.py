@@ -78,6 +78,8 @@ def _get_content_from_file_added_diff(diff: PatchedFile) -> str:
 
 
 def _apply_patch(diff: Union[PatchedFile, PatchSet, str], project_path: Path) -> None:
+    # TODO: for some reason the patch library will add a new line to the end of the file
+    #  even when it is not supposed to have one
     patch_set = patch.fromstring(str(diff).encode("utf-8"))
     with change_directory_to(project_path):
         patch_set.apply()
@@ -176,7 +178,7 @@ class BackSyncServer:
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         with pause_sync(self.sync_manager):
             apply_diff_between_commits_to_separate_project(
-                self.project_repo, new_commit, self.last_commit, self.template_path
+                self.project_repo, self.last_commit, new_commit, self.template_path
             )
             self.last_commit = new_commit
             if self.auto_commit:

@@ -119,8 +119,11 @@ class SyncServerManager:
         self.observer = Observer()
         self.handler = handler
 
-    def start(self):
+    def initial_start(self):
         self.handler.sync_output()  # do a sync before starting watcher
+        self.start()
+
+    def start(self):
         # setting up inotify and specifying path to watch
         self.observer.schedule(
             self.handler, str(self.handler.template_path), recursive=True
@@ -138,7 +141,7 @@ class SyncServerManager:
         self.observer = Observer()
 
     def __enter__(self) -> "SyncServerManager":
-        self.start()
+        self.initial_start()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
