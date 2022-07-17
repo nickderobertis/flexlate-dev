@@ -1,7 +1,7 @@
 import threading
 import time
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, cast
 
 import patch
 from git import Repo
@@ -30,8 +30,13 @@ def commit_in_one_repo_with_another_repo_commit_message(
     commit_sha: str,
 ) -> None:
     commit_message = repo.commit(commit_sha).message
-    print_styled(f"Committing change: {commit_message}", INFO_STYLE)
-    stage_and_commit_all(other_repo, commit_message)
+    # Convert commit message to str if it is a bytes object
+    if isinstance(commit_message, bytes):
+        message_str = commit_message.decode("utf-8")
+    else:
+        message_str = commit_message
+    print_styled(f"Committing change: {message_str}", INFO_STYLE)
+    stage_and_commit_all(other_repo, message_str)
 
 
 def _relative_path_from_diff_path(diff_path: str) -> Optional[Path]:
@@ -108,12 +113,12 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
         source_path.rename(target_path)
 
     if diff.is_added_file:
-        out_path = target_path
+        out_path = cast(Path, target_path)
         content = _get_content_from_file_added_diff(diff)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(content)
     elif diff.is_removed_file:
-        out_path = source_path
+        out_path = cast(Path, source_path)
         out_path.unlink()
     elif is_pure_rename(diff):
         rename()

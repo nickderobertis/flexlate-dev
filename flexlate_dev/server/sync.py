@@ -1,7 +1,7 @@
 import contextlib
 import os
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Iterator, Optional
 
 from flexlate import Flexlate
 from flexlate.template_data import TemplateData
@@ -166,7 +166,7 @@ def create_sync_server(
     save: bool = False,
     data: Optional[TemplateData] = None,
     folder_name: Optional[str] = None,
-) -> SyncServerManager:
+) -> Iterator[SyncServerManager]:
     event_handler = ServerEventHandler(
         config,
         template_path,
