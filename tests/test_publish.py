@@ -7,7 +7,7 @@ from flexlate_dev.config import (
     FlexlateDevConfig,
     UserDataConfiguration,
 )
-from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.publish import publish_template
 from flexlate_dev.server.main import run_server
 from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
