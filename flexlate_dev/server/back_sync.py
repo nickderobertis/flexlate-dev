@@ -7,7 +7,7 @@ from git import Repo
 from unidiff import PatchedFile, PatchSet
 
 from flexlate_dev.dirutils import change_directory_to
-from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.logger import log
 from flexlate_dev.server.sync import SyncServerManager, pause_sync
 from flexlate_dev.styles import INFO_STYLE, print_styled
