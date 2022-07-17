@@ -2,14 +2,18 @@ import contextlib
 import tempfile
 import time
 from pathlib import Path
-from typing import Optional
+from typing import Iterator, Optional
 
 from flexlate.template_data import TemplateData
 from watchdog.observers import Observer
 
 from flexlate_dev.config import FlexlateDevConfig, load_config
 from flexlate_dev.server.back_sync import BackSyncServer
-from flexlate_dev.server.sync import ServerEventHandler, create_sync_server
+from flexlate_dev.server.sync import (
+    ServerEventHandler,
+    SyncServerManager,
+    create_sync_server,
+)
 from flexlate_dev.styles import INFO_STYLE, SUCCESS_STYLE, print_styled
 
 
@@ -46,6 +50,22 @@ def serve_template(
             return
 
 
+class ServerContext:
+    def __init__(
+        self,
+        sync_manager: SyncServerManager,
+        back_sync_manager: Optional[BackSyncServer] = None,
+    ):
+        self.sync_manager = sync_manager
+        self.back_sync_manager = back_sync_manager
+
+    @property
+    def is_back_syncing(self) -> bool:
+        if self.back_sync_manager is None:
+            return False
+        return self.back_sync_manager.is_syncing
+
+
 @contextlib.contextmanager
 def run_server(
     config: FlexlateDevConfig,
@@ -60,7 +80,7 @@ def run_server(
     save: bool = False,
     data: Optional[TemplateData] = None,
     folder_name: Optional[str] = None,
-):
+) -> Iterator[ServerContext]:
     temp_file: Optional[tempfile.TemporaryDirectory] = None
     if out_path is None:
         temp_file = tempfile.TemporaryDirectory()
@@ -96,9 +116,9 @@ def run_server(
                 auto_commit=back_sync_auto_commit,
                 check_interval_seconds=back_sync_check_interval_seconds,
             ) as back_sync_manager:
-                yield
+                yield ServerContext(sync_manager, back_sync_manager)
         else:
-            yield
+            yield ServerContext(sync_manager)
 
     if temp_file is not None:
         temp_file.cleanup()

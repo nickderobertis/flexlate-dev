@@ -22,6 +22,7 @@ from tests.waitutils import (
     wait_until_file_has_content,
     wait_until_file_updates,
     wait_until_path_exists,
+    wait_until_returns_true,
 )
 
 
@@ -306,7 +307,7 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
     config = FlexlateDevConfig()
     with run_server(
         config, None, template_path, GENERATED_FILES_DIR, no_input=True, back_sync=True
-    ):
+    ) as context:
         project_repo = Repo(project_path)
 
         wait_until_path_exists(expect_file)
@@ -327,6 +328,10 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
             non_templated_template_file,
             non_templated_modified_time,
             "new content\n",
+        )
+
+        wait_until_returns_true(
+            lambda: not context.is_back_syncing, "Back sync is still running"
         )
 
         # Cause a reload

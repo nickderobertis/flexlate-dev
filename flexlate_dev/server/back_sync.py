@@ -155,6 +155,7 @@ class BackSyncServer:
         )
         self.last_commit = get_last_commit_sha(self.project_repo)
         self.thread: Optional[threading.Thread] = None
+        self.is_syncing = False
 
     def start(self):
         if self.thread is not None:
@@ -179,6 +180,13 @@ class BackSyncServer:
             time.sleep(self.check_interval_seconds)
 
     def sync(self, new_commit: Optional[str] = None):
+        self.is_syncing = True
+        try:
+            self._sync(new_commit)
+        finally:
+            self.is_syncing = False
+
+    def _sync(self, new_commit: Optional[str] = None):
         new_commit = new_commit or get_last_commit_sha(self.project_repo)
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         with pause_sync(self.sync_manager):

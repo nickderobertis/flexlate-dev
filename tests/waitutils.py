@@ -8,9 +8,7 @@ DEFAULT_TIMEOUT: Final = 5
 
 
 def wait_until_path_exists(path: Path, timeout: int = DEFAULT_TIMEOUT):
-    _wait_until_returns_true(
-        path.exists, f"Could not find path {path}", timeout=timeout
-    )
+    wait_until_returns_true(path.exists, f"Could not find path {path}", timeout=timeout)
 
 
 def wait_until_file_updates(
@@ -20,7 +18,7 @@ def wait_until_file_updates(
         new_modified_time = path.lstat().st_mtime
         return new_modified_time > modified_time
 
-    _wait_until_returns_true(
+    wait_until_returns_true(
         path_has_been_modified,
         f"{path} was not updated. Content: {path.read_text()}",
         timeout=timeout,
@@ -40,14 +38,14 @@ def wait_until_file_has_content(
         file_content = path.read_text()
         return file_content == content
 
-    _wait_until_returns_true(
+    wait_until_returns_true(
         file_has_new_content,
         f"{path} never got the expected contents. Content: {path.read_text()}. Expect content: {content}",
         timeout=timeout,
     )
 
 
-def _wait_until_returns_true(
+def wait_until_returns_true(
     exit_callback: Callable[[], bool],
     error_message: str,
     timeout: int = DEFAULT_TIMEOUT,
