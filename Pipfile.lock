@@ -277,11 +277,11 @@
         },
         "flexlate": {
             "hashes": [
-                "sha256:5e6b27dce1dddd82061711e0d2337190782908725afbbf9e89fd19425d6a839c",
-                "sha256:a4cac0b6aa4b33d0219bb19e56ffab6141014122decd096ff522cd913e51cfc5"
+                "sha256:5d242e17571b859a18c29e0098c0895b1984d5a17849bec6d4e772d025bea57d",
+                "sha256:deb662cd829ee73daaa90f5ada5659ad9b81af5b9085147b530ed45a20bd4c61"
             ],
             "index": "pypi",
-            "version": "==0.14.4"
+            "version": "==0.14.5"
         },
         "gitdb": {
             "hashes": [
@@ -656,11 +656,11 @@
         },
         "py-app-conf": {
             "hashes": [
-                "sha256:2e6aebd274070506c6ec07278a764725beb9c883fe3aab90e290d74a52240faa",
-                "sha256:4f74017797ce4abc794a0ebaecab5b2552198ef46bebec55046102a35153acab"
+                "sha256:70f739a068cb642ba939a2c9021a1ea2990b07f7a2518e3e530f19cdc25a9b58",
+                "sha256:d028779667c5a3267601c1a61c0d29ab9b05719296e36a71b259238cc5cf6a0e"
             ],
             "index": "pypi",
-            "version": "==0.5.0"
+            "version": "==1.1.0"
         },
         "pycodestyle": {
             "hashes": [
@@ -1088,7 +1088,7 @@
                 "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
                 "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==2.0.1"
         },
         "tornado": {
