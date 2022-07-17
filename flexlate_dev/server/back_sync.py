@@ -8,6 +8,7 @@ from git import Repo
 from unidiff import PatchedFile, PatchSet
 
 from flexlate_dev.dirutils import change_directory_to
+from flexlate_dev.ext_threading import PropagatingThread
 from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.logger import log
 from flexlate_dev.server.sync import SyncServerManager, pause_sync
@@ -28,8 +29,9 @@ def commit_in_one_repo_with_another_repo_commit_message(
     other_repo: Repo,
     commit_sha: str,
 ) -> None:
-    commit_message = other_repo.commit(commit_sha).message
-    stage_and_commit_all(repo, commit_message)
+    commit_message = repo.commit(commit_sha).message
+    print_styled(f"Committing change: {commit_message}", INFO_STYLE)
+    stage_and_commit_all(other_repo, commit_message)
 
 
 def _relative_path_from_diff_path(diff_path: str) -> Optional[Path]:
@@ -65,6 +67,7 @@ def apply_diff_between_commits_to_separate_project(
 
 
 def apply_diff_to_project(project_path: Path, diff: PatchSet) -> None:
+    log.debug(f"Applying to {project_path}:\n{diff}")
     for file_diff in diff:
         apply_file_diff_to_project(project_path, file_diff)
 
@@ -127,19 +130,19 @@ class BackSyncServer:
     def __init__(
         self,
         template_path: Path,
-        out_folder: Path,
+        project_folder: Path,
         sync_manager: SyncServerManager,
         auto_commit: bool = True,
         check_interval_seconds: int = 1,
     ):
         super().__init__()
         self.template_path = template_path
-        self.out_folder = out_folder
+        self.project_folder = project_folder
         self.sync_manager = sync_manager
         self.auto_commit = auto_commit
         self.check_interval_seconds = check_interval_seconds
 
-        self.project_repo: Repo = Repo(self.out_folder)
+        self.project_repo: Repo = Repo(self.project_folder)
         self.template_repo: Repo = Repo(
             self.template_path, search_parent_directories=True
         )
@@ -150,12 +153,13 @@ class BackSyncServer:
         if self.thread is not None:
             raise RuntimeError("Already started")
         # Run start_sync on a background thread
-        self.thread = threading.Thread(target=self.start_sync)
+        self.thread = PropagatingThread(target=self.start_sync, daemon=True)
         self.thread.start()
 
     def stop(self):
         if self.thread is not None:
-            self.thread.join()
+            log.debug("Killing back sync thread")
+            self.thread.join(timeout=0.1)
             self.thread = None
 
     def start_sync(self):
@@ -172,7 +176,7 @@ class BackSyncServer:
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         with pause_sync(self.sync_manager):
             apply_diff_between_commits_to_separate_project(
-                self.project_repo, new_commit, self.last_commit, self.out_folder
+                self.project_repo, new_commit, self.last_commit, self.template_path
             )
             self.last_commit = new_commit
             if self.auto_commit:

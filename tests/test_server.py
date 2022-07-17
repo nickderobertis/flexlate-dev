@@ -1,7 +1,10 @@
 import time
 from pathlib import Path
 
+from git import Repo
+
 from flexlate_dev.config import FlexlateDevConfig, UserDataConfiguration
+from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.server.main import run_server
 from flexlate_dev.user_runner import UserRunConfiguration
 from tests.config import (
@@ -313,6 +316,7 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
 
         # Cause a back sync
         non_templated_expect_file.write_text("new content")
+        stage_and_commit_all(project_repo, "Trigger back sync")
 
         # Check back sync
         wait_until_file_has_content(
