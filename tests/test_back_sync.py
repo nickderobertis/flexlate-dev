@@ -1,11 +1,17 @@
 from unidiff import PatchedFile
 
 from flexlate_dev.server.back_sync import apply_file_diff_to_project
-from tests.config import GENERATED_FILES_DIR, MODIFIED_FILE, RENAMED_AND_MODIFIED_FILE
+from tests.config import (
+    GENERATED_FILES_DIR,
+    MODIFIED_FILE,
+    RENAMED_AND_MODIFIED_FILE,
+    RENAMED_FILE,
+)
 from tests.fixtures.diff import (
     file_added_diff,
     file_modified_diff,
     file_removed_diff,
+    file_renamed_and_modified_diff,
     file_renamed_diff,
 )
 from tests.fixtures.repo import flexlate_dev_repo
@@ -37,11 +43,26 @@ def test_apply_removed_file_diff_to_project(
     assert not expect_path.exists()
 
 
-# TODO: Add test for renamed without modify
+def test_apply_renamed_file_diff_to_project(
+    file_renamed_diff, inside_generated_dir: None
+):
+    out_dir = GENERATED_FILES_DIR
+    common_path = out_dir / "flexlate_dev"
+    orig_path = common_path / "gituitls.py"
+    moved_to_path = common_path / "gitutils.py"
+    orig_file_content = RENAMED_FILE.read_text()
+    orig_path.parent.mkdir(parents=True, exist_ok=True)
+    orig_path.write_text(orig_file_content)
+    assert not moved_to_path.exists()
+
+    apply_file_diff_to_project(out_dir, file_renamed_diff)
+
+    assert not orig_path.exists()
+    assert moved_to_path.exists()
 
 
 def test_apply_renamed_and_modified_file_diff_to_project(
-    file_renamed_diff: PatchedFile, inside_generated_dir: None
+    file_renamed_and_modified_diff, inside_generated_dir: None
 ):
     out_dir = GENERATED_FILES_DIR
     common_path = out_dir / "flexlate_dev"
@@ -52,7 +73,7 @@ def test_apply_renamed_and_modified_file_diff_to_project(
     orig_path.write_text(orig_file_content)
     assert not moved_to_path.exists()
 
-    apply_file_diff_to_project(out_dir, file_renamed_diff)
+    apply_file_diff_to_project(out_dir, file_renamed_and_modified_diff)
 
     assert not orig_path.exists()
     assert moved_to_path.exists()

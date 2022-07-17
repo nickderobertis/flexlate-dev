@@ -80,6 +80,10 @@ def _apply_patch(diff: Union[PatchedFile, PatchSet, str], project_path: Path) ->
     return
 
 
+def is_pure_rename(diff: PatchedFile) -> bool:
+    return diff.is_rename and "similarity index 100%" in str(diff.patch_info)
+
+
 def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
     def project_file_path(diff_path: str) -> Optional[Path]:
         file_path = _relative_path_from_diff_path(diff_path)
@@ -93,9 +97,9 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
     target_path = project_file_path(diff.target_file)
     source_path = project_file_path(diff.source_file)
 
-    # Can have modifications and also be renamed, so handle modifications separately
-    if diff.is_modified_file:
-        _apply_patch(diff, project_path)
+    def rename():
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        source_path.rename(target_path)
 
     if diff.is_added_file:
         out_path = target_path
@@ -105,10 +109,16 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
     elif diff.is_removed_file:
         out_path = source_path
         out_path.unlink()
+    elif is_pure_rename(diff):
+        rename()
     elif diff.is_rename:
-        target_path.parent.mkdir(parents=True, exist_ok=True)
-        source_path.rename(target_path)
-    elif not diff.is_modified_file:
+        # Rename with modifications
+        rename()
+        _apply_patch(diff, project_path)
+    elif diff.is_modified_file:
+        # Modifications in place
+        _apply_patch(diff, project_path)
+    else:
         raise NotImplementedError("Unknown diff type")
 
 

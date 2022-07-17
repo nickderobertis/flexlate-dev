@@ -24,7 +24,8 @@ def _get_single_file_diff_between_commit_and_parent(
 
 ADDED_FILE_SHA: Final[str] = "941efdf4533463986e81cfcc62f129ef899bc92b"
 REMOVED_FILE_SHA: Final[str] = "3d3157a424270d295079cd29ce49f6f58b6aa616"
-RENAMED_FILE_SHA: Final[str] = "6d0b0b85b6a64ca02ddb8947c3cfddd1f64ea851"
+RENAMED_FILE_SHA: Final[str] = "c18e01f08ec8e98e1988e7266cc072a19027abb3"
+RENAMED_AND_MODIFIED_FILE_SHA: Final[str] = "6d0b0b85b6a64ca02ddb8947c3cfddd1f64ea851"
 MODIFIED_FILE_SHA: Final[str] = "cdc3b85ff0db4d9a38720d9a70010849193e4fdf"
 
 
@@ -46,7 +47,16 @@ def file_removed_diff(flexlate_dev_repo: Repo) -> PatchedFile:
 
 @pytest.fixture(scope="session")
 def file_renamed_diff(flexlate_dev_repo: Repo) -> PatchedFile:
-    patch_set = _get_diff_between_commit_and_parent(flexlate_dev_repo, RENAMED_FILE_SHA)
+    return _get_single_file_diff_between_commit_and_parent(
+        flexlate_dev_repo, RENAMED_FILE_SHA
+    )
+
+
+@pytest.fixture(scope="session")
+def file_renamed_and_modified_diff(flexlate_dev_repo: Repo) -> PatchedFile:
+    patch_set = _get_diff_between_commit_and_parent(
+        flexlate_dev_repo, RENAMED_AND_MODIFIED_FILE_SHA
+    )
     for patch in patch_set:
         if patch.is_rename:
             return patch
