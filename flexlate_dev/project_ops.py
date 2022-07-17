@@ -18,7 +18,7 @@ from flexlate_dev.dirutils import (
     change_directory_to,
     directory_has_files_or_directories,
 )
-from flexlate_dev.gituitls import stage_and_commit_all
+from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.render import create_jinja_environment
 from flexlate_dev.styles import ACTION_REQUIRED_STYLE, INFO_STYLE, print_styled
 from flexlate_dev.user_runner import RunnerHookType, run_user_hook
