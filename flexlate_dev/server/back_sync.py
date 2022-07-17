@@ -12,6 +12,7 @@ from flexlate_dev.config import FlexlateDevConfig
 from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.logger import log
+from flexlate_dev.styles import INFO_STYLE, print_styled
 
 
 def get_last_commit_sha(repo: Repo) -> str:
@@ -98,7 +99,6 @@ def apply_file_diff_to_project(project_path: Path, diff: PatchedFile) -> None:
         out_path = source_path
         out_path.unlink()
     elif diff.is_rename:
-        # TODO: rename with modifications?
         target_path.parent.mkdir(parents=True, exist_ok=True)
         source_path.rename(target_path)
     elif not diff.is_modified_file:
@@ -143,7 +143,7 @@ class BackSyncServer:
 
     def sync(self, new_commit: Optional[str] = None):
         new_commit = new_commit or get_last_commit_sha(self.repo)
-        log.info(f"Back-syncing to commit {new_commit}")
+        print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         apply_diff_between_commits_to_separate_project(
             self.repo, new_commit, self.last_commit, self.out_folder
         )
