@@ -8,6 +8,7 @@ from flexlate.template_data import TemplateData
 from watchdog.observers import Observer
 
 from flexlate_dev.config import FlexlateDevConfig, load_config
+from flexlate_dev.server.back_sync import BackSyncServer
 from flexlate_dev.server.sync import ServerEventHandler, create_sync_server
 from flexlate_dev.styles import INFO_STYLE, SUCCESS_STYLE, print_styled
 
@@ -54,6 +55,8 @@ def run_server(
     back_sync: bool = False,
     no_input: bool = False,
     auto_commit: bool = True,
+    back_sync_auto_commit: bool = True,
+    back_sync_check_interval_seconds: int = 1,
     save: bool = False,
     data: Optional[TemplateData] = None,
     folder_name: Optional[str] = None,
@@ -78,12 +81,24 @@ def run_server(
         folder_name=folder_name,
     ) as sync_manager:
 
+        out_folder = sync_manager.handler.out_path
+
         print_styled(
-            f"Running auto-reloader, updating {sync_manager.handler.out_path} with changes to {template_path}",
+            f"Running auto-reloader, updating {out_folder} with changes to {template_path}",
             SUCCESS_STYLE,
         )
 
-        yield
+        if back_sync:
+            with BackSyncServer(
+                template_path,
+                out_folder,
+                sync_manager,
+                auto_commit=back_sync_auto_commit,
+                check_interval_seconds=back_sync_check_interval_seconds,
+            ) as back_sync_manager:
+                yield
+        else:
+            yield
 
     if temp_file is not None:
         temp_file.cleanup()

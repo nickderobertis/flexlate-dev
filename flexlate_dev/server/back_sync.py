@@ -1,3 +1,4 @@
+import threading
 import time
 from pathlib import Path
 from typing import Optional, Union
@@ -143,8 +144,21 @@ class BackSyncServer:
             self.template_path, search_parent_directories=True
         )
         self.last_commit = get_last_commit_sha(self.project_repo)
+        self.thread: Optional[threading.Thread] = None
 
     def start(self):
+        if self.thread is not None:
+            raise RuntimeError("Already started")
+        # Run start_sync on a background thread
+        self.thread = threading.Thread(target=self.start_sync)
+        self.thread.start()
+
+    def stop(self):
+        if self.thread is not None:
+            self.thread.join()
+            self.thread = None
+
+    def start_sync(self):
         while True:
             new_commit = get_last_commit_sha(self.project_repo)
             if self.last_commit == new_commit:
@@ -165,3 +179,10 @@ class BackSyncServer:
                 commit_in_one_repo_with_another_repo_commit_message(
                     self.project_repo, self.template_repo, new_commit
                 )
+
+    def __enter__(self) -> "BackSyncServer":
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
