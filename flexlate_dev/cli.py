@@ -1,9 +1,8 @@
-import ast
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import typer
-from flexlate.template_data import TemplateData
+from flexlate.get_version import get_flexlate_version
 
 from flexlate_dev import get_version
 from flexlate_dev.cli_validators import parse_data_from_str
@@ -63,7 +62,7 @@ def pre_execute(
     # Support printing version and then existing with dfxt --version
     if version:
         version_number = get_version.get_flexlate_dev_version()
-        flexlate_version = get_version.get_flexlate_version()
+        flexlate_version = get_flexlate_version()
         message = "\n".join(
             [
                 f"flexlate-dev: {version_number}",

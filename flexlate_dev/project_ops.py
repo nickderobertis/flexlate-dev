@@ -8,16 +8,12 @@ from flexlate.config import FlexlateConfig
 from flexlate.template_data import TemplateData
 from git import Repo
 
-from flexlate_dev.command_runner import run_command_or_command_strs
 from flexlate_dev.config import (
     DEFAULT_PROJECT_NAME,
     FlexlateDevConfig,
     FullRunConfiguration,
 )
-from flexlate_dev.dirutils import (
-    change_directory_to,
-    directory_has_files_or_directories,
-)
+from flexlate_dev.dirutils import directory_has_files_or_directories
 from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.render import create_jinja_environment
 from flexlate_dev.styles import ACTION_REQUIRED_STYLE, INFO_STYLE, print_styled

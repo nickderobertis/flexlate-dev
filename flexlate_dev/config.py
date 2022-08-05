@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, Final, List, Optional, Union
+from typing import Any, Dict, Final, List, Optional, Union
 
 from flexlate.template_data import TemplateData
 from pyappconf import AppConfig, BaseConfig, ConfigFormats

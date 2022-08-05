@@ -1,7 +1,7 @@
 import contextlib
 import os
 from pathlib import Path
-from typing import Callable, Iterator, Optional
+from typing import Iterator, Optional
 
 from flexlate import Flexlate
 from flexlate.template_data import TemplateData

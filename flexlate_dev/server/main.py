@@ -5,15 +5,10 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 from flexlate.template_data import TemplateData
-from watchdog.observers import Observer
 
 from flexlate_dev.config import FlexlateDevConfig, load_config
 from flexlate_dev.server.back_sync import BackSyncServer
-from flexlate_dev.server.sync import (
-    ServerEventHandler,
-    SyncServerManager,
-    create_sync_server,
-)
+from flexlate_dev.server.sync import SyncServerManager, create_sync_server
 from flexlate_dev.styles import INFO_STYLE, SUCCESS_STYLE, print_styled
 
 
