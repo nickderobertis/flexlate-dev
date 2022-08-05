@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "husky install && pipx install black || true && pipx install isort || true"
+    "prepare": "husky install && cat global-requirements.in | xargs -n1 pipx install || true"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +15,14 @@
     "lint-staged": "^12.4.1"
   },
   "lint-staged": {
-    "*.py": "pipenv run nox -s format_files -- "
+    "*.py": [
+      "just format ",
+      "just strip "
+    ],
+    "lint-requirements.in": "mvenv compile lint ",
+    "test-requirements.in": "mvenv compile test ",
+    "docs-requirements.in": "mvenv compile docs ",
+    "dev-requirements.in": "mvenv compile dev ",
+    "global-requirements.in": "mvenv compile global "
   }
 }
