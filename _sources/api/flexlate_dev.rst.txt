@@ -6,6 +6,13 @@ flexlate\_dev package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+
+   flexlate_dev.server
+
 Submodules
 ----------
 
@@ -81,6 +88,14 @@ flexlate\_dev.ext\_subprocess module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.ext\_threading module
+-----------------------------------
+
+.. automodule:: flexlate_dev.ext_threading
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.external\_command\_type module
 --------------------------------------------
 
@@ -97,10 +112,10 @@ flexlate\_dev.get\_version module
    :undoc-members:
    :show-inheritance:
 
-flexlate\_dev.gituitls module
+flexlate\_dev.gitutils module
 -----------------------------
 
-.. automodule:: flexlate_dev.gituitls
+.. automodule:: flexlate_dev.gitutils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -141,14 +156,6 @@ flexlate\_dev.render module
 ---------------------------
 
 .. automodule:: flexlate_dev.render
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-flexlate\_dev.server module
----------------------------
-
-.. automodule:: flexlate_dev.server
    :members:
    :undoc-members:
    :show-inheritance:

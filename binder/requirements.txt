@@ -1,6 +1,8 @@
-flexlate>=0.14.0
-watchdog
+unidiff
 flexlate-dev
-py-app-conf>=1.1.0
 typer
+flexlate>=0.14.0
+py-app-conf>=1.1.0
+patch
 rich
+watchdog

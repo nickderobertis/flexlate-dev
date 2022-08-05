@@ -1,0 +1,35 @@
+flexlate\_dev.server package
+============================
+
+.. automodule:: flexlate_dev.server
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+flexlate\_dev.server.back\_sync module
+--------------------------------------
+
+.. automodule:: flexlate_dev.server.back_sync
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.server.main module
+--------------------------------
+
+.. automodule:: flexlate_dev.server.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+flexlate\_dev.server.sync module
+--------------------------------
+
+.. automodule:: flexlate_dev.server.sync
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
