@@ -9,10 +9,12 @@ from unidiff import PatchedFile, PatchSet
 
 from flexlate_dev.dirutils import change_directory_to
 from flexlate_dev.ext_flexlate import (
+    get_flexlate_branch_names_from_project_path,
+    get_non_flexlate_commits_between_commits,
     get_render_relative_root_in_template_from_project_path,
 )
 from flexlate_dev.ext_threading import PropagatingThread
-from flexlate_dev.gitutils import stage_and_commit_all
+from flexlate_dev.gitutils import stage_and_commit_all, temporary_branch_from_commits
 from flexlate_dev.logger import log
 from flexlate_dev.server.sync import SyncServerManager, pause_sync
 from flexlate_dev.styles import INFO_STYLE, print_styled
@@ -166,6 +168,9 @@ class BackSyncServer:
                 self.project_folder
             )
         )
+        self.branch_names = get_flexlate_branch_names_from_project_path(
+            self.project_folder
+        )
 
     def start(self):
         if self.thread is not None:
@@ -186,13 +191,14 @@ class BackSyncServer:
             if self.last_commit == new_commit:
                 self._sleep()
                 continue
-            self.sync(new_commit)
+            self.sync()
+            self.last_commit = new_commit
             self._sleep()
 
-    def sync(self, new_commit: Optional[str] = None):
+    def sync(self):
         self.is_syncing = True
         try:
-            self._sync(new_commit)
+            self._sync()
         finally:
             self.is_syncing = False
 
@@ -201,21 +207,40 @@ class BackSyncServer:
         time.sleep(self.check_interval_seconds)
         self.is_sleeping = False
 
-    def _sync(self, new_commit: Optional[str] = None):
-        new_commit = new_commit or get_last_commit_sha(self.project_repo)
-        print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
+    def _sync(self):
+        last_commit = self.project_repo.commit(self.last_commit)
+        new_commit = self.project_repo.commit(get_last_commit_sha(self.project_repo))
+        new_commits = get_non_flexlate_commits_between_commits(
+            self.project_repo,
+            last_commit,
+            new_commit,
+            self.branch_names.merged_branch_name,
+            self.branch_names.template_branch_name,
+        )
+        if not new_commits:
+            log.debug("Skipping back-sync as there are no non-flexlate commits")
+            return
+        print_styled(
+            f"Back-syncing commits: {[f'{commit.hexsha}: {commit.message}' for commit in new_commits]}",
+            INFO_STYLE,
+        )
         with pause_sync(self.sync_manager):
-            apply_diff_between_commits_to_separate_project(
-                self.project_repo,
-                self.last_commit,
-                new_commit,
-                self.template_output_path,
-            )
-            self.last_commit = new_commit
-            if self.auto_commit:
-                commit_in_one_repo_with_another_repo_commit_message(
-                    self.project_repo, self.template_repo, new_commit
-                )
+            with temporary_branch_from_commits(
+                self.project_repo, last_commit, new_commits
+            ) as branch_info:
+                last_commit_sha = self.last_commit
+                for new_commit_sha in branch_info.commit_shas:
+                    apply_diff_between_commits_to_separate_project(
+                        self.project_repo,
+                        last_commit_sha,
+                        new_commit_sha,
+                        self.template_output_path,
+                    )
+                    if self.auto_commit:
+                        commit_in_one_repo_with_another_repo_commit_message(
+                            self.project_repo, self.template_repo, new_commit_sha
+                        )
+                    last_commit_sha = new_commit_sha
 
     def __enter__(self) -> "BackSyncServer":
         self.start()
