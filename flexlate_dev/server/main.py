@@ -60,6 +60,12 @@ class ServerContext:
             return False
         return self.back_sync_manager.is_syncing
 
+    @property
+    def back_sync_is_sleeping(self) -> bool:
+        if self.back_sync_manager is None:
+            return False
+        return self.back_sync_manager.is_sleeping
+
 
 @contextlib.contextmanager
 def run_server(

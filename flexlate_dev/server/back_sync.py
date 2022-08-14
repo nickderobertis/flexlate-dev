@@ -159,6 +159,7 @@ class BackSyncServer:
         self.last_commit = get_last_commit_sha(self.project_repo)
         self.thread: Optional[threading.Thread] = None
         self.is_syncing = False
+        self.is_sleeping = False
         self.template_output_path = (
             self.template_path
             / get_render_relative_root_in_template_from_project_path(
@@ -183,10 +184,10 @@ class BackSyncServer:
         while True:
             new_commit = get_last_commit_sha(self.project_repo)
             if self.last_commit == new_commit:
-                time.sleep(self.check_interval_seconds)
+                self._sleep()
                 continue
             self.sync(new_commit)
-            time.sleep(self.check_interval_seconds)
+            self._sleep()
 
     def sync(self, new_commit: Optional[str] = None):
         self.is_syncing = True
@@ -194,6 +195,11 @@ class BackSyncServer:
             self._sync(new_commit)
         finally:
             self.is_syncing = False
+
+    def _sleep(self):
+        self.is_sleeping = True
+        time.sleep(self.check_interval_seconds)
+        self.is_sleeping = False
 
     def _sync(self, new_commit: Optional[str] = None):
         new_commit = new_commit or get_last_commit_sha(self.project_repo)

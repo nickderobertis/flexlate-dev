@@ -393,5 +393,55 @@ def test_server_back_syncs_changes_from_project_to_template_with_subdir_copier(
         )
 
 
+def test_server_does_not_back_sync_a_forward_sync_change(
+    copier_one_template_repo: Repo,
+):
+    template_path = Path(copier_one_template_repo.working_dir)
+    folder_name = "project"
+    project_path = GENERATED_FILES_DIR / folder_name
+    expect_file = project_path / "a1.txt"
+    non_templated_template_file = template_path / "README.md"
+    non_templated_expect_file = project_path / "README.md"
+    config = FlexlateDevConfig()
+    with run_server(
+        config, None, template_path, GENERATED_FILES_DIR, no_input=True, back_sync=True
+    ) as context:
+        template_repo = Repo(template_path)
+
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        assert non_templated_expect_file.read_text() == "some existing content"
+        assert non_templated_template_file.read_text() == "some existing content"
+        non_templated_expect_modified_time = non_templated_expect_file.lstat().st_mtime
+
+        # Check the most recent commit on the template repo. It should not change after forward sync
+        last_commit_sha = template_repo.head.commit.hexsha
+
+        # Cause a forward-sync
+        non_templated_template_file.write_text("new content")
+
+        # Check forward sync
+        wait_until_file_has_content(
+            non_templated_expect_file,
+            non_templated_expect_modified_time,
+            "new content",
+        )
+
+        # Wait for back-sync to finish sleeping, so it has a chance to run
+        wait_until_returns_true(
+            lambda: not context.back_sync_is_sleeping, "Back sync is still sleeping"
+        )
+        # Wait another half second so that back-sync definitely would have run if it was going to
+        time.sleep(0.5)
+        # Give time for potential back-sync to complete
+        wait_until_returns_true(
+            lambda: not context.is_back_syncing, "Back sync is still running"
+        )
+
+        # Last commit on template repo should not have changed after back-sync
+        assert template_repo.head.commit.hexsha == last_commit_sha
+
+
 # TODO: add tests for back sync cookiecutter
 # TODO: add tests for auto-commit, need to set up temp git repos
