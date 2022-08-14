@@ -8,6 +8,9 @@ from git import Repo
 from unidiff import PatchedFile, PatchSet
 
 from flexlate_dev.dirutils import change_directory_to
+from flexlate_dev.ext_flexlate import (
+    get_render_relative_root_in_template_from_project_path,
+)
 from flexlate_dev.ext_threading import PropagatingThread
 from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.logger import log
@@ -156,6 +159,12 @@ class BackSyncServer:
         self.last_commit = get_last_commit_sha(self.project_repo)
         self.thread: Optional[threading.Thread] = None
         self.is_syncing = False
+        self.template_output_path = (
+            self.template_path
+            / get_render_relative_root_in_template_from_project_path(
+                self.project_folder
+            )
+        )
 
     def start(self):
         if self.thread is not None:
@@ -191,7 +200,10 @@ class BackSyncServer:
         print_styled(f"Back-syncing to commit {new_commit}", INFO_STYLE)
         with pause_sync(self.sync_manager):
             apply_diff_between_commits_to_separate_project(
-                self.project_repo, self.last_commit, new_commit, self.template_path
+                self.project_repo,
+                self.last_commit,
+                new_commit,
+                self.template_output_path,
             )
             self.last_commit = new_commit
             if self.auto_commit:
