@@ -80,6 +80,14 @@ flexlate\_dev.exc module
    :undoc-members:
    :show-inheritance:
 
+flexlate\_dev.ext\_flexlate module
+----------------------------------
+
+.. automodule:: flexlate_dev.ext_flexlate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 flexlate\_dev.ext\_subprocess module
 ------------------------------------
 
