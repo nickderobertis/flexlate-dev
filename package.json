@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "just": "./scripts/bin/just",
     "prepare": "husky install && cat global-requirements.in | xargs -n1 pipx install || true"
   },
   "author": "",
@@ -16,8 +17,8 @@
   },
   "lint-staged": {
     "*.py": [
-      "just format ",
-      "just strip "
+      "npm run just format ",
+      "npm run just strip "
     ],
     "lint-requirements.in": "mvenv compile lint ",
     "test-requirements.in": "mvenv compile test ",

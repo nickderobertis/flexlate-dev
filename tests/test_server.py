@@ -16,7 +16,7 @@ from tests.config import (
     SEPARATE_PUBLISH_SERVE_CONFIG_PATH,
 )
 from tests.fixtures.template_path import *
-from tests.fixtures.template_repo import copier_one_template_repo
+from tests.fixtures.template_repo import *
 from tests.pathutils import change_directory_to
 from tests.waitutils import (
     wait_until_file_has_content,
@@ -303,6 +303,56 @@ def test_server_back_syncs_changes_from_project_to_template_copier(
     expect_file = project_path / "a1.txt"
     template_file = template_path / "{{ q1 }}.txt.jinja"
     non_templated_template_file = template_path / "README.md"
+    non_templated_expect_file = project_path / "README.md"
+    config = FlexlateDevConfig()
+    with run_server(
+        config, None, template_path, GENERATED_FILES_DIR, no_input=True, back_sync=True
+    ) as context:
+        project_repo = Repo(project_path)
+
+        wait_until_path_exists(expect_file)
+        # Check initial load
+        assert expect_file.read_text() == "1"
+        templated_modified_time = expect_file.lstat().st_mtime
+        assert non_templated_expect_file.read_text() == "some existing content"
+        assert non_templated_template_file.read_text() == "some existing content"
+        non_templated_modified_time = non_templated_template_file.lstat().st_mtime
+
+        # Cause a back sync
+        non_templated_expect_file.write_text("new content")
+        stage_and_commit_all(project_repo, "Trigger back sync")
+
+        # Check back sync
+        wait_until_file_has_content(
+            # After fixing the TODO about adding new lines, set this back to "new content"
+            non_templated_template_file,
+            non_templated_modified_time,
+            "new content\n",
+        )
+
+        wait_until_returns_true(
+            lambda: not context.is_back_syncing, "Back sync is still running"
+        )
+
+        # Cause a reload
+        template_file.write_text("new content {{ q2 }}")
+
+        # Check reload
+        wait_until_file_has_content(
+            expect_file, templated_modified_time, "new content 1"
+        )
+
+
+def test_server_back_syncs_changes_from_project_to_template_with_subdir_copier(
+    copier_output_subdir_template_repo: Repo,
+):
+    template_path = Path(copier_output_subdir_template_repo.working_dir)
+    template_output_path = template_path / "output"
+    folder_name = "project"
+    project_path = GENERATED_FILES_DIR / folder_name
+    expect_file = project_path / "a1.txt"
+    template_file = template_output_path / "{{ q1 }}.txt.jinja"
+    non_templated_template_file = template_output_path / "README.md"
     non_templated_expect_file = project_path / "README.md"
     config = FlexlateDevConfig()
     with run_server(
