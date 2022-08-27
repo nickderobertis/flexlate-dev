@@ -22,6 +22,7 @@ jobs:
       - uses: ./.github/actions/install-dependencies
         with:
           python-version: ${{ matrix.python-version }}
+          gh-token: ${{ secrets.GH_TOKEN }}
       - uses: ./.github/actions/lint-and-test
 
   collectTODO:
@@ -57,6 +58,7 @@ jobs:
         if: steps.semantic-release.outputs.new_release_published == 'true'
         with:
           python-version: ${{ matrix.python-version }}
+          gh-token: ${{ secrets.GH_TOKEN }}
       - name: Deploy docs
         if: steps.semantic-release.outputs.new_release_published == 'true'
         uses: ./.github/actions/build-and-deploy-docs
@@ -75,6 +77,7 @@ jobs:
       - uses: ./.github/actions/install-dependencies
         with:
           python-version: ${{ matrix.python-version }}
+          gh-token: ${{ secrets.GH_TOKEN }}
       - name: Run coverage and upload to Codecov.io
         uses: ./.github/actions/test-coverage
         with:

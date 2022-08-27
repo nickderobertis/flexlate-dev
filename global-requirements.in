@@ -1,5 +1,5 @@
 autoflake
 black
 isort
-pip-tools
-virtualenv
+multivenv
+twine

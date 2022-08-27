@@ -43,16 +43,19 @@ upgrades will often have breaking changes.
 
 ## Developing
 
-First ensure that you have `pipx` installed, if not, install it with `pip install pipx`.
+First, you need a couple global dependencies installed, see their documentation for details:
+- [pipx](https://pypa.github.io/pipx/installation/)
+- [direnv](https://direnv.net/docs/installation.html)
 
-Then clone the repo and run `npm install` and `pipenv sync`. Run `pipenv shell`
-to use the virtual environment. Make your changes and then run `nox` to run formatting,
+Then clone the repo and run `npm install` and `mvenv sync dev`. Make your changes and then run `just` to run formatting,
 linting, and tests.
 
-Develop documentation by running `nox -s docs` to start up a dev server.
+Develop documentation by running `just docs` to start up a dev server.
 
-To run tests only, run `nox -s test`. You can pass additional arguments to pytest
-by adding them after `--`, e.g. `nox -s test -- -k test_something`.
+To run tests only, run `just test`. You can pass additional arguments to pytest,
+e.g. `just test -k test_something`.
+
+Prior to committing, you can run `just` with no arguments to run all the checks.
 
 ## Author
 

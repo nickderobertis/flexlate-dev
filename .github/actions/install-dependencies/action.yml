@@ -4,47 +4,38 @@ inputs:
   python-version:
     required: true
     description: "The Python version to install dependencies for."
+  gh-token:
+    required: true
+    description: "The GitHub token to use for authentication."
 
 runs:
   using: composite
   steps:
-    - name: Install pipenv
-      shell: bash
-      run: pipx install pipenv
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        cache: pipenv
-    - uses: actions/cache@v3
-      name: Cache global dependencies
-      with:
-        path: ${{ env.pythonLocation }}
-        key: ${{ env.pythonLocation }}-${{ hashFiles('*-requirements.txt') }}
-    - name: Get Venvs Path
-      id: get-venv-path
-      shell: python
+    - name: Install Multivenv
+      shell: bash
+      run: pip install multivenv
+    - name: Install Just command runner
+      uses: extractions/setup-just@v1
+      env:
+        GITHUB_TOKEN: ${{ inputs.gh-token }}
+    - id: get-requirements-path
+      shell: bash
       run: |
-        from pathlib import Path
-        home = Path("~").expanduser()
-        venv_path = home / ".venvs"
-        print(f"::set-output name=venv-path::{venv_path}")
+        reqs_extension=$(python reqs_extension.py)
+        echo "::set-output name=requirements-extension::$reqs_extension"
+        echo "Will cache requirements files with extension $reqs_extension"
     - uses: actions/cache@v3
       id: cache-venvs
       name: Cache venvs
       with:
-        path: ${{ steps.get-venv-path.outputs.venv-path }}
-        key: ${{ env.pythonLocation }}-venvs-${{ hashFiles('*-requirements.txt') }}
-    - name: Install main dependencies
-      shell: bash
-      run: |
-        pipenv --python ${{ matrix.python-version }} sync
-    - name: Install global dependencies
-      shell: bash
-      run: |
-        pip install -r global-requirements.txt
+        path: venvs
+        key: ${{ env.pythonLocation }}-venvs-v2-${{ hashFiles(format('requirements/*-requirements{0}.txt', steps.get-requirements-path.outputs.requirements-extension)) }}
     - name: Create venvs
       shell: bash
       if: steps.cache-venvs.outputs.cache-hit != 'true'
       run: |
-        pipenv run nox -s venv -- create lint
+        mvenv sync

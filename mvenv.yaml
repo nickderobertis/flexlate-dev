@@ -1,0 +1,28 @@
+venv_folder: venvs
+venv_names: null
+venvs:
+  lint:
+    requirements_out: requirements/lint-requirements.txt
+  global:
+    requirements_out: requirements/global-requirements.txt
+  test:
+    requirements_out: requirements/test-requirements.txt
+    post_sync: pip install -e .
+    auto_sync_changed:
+      - conf.py
+  dev:
+    requirements_out: requirements/dev-requirements.txt
+    post_sync: pip install -e .
+    auto_sync_changed:
+      - conf.py
+  docs:
+    requirements_out: requirements/docs-requirements.txt
+targets:
+  platforms:
+    - windows
+    - linux
+    - macos
+  versions:
+    - "3.8"
+    - "3.9"
+    - "3.10"
