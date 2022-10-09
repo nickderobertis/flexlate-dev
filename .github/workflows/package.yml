@@ -43,7 +43,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies to build package
-        run: pip install --upgrade --upgrade-strategy eager setuptools wheel twine
+        run: |
+          # Fixes openSSL error when using setuptools
+          pip install pyOpenSSL --upgrade
+          pip install --upgrade --upgrade-strategy eager setuptools wheel twine
       - name: Semantic Release
         id: semantic-release
         uses: cycjimmy/semantic-release-action@v3

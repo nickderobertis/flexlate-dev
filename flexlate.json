@@ -4,7 +4,7 @@
       "name": "copier-pypi-sphinx-flexlate",
       "path": "https://github.com/nickderobertis/copier-pypi-sphinx-flexlate",
       "type": "copier",
-      "version": "4d479c59cf0b4140c44487e47e612de302016990",
+      "version": "e28bb5e7c92790ead4f2d238cb04edfc1463f180",
       "git_url": "https://github.com/nickderobertis/copier-pypi-sphinx-flexlate",
       "target_version": null,
       "render_relative_root_in_output": ".",
@@ -43,7 +43,7 @@
         "logo_url": "",
         "install_packages": ""
       },
-      "version": "4d479c59cf0b4140c44487e47e612de302016990",
+      "version": "e28bb5e7c92790ead4f2d238cb04edfc1463f180",
       "add_mode": "local",
       "root": "."
     },
