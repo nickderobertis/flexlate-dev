@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flexlate-dev"
-version = "0.21.0"
+version = "0.22.0"
 description = "Development tools for template authors using Flexlate"
 authors = ["Nick DeRobertis <derobertis.nick@gmail.com>"]
 readme = "README.md"

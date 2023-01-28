@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.0](https://github.com/nickderobertis/flexlate-dev/compare/v0.21.0...v0.22.0) (2023-01-28)
+
+
+### Features
+
+* Add context to template for commands ([34a6672](https://github.com/nickderobertis/flexlate-dev/commit/34a66729a3a33732617ca0dd715377286adc8f97))
+
 ## [0.21.0](https://github.com/nickderobertis/flexlate-dev/compare/v0.20.0...v0.21.0) (2023-01-28)
 
 
