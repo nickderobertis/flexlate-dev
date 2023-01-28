@@ -8,28 +8,11 @@ on:
       - "README.md"
     branches:
       - master
+  release:
+    types: [released]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [3.8]
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: ${{ matrix.python-version }}
-          gh-token: ${{ secrets.GH_TOKEN }}
-      - uses: ./.github/actions/lint-and-test
-
   deploy:
-    needs: test
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
@@ -45,21 +28,3 @@ jobs:
       - uses: ./.github/actions/build-and-deploy-docs
         with:
           gh-token: ${{ secrets.GH_TOKEN }}
-
-  coverage:
-    needs: deploy
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [3.8]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/install-dependencies
-        with:
-          python-version: ${{ matrix.python-version }}
-          gh-token: ${{ secrets.GH_TOKEN }}
-      - name: Run coverage and upload to Codecov.io
-        uses: ./.github/actions/test-coverage
-        with:
-          codecov-token: ${{ secrets.CODECOV_TOKEN }}

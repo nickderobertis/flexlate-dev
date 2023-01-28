@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "flexlate-dev-docs"
+description = "Documentation building environment for flexlate-dev"
+version = "1.0.0"
+authors = ["Nick DeRobertis <derobertis.nick@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8"
+flexlate-dev = {path = "../..", develop = true}
+sphinx = "*"
+sphinx-autobuild = "*"
+sphinx-autodoc-typehints = "*"
+sphinxcontrib-fulltoc = "*"
+sphinx-paramlinks = "*"
+sphinx-gallery = "*"
+sphinx-copybutton = "*"
+pypandoc = "*"
+myst-parser = "*"
+sphinx-material = "*"
