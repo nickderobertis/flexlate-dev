@@ -245,6 +245,9 @@ def test_publish_creates_output_with_templated_commands(copier_one_template_path
     assert (project_path / "2.txt").exists()
     assert (project_path / "my-data.txt").exists()
 
+    context_path_result = (project_path / "context_path.txt").read_text().strip()
+    assert context_path_result == str(template_path.absolute())
+
 
 def test_publish_pre_check_can_alter_whether_init_or_update(
     copier_one_template_path: Path,

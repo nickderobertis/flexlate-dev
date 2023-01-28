@@ -16,6 +16,7 @@ from flexlate_dev.external_command_type import ExternalCLICommandType
 from flexlate_dev.ignore import IgnoreSpecification
 from flexlate_dev.user_command import UserCommand
 from flexlate_dev.user_runner import (
+    CommandContext,
     RunConfiguration,
     UserRootRunConfiguration,
     UserRunConfiguration,
@@ -63,9 +64,11 @@ class FullRunConfiguration:
     def __post_init__(self):
         self._ignore_spec = IgnoreSpecification(ignore_list=self._use_ignore)
 
-    def to_jinja_data(self) -> Dict[str, Any]:
+    def to_jinja_data(self, context: CommandContext) -> Dict[str, Any]:
         return dict(
-            config=self.config.dict(), data=self.data.dict() if self.data else {}
+            config=self.config.dict(),
+            data=self.data.dict() if self.data else {},
+            context=context.dict(),
         )
 
     @property

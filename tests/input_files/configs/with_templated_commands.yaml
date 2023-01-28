@@ -25,3 +25,4 @@ run_configs:
     post_init:
     - run: touch {{ data.data.q2 }}.txt
     - run: touch {{ config.data_name }}.txt
+    - run: echo '{{ context.paths.template_root }}' > context_path.txt

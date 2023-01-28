@@ -5,7 +5,7 @@ from flexlate_dev.config import (
 )
 from flexlate_dev.user_command import UserCommand
 from flexlate_dev.user_runner import UserRootRunConfiguration, UserRunConfiguration
-from tests.config import GENERATED_FILES_DIR, INPUT_CONFIGS_DIR
+from tests.config import INPUT_CONFIGS_DIR
 
 
 def gen_config_with_user_commands():
@@ -147,8 +147,15 @@ def gen_config_with_templated_commands():
     data_config = UserDataConfiguration(data=dict(q1="a1", q2=2), folder_name="a")
     data_templated_command = UserCommand(run="touch {{ data.data.q2 }}.txt")
     config_templated_command = UserCommand(run="touch {{ config.data_name }}.txt")
+    context_templated_command = UserCommand(
+        run="echo '{{ context.paths.template_root }}' > context_path.txt"
+    )
     run_config = UserRootRunConfiguration(
-        post_init=[data_templated_command, config_templated_command],
+        post_init=[
+            data_templated_command,
+            config_templated_command,
+            context_templated_command,
+        ],
         data_name="my-data",
     )
     run_configs = {"my-run-config": run_config, **create_default_run_configs()}

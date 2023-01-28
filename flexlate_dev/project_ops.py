@@ -14,10 +14,11 @@ from flexlate_dev.config import (
     FullRunConfiguration,
 )
 from flexlate_dev.dirutils import directory_has_files_or_directories
+from flexlate_dev.ext_flexlate import get_template_path_from_project_path
 from flexlate_dev.gitutils import stage_and_commit_all
 from flexlate_dev.render import create_jinja_environment
 from flexlate_dev.styles import ACTION_REQUIRED_STYLE, INFO_STYLE, print_styled
-from flexlate_dev.user_runner import RunnerHookType, run_user_hook
+from flexlate_dev.user_runner import CommandContext, RunnerHookType, run_user_hook
 
 fxt = Flexlate()
 
@@ -64,7 +65,19 @@ def update_or_initialize_project_get_folder(
     out_path = out_root / folder
     if not out_path.exists():
         out_path.mkdir()
-    run_user_hook(RunnerHookType.PRE_CHECK, out_path, run_config, config, jinja_env)
+
+    context = CommandContext.create(
+        template_root=template_path,
+        out_root=out_root,
+        no_input=no_input,
+        save=save,
+        abort_on_conflict=abort_on_conflict,
+        auto_commit=auto_commit,
+    )
+    run_user_hook(
+        RunnerHookType.PRE_CHECK, out_path, run_config, config, jinja_env, context
+    )
+
     if out_path.exists() and directory_has_files_or_directories(out_path):
         print_styled(f"{out_path} exists, updating project", INFO_STYLE)
         update_project(
@@ -106,7 +119,16 @@ def initialize_project_get_folder(
         default_folder_name=default_folder_name,
     )
     out_path = out_root / folder
-    run_user_hook(RunnerHookType.POST_INIT, out_path, run_config, config, jinja_env)
+
+    context = CommandContext.create(
+        template_root=template_path,
+        out_root=out_root,
+        no_input=no_input,
+        save=save,
+    )
+    run_user_hook(
+        RunnerHookType.POST_INIT, out_path, run_config, config, jinja_env, context
+    )
     if save:
         if run_config.data:
             run_config.data.folder_name = folder
@@ -143,7 +165,19 @@ def update_project(
             )
             return True
 
-    run_user_hook(RunnerHookType.PRE_UPDATE, out_path, run_config, config, jinja_env)
+    template_path = Path(get_template_path_from_project_path(out_path))
+    context = CommandContext.create(
+        template_root=template_path,
+        out_root=out_path,
+        no_input=no_input,
+        save=save,
+        abort_on_conflict=abort_on_conflict,
+        auto_commit=auto_commit,
+    )
+    run_user_hook(
+        RunnerHookType.PRE_UPDATE, out_path, run_config, config, jinja_env, context
+    )
+
     try:
         aborted = run_update_check_was_aborted()
     except flexlate_exc.GitRepoDirtyException:
@@ -166,7 +200,9 @@ def update_project(
         # If update was not successful, skip post update hook and saving config
         return
 
-    run_user_hook(RunnerHookType.POST_UPDATE, out_path, run_config, config, jinja_env)
+    run_user_hook(
+        RunnerHookType.POST_UPDATE, out_path, run_config, config, jinja_env, context
+    )
     if save:
         _save_config(out_path, config, run_config)
 

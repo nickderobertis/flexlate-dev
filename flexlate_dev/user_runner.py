@@ -92,12 +92,58 @@ class UserRootRunConfiguration(UserRunConfiguration):
         return config
 
 
+class PathsContext(BaseModel):
+    template_root: str
+    out_root: str
+
+
+class OptionsContext(BaseModel):
+    no_input: bool
+    save: bool
+    abort_on_conflict: Optional[bool] = None
+    auto_commit: Optional[bool] = None
+
+
+class CommandContext(BaseModel):
+    """
+    Represents the context of a command that will be provided for the user to
+    use in templated commands
+    """
+
+    paths: PathsContext
+    options: OptionsContext
+
+    @classmethod
+    def create(
+        cls,
+        template_root: Path,
+        out_root: Path,
+        no_input: bool,
+        save: bool,
+        abort_on_conflict: Optional[bool] = None,
+        auto_commit: Optional[bool] = None,
+    ):
+        return cls(
+            paths=PathsContext(
+                template_root=str(template_root.absolute()),
+                out_root=str(out_root.absolute()),
+            ),
+            options=OptionsContext(
+                no_input=no_input,
+                save=save,
+                abort_on_conflict=abort_on_conflict,
+                auto_commit=auto_commit,
+            ),
+        )
+
+
 def run_user_hook(
     hook_type: RunnerHookType,
     out_path: Path,
     run_config: "FullRunConfiguration",
     config: "FlexlateDevConfig",
     jinja_env: jinja2.Environment,
+    context: CommandContext,
 ):
     """
     Runs a hook of the given type.
@@ -105,7 +151,7 @@ def run_user_hook(
     hook: Optional[List[Runnable]] = getattr(run_config.config, hook_type.value)
     if hook is not None:
         commands = _create_command_list_resolving_references(hook, config)
-        rendered_commands = _render_commands(commands, run_config, jinja_env)
+        rendered_commands = _render_commands(commands, run_config, jinja_env, context)
         print_styled(f"Running {hook_type.value} commands", INFO_STYLE)
         with change_directory_to(out_path):
             run_command_or_command_strs(rendered_commands)
@@ -135,22 +181,26 @@ def _render_commands(
     commands: List[UserCommand],
     run_config: "FullRunConfiguration",
     jinja_env: jinja2.Environment,
+    context: CommandContext,
 ) -> List[UserCommand]:
     """
     Renders the given commands using the given jinja environment, returning new commands.
     """
-    return [_render_command(command, run_config, jinja_env) for command in commands]
+    return [
+        _render_command(command, run_config, jinja_env, context) for command in commands
+    ]
 
 
 def _render_command(
     command: UserCommand,
     run_config: "FullRunConfiguration",
     jinja_env: jinja2.Environment,
+    context: CommandContext,
 ) -> UserCommand:
     """
     Renders the given command using the given jinja environment, returning a new command.
     """
-    data = run_config.to_jinja_data()
+    data = run_config.to_jinja_data(context)
     update_dict: Dict[str, Any] = {}
     for attr in ["run", "name"]:
         value = getattr(command, attr)
