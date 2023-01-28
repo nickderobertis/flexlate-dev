@@ -3,3 +3,4 @@ include = 'flexlate_dev.*\.pyi?$|tests.*\.pyi?$'
 
 [tool.isort]
 profile = "black"
+skip = ['.bzr', '.direnv', '.eggs', '.git', '.hg', '.mypy_cache', '.pants.d', '.svn', '.tox', '.venv', '__pypackages__', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv', 'venvs']

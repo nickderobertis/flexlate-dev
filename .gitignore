@@ -68,4 +68,5 @@ _examples
 .vscode
 tests/generated
 .nox
+venvs/
 node_modules
