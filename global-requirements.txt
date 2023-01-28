@@ -1,5 +1,4 @@
 autoflake
 black
 isort
-multivenv
-twine
+poetry==1.3.2

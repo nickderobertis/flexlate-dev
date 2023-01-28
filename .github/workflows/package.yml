@@ -42,28 +42,15 @@ jobs:
         python-version: [3.8]
     steps:
       - uses: actions/checkout@v3
-      - name: Install dependencies to build package
-        run: pip install --upgrade --upgrade-strategy eager setuptools wheel twine
-      - name: Semantic Release
-        id: semantic-release
-        uses: cycjimmy/semantic-release-action@v3
+      - uses: actions/setup-python@v4
         with:
-          extra_plugins: |
-            semantic-release-pypi
-            @semantic-release/git
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          PYPI_TOKEN: ${{ secrets.PYPI_PASSWORD }}
-      - uses: ./.github/actions/install-dependencies
-        if: steps.semantic-release.outputs.new_release_published == 'true'
+          python-version: "3.10"
+      - name: Install Poetry
+        run: pip install poetry==1.3.2
+      - uses: bjoluc/semantic-release-config-poetry@v2
         with:
-          python-version: ${{ matrix.python-version }}
-          gh-token: ${{ secrets.GH_TOKEN }}
-      - name: Deploy docs
-        if: steps.semantic-release.outputs.new_release_published == 'true'
-        uses: ./.github/actions/build-and-deploy-docs
-        with:
-          gh-token: ${{ secrets.GH_TOKEN }}
+          pypi_token: ${{ secrets.PYPI_PASSWORD }}
+          github_token: ${{ secrets.GH_TOKEN }}
 
   coverage:
     needs: deploy
