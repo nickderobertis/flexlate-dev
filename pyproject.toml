@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "flexlate-dev"
-version = "1.0.0"
+version = "0.20.0"
 description = "Development tools for template authors using Flexlate"
 authors = ["Nick DeRobertis <derobertis.nick@gmail.com>"]
 readme = "README.md"
@@ -31,7 +31,7 @@ documentation = "https://nickderobertis.github.io/flexlate-dev"
 dfxt = "flexlate_dev.cli:cli"
 
 [tool.poetry.dependencies]
-python = ">=3.8"
+python = ">=3.8,<4.0"
 flexlate = ">=0.14.7"
 py-app-conf = ">=1.1.0"
 watchdog = "*"
