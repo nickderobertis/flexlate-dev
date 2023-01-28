@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -47,7 +47,7 @@
   
   
   
-    <title>Welcome to Flexlate Development Tools documentation! &#8212; flexlate-dev 0.21.0a2 documentation</title>
+    <title>Welcome to Flexlate Development Tools documentation! &#8212; flexlate-dev 0.20.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/material.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -90,7 +90,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="#" title="flexlate-dev 0.21.0a2 documentation"
+        <a href="#" title="flexlate-dev 0.20.0 documentation"
            class="md-header-nav__button md-logo">
           
             <i class="md-icon">&#xe869</i>
@@ -176,7 +176,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="#" class="md-tabs__link">flexlate-dev 0.21.0a2 documentation</a></li>
+          <li class="md-tabs__item"><a href="#" class="md-tabs__link">flexlate-dev 0.20.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -188,13 +188,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="#" title="flexlate-dev 0.21.0a2 documentation" class="md-nav__button md-logo">
+    <a href="#" title="flexlate-dev 0.20.0 documentation" class="md-nav__button md-logo">
       
         <i class="md-icon">&#xe869</i>
       
     </a>
     <a href="#"
-       title="flexlate-dev 0.21.0a2 documentation">flexlate-dev</a>
+       title="flexlate-dev 0.20.0 documentation">flexlate-dev</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/nickderobertis/flexlate-dev" title="Go to repository" class="md-source" data-md-source="github">
@@ -258,13 +258,25 @@
         </li>
         <li class="md-nav__item"><a href="#getting-started" class="md-nav__link">Getting Started</a>
         </li>
+        <li class="md-nav__item"><a href="#links" class="md-nav__link">Links</a>
+        </li>
         <li class="md-nav__item"><a href="#development-status" class="md-nav__link">Development Status</a>
         </li>
-        <li class="md-nav__item"><a href="#developing" class="md-nav__link">Developing</a>
+        <li class="md-nav__item"><a href="#developing" class="md-nav__link">Developing</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#initial-setup" class="md-nav__link">Initial Setup</a>
+        </li>
+        <li class="md-nav__item"><a href="#day-to-day-development" class="md-nav__link">Day to Day Development</a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#conventional-commits-semantic-release" class="md-nav__link">Conventional Commits & Semantic Release</a>
+        </li>
+        <li class="md-nav__item"><a href="#pre-commit-hooks" class="md-nav__link">Pre-commit Hooks</a>
+        </li></ul>
+            </nav>
+        </li></ul>
+            </nav>
         </li>
         <li class="md-nav__item"><a href="#author" class="md-nav__link">Author</a>
-        </li>
-        <li class="md-nav__item"><a href="#links" class="md-nav__link">Links</a>
         </li>
         <li class="md-nav__item"><a href="#tutorial-and-examples" class="md-nav__link">Tutorial and Examples</a>
         </li>
@@ -318,6 +330,11 @@
 <p>See a
 <a class="reference external" href="https://nickderobertis.github.io/flexlate-dev/tutorial.html">more in-depth tutorial here.</a></p>
 </section>
+<section id="links">
+<h2 id="links">Links<a class="headerlink" href="#links" title="Permalink to this heading">¶</a></h2>
+<p>See the
+<a class="reference external" href="https://nickderobertis.github.io/flexlate-dev/">documentation here.</a></p>
+</section>
 <section id="development-status">
 <h2 id="development-status">Development Status<a class="headerlink" href="#development-status" title="Permalink to this heading">¶</a></h2>
 <p>This project is currently in early-stage development. There may be
@@ -326,26 +343,52 @@ upgrades will often have breaking changes.</p>
 </section>
 <section id="developing">
 <h2 id="developing">Developing<a class="headerlink" href="#developing" title="Permalink to this heading">¶</a></h2>
+<section id="initial-setup">
+<h3 id="initial-setup">Initial Setup<a class="headerlink" href="#initial-setup" title="Permalink to this heading">¶</a></h3>
 <p>First, you need a couple global dependencies installed, see their documentation for details:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://pypa.github.io/pipx/installation/">pipx</a></p></li>
 <li><p><a class="reference external" href="https://direnv.net/docs/installation.html">direnv</a></p></li>
+<li><p><a class="reference external" href="https://asdf-vm.com/guide/getting-started.html">asdf</a></p></li>
 </ul>
-<p>Then clone the repo and run <code class="docutils literal notranslate"><span class="pre">npm</span> <span class="pre">install</span></code> and <code class="docutils literal notranslate"><span class="pre">mvenv</span> <span class="pre">sync</span> <span class="pre">dev</span></code>. Make your changes and then run <code class="docutils literal notranslate"><span class="pre">just</span></code> to run formatting,
+<p>Note that these tools require a UNIX-style shell, such as bash or zsh. If
+you are on Windows, you can use WSL or Git Bash. If you are using Pycharm,
+you can configure the built-in terminal to use Git Bash.</p>
+<p>Then clone the repo and run <code class="docutils literal notranslate"><span class="pre">direnv</span> <span class="pre">allow</span></code>. This will take a while on the first time
+to install the remaining dependencies.</p>
+</section>
+<section id="day-to-day-development">
+<h3 id="day-to-day-development">Day to Day Development<a class="headerlink" href="#day-to-day-development" title="Permalink to this heading">¶</a></h3>
+<p>Make your changes and then run <code class="docutils literal notranslate"><span class="pre">just</span></code> to run formatting,
 linting, and tests.</p>
 <p>Develop documentation by running <code class="docutils literal notranslate"><span class="pre">just</span> <span class="pre">docs</span></code> to start up a dev server.</p>
 <p>To run tests only, run <code class="docutils literal notranslate"><span class="pre">just</span> <span class="pre">test</span></code>. You can pass additional arguments to pytest,
 e.g. <code class="docutils literal notranslate"><span class="pre">just</span> <span class="pre">test</span> <span class="pre">-k</span> <span class="pre">test_something</span></code>.</p>
 <p>Prior to committing, you can run <code class="docutils literal notranslate"><span class="pre">just</span></code> with no arguments to run all the checks.</p>
+<section id="conventional-commits-semantic-release">
+<h4 id="conventional-commits-semantic-release">Conventional Commits &amp; Semantic Release<a class="headerlink" href="#conventional-commits-semantic-release" title="Permalink to this heading">¶</a></h4>
+<p>This project uses <a class="reference external" href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commits</a>
+to power <a class="reference external" href="https://semantic-release.gitbook.io/semantic-release/">semantic release</a>. This means
+that when you commit, you should use the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nb">type</span><span class="o">&gt;</span><span class="p">[</span><span class="n">optional</span> <span class="n">scope</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">description</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">feat:</span> <span class="pre">Add</span> <span class="pre">new</span> <span class="pre">feature</span></code> or <code class="docutils literal notranslate"><span class="pre">fix:</span> <span class="pre">Fix</span> <span class="pre">bug</span></code>.</p>
+<p>When creating a PR, please name the PR in this way as well so that the squashed
+commit from the PR will have a conventional commit message.</p>
+</section>
+<section id="pre-commit-hooks">
+<h4 id="pre-commit-hooks">Pre-commit Hooks<a class="headerlink" href="#pre-commit-hooks" title="Permalink to this heading">¶</a></h4>
+<p>This project uses Husky and Lint-staged to run pre-commit hooks. This means that
+when you commit, it will run <code class="docutils literal notranslate"><span class="pre">just</span> <span class="pre">format</span></code> and <code class="docutils literal notranslate"><span class="pre">just</span> <span class="pre">strip</span></code> on the files
+you edited, and also check that your commit message is a conventional commit.</p>
+<p>If you are not able to commit, it is likely because your commit message is not
+in the conventional commit format.</p>
+</section>
+</section>
 </section>
 <section id="author">
 <h2 id="author">Author<a class="headerlink" href="#author" title="Permalink to this heading">¶</a></h2>
 <p>Created by Nick DeRobertis. MIT License.</p>
-</section>
-<section id="links">
-<h2 id="links">Links<a class="headerlink" href="#links" title="Permalink to this heading">¶</a></h2>
-<p>See the
-<a class="reference external" href="https://nickderobertis.github.io/flexlate-dev/">documentation here.</a></p>
 <p>For more information on getting started, take a look at the tutorial and examples.</p>
 </section>
 <section id="tutorial-and-examples">
@@ -369,28 +412,28 @@ e.g. <code class="docutils literal notranslate"><span class="pre">just</span> <s
 <li class="toctree-l2"><a class="reference internal" href="api/flexlate_dev.html">flexlate_dev package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#subpackages">Subpackages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-cli-module">flexlate_dev.cli module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-cli-validators-module">flexlate_dev.cli_validators module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-command-runner-module">flexlate_dev.command_runner module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-config-module">flexlate_dev.config module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-config-schema-module">flexlate_dev.config_schema module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.cli">flexlate_dev.cli module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.cli_validators">flexlate_dev.cli_validators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.command_runner">flexlate_dev.command_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.config">flexlate_dev.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.config_schema">flexlate_dev.config_schema module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.dict_merge">flexlate_dev.dict_merge module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.dirutils">flexlate_dev.dirutils module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.exc">flexlate_dev.exc module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-ext-flexlate-module">flexlate_dev.ext_flexlate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.ext_flexlate">flexlate_dev.ext_flexlate module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.ext_subprocess">flexlate_dev.ext_subprocess module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.ext_threading">flexlate_dev.ext_threading module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.external_command_type">flexlate_dev.external_command_type module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.get_version">flexlate_dev.get_version module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-gitutils-module">flexlate_dev.gitutils module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-ignore-module">flexlate_dev.ignore module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-logger-module">flexlate_dev.logger module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-project-ops-module">flexlate_dev.project_ops module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-publish-module">flexlate_dev.publish module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.gitutils">flexlate_dev.gitutils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.ignore">flexlate_dev.ignore module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.logger">flexlate_dev.logger module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.project_ops">flexlate_dev.project_ops module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.publish">flexlate_dev.publish module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.render">flexlate_dev.render module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.styles">flexlate_dev.styles module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-user-command-module">flexlate_dev.user_command module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#flexlate-dev-user-runner-module">flexlate_dev.user_runner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.user_command">flexlate_dev.user_command module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/flexlate_dev.html#module-flexlate_dev.user_runner">flexlate_dev.user_runner module</a></li>
 </ul>
 </li>
 </ul>
@@ -438,7 +481,7 @@ e.g. <code class="docutils literal notranslate"><span class="pre">just</span> <s
       <div class="md-footer-meta__inner md-grid">
         <div class="md-footer-copyright">
           <div class="md-footer-copyright__highlight">
-              &#169; Copyright 2022, Nick DeRobertis.
+              &#169; Copyright 2023, Nick DeRobertis.
               
           </div>
             Created using
