@@ -249,6 +249,54 @@ def test_publish_creates_output_with_templated_commands(copier_one_template_path
     assert context_path_result == str(template_path.absolute())
 
 
+def test_publish_updates_output_with_templated_commands(copier_one_template_path: Path):
+    template_path = copier_one_template_path
+    template_file = template_path / "{{ q1 }}.txt.jinja"
+    project_path = GENERATED_FILES_DIR / "a"
+    expect_file = project_path / "a1.txt"
+    config_path = WITH_TEMPLATED_COMMANDS_CONFIG_PATH
+
+    # Do a first publish so that project exists
+    assert not expect_file.exists()
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        run_config_name="my-run-config",
+        config_path=config_path,
+        no_input=True,
+    )
+    assert expect_file.read_text() == "2"
+
+    # Check that templated command works with post init
+    assert (project_path / "2.txt").exists()
+    assert (project_path / "my-data.txt").exists()
+
+    # Commit to get a clean slate for next update
+    repo = Repo(project_path)
+    stage_and_commit_all(repo, "Add one.txt")
+
+    # Update the template
+    template_file.write_text("new content {{ q2 }}")
+
+    # Publish again, should do update
+    publish_template(
+        template_path,
+        GENERATED_FILES_DIR,
+        config_path=config_path,
+        run_config_name="my-run-config",
+        no_input=True,
+    )
+
+    # Check that output was updated
+    assert expect_file.read_text() == "new content 2"
+
+    # Check that post update was run
+    context_path_result = (
+        (project_path / "context_path_publish.txt").read_text().strip()
+    )
+    assert context_path_result == str(template_path.absolute())
+
+
 def test_publish_pre_check_can_alter_whether_init_or_update(
     copier_one_template_path: Path,
 ):

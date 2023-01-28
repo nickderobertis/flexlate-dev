@@ -150,12 +150,22 @@ def gen_config_with_templated_commands():
     context_templated_command = UserCommand(
         run="echo '{{ context.paths.template_root }}' > context_path.txt"
     )
+    context_templated_command_publish = UserCommand(
+        run="echo '{{ context.paths.template_root }}' > context_path_publish.txt"
+    )
+    post_init = [
+        data_templated_command,
+        config_templated_command,
+        context_templated_command,
+    ]
+    post_update = [context_templated_command_publish]
     run_config = UserRootRunConfiguration(
-        post_init=[
-            data_templated_command,
-            config_templated_command,
-            context_templated_command,
-        ],
+        post_init=post_init,
+        post_update=post_update,
+        publish=UserRunConfiguration(
+            post_init=post_init,
+            post_update=post_update,
+        ),
         data_name="my-data",
     )
     run_configs = {"my-run-config": run_config, **create_default_run_configs()}

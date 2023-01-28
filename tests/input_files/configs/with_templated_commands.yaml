@@ -26,3 +26,12 @@ run_configs:
     - run: touch {{ data.data.q2 }}.txt
     - run: touch {{ config.data_name }}.txt
     - run: echo '{{ context.paths.template_root }}' > context_path.txt
+    post_update:
+    - run: echo '{{ context.paths.template_root }}' > context_path_publish.txt
+    publish:
+      post_init:
+      - run: touch {{ data.data.q2 }}.txt
+      - run: touch {{ config.data_name }}.txt
+      - run: echo '{{ context.paths.template_root }}' > context_path.txt
+      post_update:
+      - run: echo '{{ context.paths.template_root }}' > context_path_publish.txt
