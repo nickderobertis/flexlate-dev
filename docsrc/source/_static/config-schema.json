@@ -1,0 +1,286 @@
+{
+  "title": "FlexlateDevConfig",
+  "description": "Flexlate Dev configuration.",
+  "type": "object",
+  "properties": {
+    "data": {
+      "title": "Data",
+      "description": "Data configurations by name",
+      "env_names": [
+        "data"
+      ],
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/UserDataConfiguration"
+      }
+    },
+    "commands": {
+      "title": "Commands",
+      "description": "Commands that can be used across multiple configurations",
+      "env_names": [
+        "commands"
+      ],
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UserCommand"
+      }
+    },
+    "run_configs": {
+      "title": "Run Configs",
+      "description": "Root run configurations by name",
+      "env_names": [
+        "run_configs"
+      ],
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/UserRootRunConfiguration"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "UserDataConfiguration": {
+      "title": "UserDataConfiguration",
+      "type": "object",
+      "properties": {
+        "data": {
+          "title": "Data",
+          "description": "Key-value pairs of data to be used in the template",
+          "type": "object"
+        },
+        "folder_name": {
+          "title": "Folder Name",
+          "description": "Name of the folder to be created for the project, if it is a template type that does not specify a name",
+          "type": "string"
+        },
+        "ignore": {
+          "title": "Ignore",
+          "description": "List of files or folders to ignore when creating the project. Full git wildmatch syntax (like .gitignore) is supported including negations",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extends": {
+          "title": "Extends",
+          "description": "Name of the data configuration to extend",
+          "type": "string"
+        }
+      }
+    },
+    "UserCommand": {
+      "title": "UserCommand",
+      "type": "object",
+      "properties": {
+        "run": {
+          "title": "Run",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "background": {
+          "title": "Background",
+          "type": "boolean"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        }
+      }
+    },
+    "UserRunConfiguration": {
+      "title": "UserRunConfiguration",
+      "type": "object",
+      "properties": {
+        "pre_check": {
+          "title": "Pre Check",
+          "help": "Commands to run before checking whether it is an initialization or update.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_init": {
+          "title": "Post Init",
+          "help": "Commands to run after initializing.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "pre_update": {
+          "title": "Pre Update",
+          "help": "Commands to run before updating.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_update": {
+          "title": "Post Update",
+          "help": "Commands to run after updating.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "data_name": {
+          "title": "Data Name",
+          "help": "Name of the data configuration to use.",
+          "type": "string"
+        },
+        "out_root": {
+          "title": "Out Root",
+          "help": "Root directory to use for output.",
+          "type": "string",
+          "format": "path"
+        },
+        "auto_commit_message": {
+          "title": "Auto Commit Message",
+          "help": "Message to use when auto-committing changes during serve.",
+          "type": "string"
+        },
+        "extends": {
+          "title": "Extends",
+          "help": "Name of the run configuration to extend.",
+          "type": "string"
+        }
+      }
+    },
+    "UserRootRunConfiguration": {
+      "title": "UserRootRunConfiguration",
+      "type": "object",
+      "properties": {
+        "pre_check": {
+          "title": "Pre Check",
+          "help": "Commands to run before checking whether it is an initialization or update.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_init": {
+          "title": "Post Init",
+          "help": "Commands to run after initializing.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "pre_update": {
+          "title": "Pre Update",
+          "help": "Commands to run before updating.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "post_update": {
+          "title": "Post Update",
+          "help": "Commands to run after updating.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/UserCommand"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "data_name": {
+          "title": "Data Name",
+          "help": "Name of the data configuration to use.",
+          "type": "string"
+        },
+        "out_root": {
+          "title": "Out Root",
+          "help": "Root directory to use for output.",
+          "type": "string",
+          "format": "path"
+        },
+        "auto_commit_message": {
+          "title": "Auto Commit Message",
+          "help": "Message to use when auto-committing changes during serve.",
+          "type": "string"
+        },
+        "extends": {
+          "title": "Extends",
+          "help": "Name of the run configuration to extend.",
+          "type": "string"
+        },
+        "publish": {
+          "title": "Publish",
+          "help": "Parts of run configuration to use only when publishing.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserRunConfiguration"
+            }
+          ]
+        },
+        "serve": {
+          "title": "Serve",
+          "help": "Parts of run configuration to use only when serving.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserRunConfiguration"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

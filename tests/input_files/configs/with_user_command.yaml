@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://nickderobertis.github.io/flexlate-dev/_static/config-schema.json
 commands:
 - id: separate_command
   run: touch referenced.txt
