@@ -8,7 +8,7 @@ from flexlate.transactions.transaction import (
     FlexlateTransaction,
     _is_flexlate_merge_commit,
 )
-from git import Commit, Repo
+from git import Commit, Repo  # type: ignore[attr-defined]
 from pydantic import BaseModel
 
 

@@ -1,7 +1,7 @@
 import contextlib
 from typing import Iterator, List
 
-from git import Commit, Repo
+from git import Commit, Repo  # type: ignore[attr-defined]
 from pydantic import BaseModel
 
 
