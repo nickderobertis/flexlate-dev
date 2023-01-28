@@ -1,10 +1,29 @@
-run := "mvenv run global --"
-run-lint := "mvenv run lint --"
-run-test := "mvenv run test --"
-run-docs := "mvenv run docs --"
+run := ""
+run-lint := "just run lint"
+run-test := "just run root"
+run-docs := "just run docs"
 
-default: format strip lint test
-check: format-check strip-check lint test
+default:
+    #!/usr/bin/env bash
+    exit_code=0
+
+    just format || ((exit_code++))
+    just strip || ((exit_code++))
+    just lint || ((exit_code++))
+    just test || ((exit_code++))
+
+    exit $exit_code
+
+check:
+    #!/usr/bin/env bash
+    exit_code=0
+
+    just format-check || ((exit_code++))
+    just strip-check || ((exit_code++))
+    just lint || ((exit_code++))
+    just test || ((exit_code++))
+
+    exit $exit_code
 
 
 format *FILES='.':
@@ -43,3 +62,47 @@ docs-serve:
 docs:
     just docs-build
     just docs-serve
+
+poetry command target *ARGS:
+    #!/usr/bin/env bash
+    cd {{invocation_directory()}}
+
+    # Set the directory depending on whether the target is root or not
+    if [ "{{target}}" = "root" ]; then
+        DIRECTORY="{{justfile_directory()}}"
+    else
+        if [ ! -d "{{justfile_directory()}}/.venvs/{{target}}" ]; then
+            echo "No such project environment {{target}}"
+            exit 1;
+        fi
+        DIRECTORY="{{justfile_directory()}}/.venvs/{{target}}"
+    fi
+
+    if [ ! -d "${DIRECTORY}/.venv" ]; then
+        echo "Creating virtual environment for {{target}}"
+
+        poetry --directory $DIRECTORY install
+    fi
+    poetry --directory $DIRECTORY {{command}} {{ARGS}}
+
+run target *ARGS:
+    @cd {{invocation_directory()}} && just poetry run {{target}} {{ARGS}}
+
+poetry-all +ARGS:
+    #!/usr/bin/env bash
+    # Split args into command from the first argument
+    # and the rest of the arguments, which should be empty if there is only a command
+    IFS=' ' read -r command args <<< "{{ARGS}}"
+
+    for target in root lint docs; do
+        echo "just poetry $command $target $args"
+        just poetry $command $target $args
+    done
+
+inspect-build:
+    rm -rf dist
+    poetry build
+    @echo "Contents of sdist:"
+    @unzip -l dist/*.whl
+    @echo "Contents of wheel:"
+    @tar -tvf dist/*.tar.gz

@@ -1,14 +1,14 @@
 {
-  "name": "output",
+  "name": "local-development",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "just": "./scripts/bin/just",
-    "prepare": "husky install && cat global-requirements.in | xargs -n1 pipx install || true"
+    "prepare": "husky install && cat global-requirements.txt | xargs -n1 pipx install || true"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
@@ -19,11 +19,6 @@
     "*.py": [
       "npm run just format ",
       "npm run just strip "
-    ],
-    "lint-requirements.in": "mvenv compile lint ",
-    "test-requirements.in": "mvenv compile test ",
-    "docs-requirements.in": "mvenv compile docs ",
-    "dev-requirements.in": "mvenv compile dev ",
-    "global-requirements.in": "mvenv compile global "
+    ]
   }
 }
