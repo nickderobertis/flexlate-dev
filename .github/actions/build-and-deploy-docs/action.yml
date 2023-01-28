@@ -14,7 +14,7 @@ runs:
     - name: Build Documentation
       shell: bash
       run: |
-        pipenv run nox -s docs
+        just docs-build
         echo "" > docs/.nojekyll
     - name: Deploy Documentation
       uses: peaceiris/actions-gh-pages@v2.5.0

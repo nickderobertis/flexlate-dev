@@ -1,0 +1,10 @@
+sphinx
+sphinx-autobuild
+sphinx-autodoc-typehints
+sphinxcontrib-fulltoc
+sphinx-paramlinks
+sphinx-gallery
+sphinx-copybutton
+pypandoc
+myst-parser
+sphinx-material

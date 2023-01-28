@@ -1,14 +1,13 @@
-import ast
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import typer
-from flexlate.template_data import TemplateData
+from flexlate.get_version import get_flexlate_version
 
 from flexlate_dev import get_version
 from flexlate_dev.cli_validators import parse_data_from_str
 from flexlate_dev.publish import publish_all_templates, publish_template
-from flexlate_dev.server import serve_template
+from flexlate_dev.server.main import serve_template
 from flexlate_dev.styles import INFO_STYLE, print_styled
 
 cli = typer.Typer()
@@ -63,7 +62,7 @@ def pre_execute(
     # Support printing version and then existing with dfxt --version
     if version:
         version_number = get_version.get_flexlate_dev_version()
-        flexlate_version = get_version.get_flexlate_version()
+        flexlate_version = get_flexlate_version()
         message = "\n".join(
             [
                 f"flexlate-dev: {version_number}",
@@ -82,6 +81,15 @@ def serve(
         "--out",
         "-o",
         help="Optional location to serve built template to, defaults to a temporary directory",
+    ),
+    back_sync: bool = typer.Option(
+        False,
+        "--back-sync",
+        "-b",
+        show_default=False,
+        help="Enable syncing changes from the generated project back to the template. Note that this only "
+        "works for non-templated files. You will see warnings in the console when changes could not "
+        "be synced automatically.",
     ),
     template_path: Path = TEMPLATE_PATH_OPTION,
     no_input: bool = NO_INPUT_OPTION,
@@ -102,6 +110,7 @@ def serve(
         run_config,
         template_path,
         out_path,
+        back_sync=back_sync,
         no_input=no_input,
         auto_commit=not no_auto_commit,
         config_path=config_path,

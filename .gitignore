@@ -65,7 +65,7 @@ docs
 docsrc/source/auto_examples
 _examples
 **/.ipynb_checkpoints
-.vscode
-tests/generated
-.nox
+venvs/
 node_modules
+scripts/bin/
+tests/generated

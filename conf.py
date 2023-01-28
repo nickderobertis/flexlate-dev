@@ -57,11 +57,13 @@ PACKAGE_INSTALL_REQUIRES = [
     # e.g.
     # 'package',
     # 'otherpackage>=1,<2'
-    "flexlate>=0.14.0",
+    "flexlate>=0.14.7",
     "py-app-conf>=1.1.0",
     "watchdog",
     "typer",
     "rich",
+    "patch",
+    "unidiff",
 ]
 
 # Add any third party packages you use in requirements for optional features of your package here

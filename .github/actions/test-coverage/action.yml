@@ -9,7 +9,7 @@ runs:
   steps:
     - name: Run tests with coverage
       shell: bash
-      run: pipenv run nox -s test_coverage
+      run: just test-coverage
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
