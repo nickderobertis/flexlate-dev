@@ -64,7 +64,8 @@ set_type_checking_flag = False
 # Options for sphinx.ext.autosummary
 autodoc_default_flags = ['members']
 autosummary_generate = True
-autodoc_mock_imports = conf.PACKAGE_INSTALL_REQUIRES + conf.DOCS_OTHER_MOCK_IMPORTS
+# List any packages that should be mocked here
+autodoc_mock_imports = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -78,8 +79,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = conf.PACKAGE_NAME
-copyright = f'{datetime.datetime.now().year}, {conf.PACKAGE_AUTHOR}'
-author = conf.PACKAGE_AUTHOR
+copyright = f'{datetime.datetime.now().year}, Nick DeRobertis'
+author = "Nick DeRobertis"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -109,7 +110,7 @@ pygments_style = 'default'
 todo_include_todos = True
 
 # Base URL for sitemap
-html_baseurl = conf.PACKAGE_URLS['Documentation'] + '/'
+html_baseurl = "https://nickderobertis.github.io/flexlate-dev" + '/'
 
 sphinx_gallery_conf = {
     'examples_dirs': '../../_examples',   # path to your example scripts
@@ -121,8 +122,8 @@ sphinx_gallery_conf = {
     },
     'binder': {
          # Required keys
-         'org': conf.REPO_USERNAME,
-         'repo': conf.REPO_NAME,
+         'org': "nickderobertis",
+         'repo': "flexlate-dev",
          'branch': 'gh-pages',  # Can be any branch, tag, or commit hash. Use a branch that hosts your docs.
          'binderhub_url': 'https://mybinder.org',  # Any URL of a binderhub deployment. Must be full URL (e.g. https://mybinder.org).
          'dependencies': './binder/requirements.txt',
@@ -157,12 +158,12 @@ html_theme = 'sphinx_material'
 #
 html_theme_options = dict(
     nav_title=project,
-    base_url=conf.PACKAGE_URLS['Documentation'],
+    base_url="https://nickderobertis.github.io/flexlate-dev",
     color_primary='indigo',
     color_accent='deep-purple',
     logo_icon='&#xe869',
-    repo_url=conf.PACKAGE_URLS['Code'],
-    repo_name=conf.REPO_NAME,
+    repo_url="https://github.com/nickderobertis/flexlate-dev",
+    repo_name="flexlate-dev",
     globaltoc_depth=3,
 )
 if conf.GOOGLE_ANALYTICS_TRACKING_ID:
@@ -232,7 +233,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, f'{conf.PACKAGE_NAME}.tex', f'{conf.PACKAGE_NAME} Documentation',
-     conf.PACKAGE_AUTHOR, 'manual'),
+     "Nick DeRobertis", 'manual'),
 ]
 
 
@@ -253,7 +254,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, conf.PACKAGE_NAME, f'{conf.PACKAGE_NAME} Documentation',
-     author, conf.PACKAGE_NAME, conf.PACKAGE_SHORT_DESCRIPTION,
+     author, conf.PACKAGE_NAME, "Development tools for template authors using Flexlate",
      'Miscellaneous'),
 ]
 

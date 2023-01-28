@@ -12,30 +12,29 @@ runs:
   using: composite
   steps:
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Multivenv
+        cache: pip
+        cache-dependency-path: global-requirements.txt
+    - name: Install Global Dependencies
       shell: bash
-      run: pip install multivenv
+      run: |
+        pip install -r global-requirements.txt
     - name: Install Just command runner
       uses: extractions/setup-just@v1
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
-    - id: get-requirements-path
-      shell: bash
-      run: |
-        reqs_extension=$(python reqs_extension.py)
-        echo "::set-output name=requirements-extension::$reqs_extension"
-        echo "Will cache requirements files with extension $reqs_extension"
     - uses: actions/cache@v3
       id: cache-venvs
       name: Cache venvs
       with:
-        path: venvs
-        key: ${{ env.pythonLocation }}-venvs-${{ hashFiles(format('requirements/*-requirements{0}.txt', steps.get-requirements-path.outputs.requirements-extension)) }}
+        path: |
+          .venv
+          .venvs
+        key: ${{ env.pythonLocation }}-venvs-${{ hashFiles('**/poetry.lock') }}
     - name: Create venvs
       shell: bash
       if: steps.cache-venvs.outputs.cache-hit != 'true'
       run: |
-        mvenv sync
+        just poetry-all install

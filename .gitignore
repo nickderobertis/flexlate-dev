@@ -61,7 +61,7 @@ target/
 .idea
 
 .mypy_cache
-docs
+docs/
 docsrc/source/auto_examples
 _examples
 **/.ipynb_checkpoints
@@ -70,3 +70,5 @@ tests/generated
 .nox
 venvs/
 node_modules
+scripts/bin/
+!.venvs/docs/
